@@ -7,6 +7,10 @@ class Console {
         println aMsg
     }
 
+    static void info(String aMsg) {
+        print "[INFO] ${aMsg}"
+    }
+
     static void warn(String aMsg) {
         print "[WARNING] ${aMsg}"
     }

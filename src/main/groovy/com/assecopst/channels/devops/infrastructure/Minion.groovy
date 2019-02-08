@@ -33,25 +33,14 @@ class Minion {
 
     private void storeFile() {
 
-        String filename = "${Project.requirementsFilename}-${project.versionCommitSha}"
-
-        Console.print("Storing ${filename} for Project ${project.name}" )
-
-        try {
-            File projectFolder = new File(workspaceFolder, project.name)
-            projectFolder.mkdir()
-
-            File requirements = new File(projectFolder, filename)
-            requirements.write(project.requirementsFileContent)
-        } catch (e) {
-            Console.err("Unable to store requirements file for Project '${project.name}'. Cause: ${e}")
-        }
+        Thread thread = new Thread(new FileStorerMinion(project, workspaceFolder))
+        thread.start()
     }
 
     private void parseRequirements() {
 
-        project.requirementsFileContent.eachLine { line ->
-            line = line.trim()
+        project.requirementsFileContent.eachLine { reqLine ->
+            String line = reqLine.trim()
             if(!line)
                 return
 
