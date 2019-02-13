@@ -1,6 +1,6 @@
-package com.asseco.pst.devops.infrastructure.utils
+package com.assecopst.channels.devops.infrastructure.utils
 
-import com.asseco.pst.devops.infrastructure.Project
+import com.assecopst.channels.devops.infrastructure.Project
 
 class GitlabUtils {
 

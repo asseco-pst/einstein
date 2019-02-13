@@ -1,8 +1,8 @@
-package com.asseco.pst.devops.infrastructure
+package com.assecopst.channels.devops.infrastructure
 
-import com.asseco.pst.devops.infrastructure.version.Version
+import com.assecopst.channels.devops.infrastructure.version.Version
 
-class DependencyRecordParser {
+class RecordParser {
 
     private final String operator = "~="
     private String record
@@ -11,7 +11,7 @@ class DependencyRecordParser {
     String readVersion
     Version versionWrapper
 
-    DependencyRecordParser(String aRecord) {
+    RecordParser(String aRecord) {
         record = aRecord
         parse()
     }

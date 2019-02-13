@@ -1,4 +1,4 @@
-package com.asseco.pst.devops.infrastructure.utils
+package com.assecopst.channels.devops.infrastructure.utils
 
 
 class Console {

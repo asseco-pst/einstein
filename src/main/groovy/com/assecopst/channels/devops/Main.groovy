@@ -1,25 +1,30 @@
-package com.asseco.pst.devops
+package com.assecopst.channels.devops
 
-import com.asseco.pst.devops.infrastructure.DB
-import com.asseco.pst.devops.infrastructure.Project
-
-import com.asseco.pst.devops.infrastructure.Application
+import com.assecopst.channels.devops.infrastructure.Application
+import com.assecopst.channels.devops.infrastructure.DB
+import com.assecopst.channels.devops.infrastructure.Project
+import com.assecopst.channels.devops.infrastructure.utils.Console
 
 class Main {
     static void main(String[] args) {
 
-
         List<Project> projects = []
 
         try {
-            projects << new Project("a", "1.3.3", DB.Repos.A.httpsUrl, DB.Repos.A.sshUrl)
-//            projects << new Project("b", "2.0.0", DB.Repos.B.httpsUrl, DB.Repos.B.sshUrl)
-//            projects << new Project("c", "1.2.0", DB.Repos.C.httpsUrl, DB.Repos.C.sshUrl)
+
+            projects <<
+                    new Project.Builder()
+                            .setName("a")
+                            .setVersion("1.5.0")
+                            .setRepoHttpsUrl(DB.Repos.A.httpsUrl)
+                            .setRepoSshUrl(DB.Repos.A.sshUrl)
+                            .build()
+
         } catch (e) {
-            println "An error occurred when trying to instantiate Projects. Cause: ${e}"
+            Console.err "An error occurred when trying to instantiate Projects. Cause: ${e}"
         }
 
-        Application.instance.calcDependencies(projects)
+        Application.calcDependencies(projects)
         println "Finished!"
     }
 }

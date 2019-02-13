@@ -1,10 +1,10 @@
-package com.asseco.pst.devops.infrastructure.version
+package com.assecopst.channels.devops.infrastructure.version
 
 import java.util.regex.Matcher
 
 class LegacyVersion extends Version {
 
-    int nyd, major, minor, patch
+    int nyd
 
     protected LegacyVersion() {}
 
@@ -19,6 +19,22 @@ class LegacyVersion extends Version {
         major = formatNumber(tokenizedVersion[1])
         minor = formatNumber(tokenizedVersion[2])
         patch = formatNumber(tokenizedVersion[3])
+    }
+
+    @Override
+    protected boolean checkIfHasMajorBreak(Version aVer1, Version aVer2) {
+        return (breakOnNydFields((LegacyVersion) aVer1, (LegacyVersion) aVer2) || breakOnMajorFields(aVer1, aVer2))
+    }
+
+    private boolean breakOnNydFields(LegacyVersion aVer1, LegacyVersion aVer2) {
+
+        List<Integer> nyds = []
+        nyds << aVer1.getNyd()
+        nyds << aVer2.getNyd()
+
+        nyds = nyds.reverse()
+
+        return ((nyds[0] - nyds[1]) >= 1)
     }
 
     @Override

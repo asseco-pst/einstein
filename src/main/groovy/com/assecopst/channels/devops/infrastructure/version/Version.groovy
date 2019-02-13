@@ -1,15 +1,19 @@
-package com.asseco.pst.devops.infrastructure.version
+package com.assecopst.channels.devops.infrastructure.version
+
+import com.assecopst.channels.devops.infrastructure.utils.Console
 
 import java.util.regex.Matcher
 
 abstract class Version {
+
+    int major, minor, patch
 
     enum Type {
         SEMANTIC,
         LEGACY
     }
 
-    protected String versionStr
+    String versionStr
     protected List<String> tokenizedVersion
 
     private static SemanticVersion semanticVersion
@@ -22,7 +26,7 @@ abstract class Version {
 
     Version() {}
 
-    Version(String aVersionStr) {
+    protected Version(String aVersionStr) {
 
         versionStr = aVersionStr
 
@@ -31,12 +35,25 @@ abstract class Version {
     }
 
 
+    static List<Version> factory(def aVersions) {
+
+        if (!aVersions)
+            return []
+
+        List<Version> versions = []
+        aVersions.each { versionStr ->
+            versions << factory(versionStr)
+        }
+
+        return versions
+    }
+
     static Version factory(String aVersionStr) {
 
-        if(!isValidVersion(aVersionStr))
+        if (!isValidVersion(aVersionStr))
             throw new Exception("Version '${aVersionStr}' is not a valid version. Accepted version sintaxes: 'x.x.x' or 'x.x.x.x'")
 
-        switch(getVersionType(aVersionStr)) {
+        switch (getVersionType(aVersionStr)) {
             case Type.SEMANTIC:
                 return new SemanticVersion(aVersionStr)
                 break
@@ -47,15 +64,73 @@ abstract class Version {
 
     }
 
+    static boolean hasMultipleVersionSpecifications(List<Version> aVersions) {
+
+        boolean hasMultSpecs = false
+
+        Version lastStatedVersion
+        aVersions.each { version ->
+            if (lastStatedVersion && (lastStatedVersion.getClass() != version.getClass())) {
+                Console.warn("Versions ${lastStatedVersion.getVersionStr()} and ${version.getVersionStr()} have " +
+                        "different specification (${lastStatedVersion.getClass().getName()} <> ${version.getClass().getName()})")
+                hasMultSpecs = true
+            }
+            lastStatedVersion = version
+        }
+
+        return hasMultSpecs
+    }
+
+    static boolean hasNonBackwardCompatibleVersions(List<Version> aVersions) {
+        return (hasMajorBreak(aVersions) || containsRCVersionAndStableVersion(aVersions))
+    }
+
+    private static boolean hasMajorBreak(List<Version> aVersions) {
+
+        boolean hasMajorBreak = false
+        Version lastStatedVersion
+        aVersions.each { version ->
+            if (!lastStatedVersion) {
+                lastStatedVersion = version
+                return
+            }
+            hasMajorBreak = version.isMajorBreak(version, lastStatedVersion)
+
+            lastStatedVersion = version
+        }
+
+        return hasMajorBreak
+    }
+
+    private static boolean containsRCVersionAndStableVersion(List<Version> aVersions) {
+
+        boolean hasStableVersions = false
+        boolean hasRCVersions = false
+
+        aVersions.each { version ->
+            if (version.isRcTag()) {
+                hasRCVersions = true
+                return
+            }
+            hasStableVersions = version.isStableVersion()
+        }
+
+        if (hasStableVersions && hasRCVersions)
+            Console.warn("Found RC versions and Stable versions as dependencies for the same Project -> " +
+                    "${aVersions.stream().collect({ version -> version.getVersionStr() }).join(" <> ")}")
+
+        return (hasStableVersions && hasRCVersions)
+    }
+
     protected void tokenizeVersion() {
         tokenizedVersion = versionStr.tokenize(".")
     }
 
     private static Type getVersionType(String aVersionStr) {
 
-        if(semanticVersion.match(aVersionStr))
+        if (semanticVersion.match(aVersionStr))
             return Type.SEMANTIC
-        else if(legacyVersion.match(aVersionStr))
+        else if (legacyVersion.match(aVersionStr))
             return Type.LEGACY
         else
             throw new Exception("Unable to determine versioning Type for version: '${aVersionStr}'")
@@ -83,12 +158,35 @@ abstract class Version {
         return ((Matcher) (versionStr =~ /^.*rc.*/)).matches()
     }
 
+    protected boolean isMajorBreak(Version aVer1, Version aVer2) {
+        if (aVer1.getClass() != aVer2.getClass())
+            throw new Exception("Unable to check compatibility of versions with origin from different specifications!" +
+                    "'${aVer1.getVersionStr()}' is a ${aVer1.getClass().getName()} version and" +
+                    "'${aVer2.getVersionStr()}' is a ${aVer2.getClass().getName()} version")
+
+        checkIfHasMajorBreak(aVer1, aVer2)
+    }
+
+    protected boolean breakOnMajorFields(Version aVer1, Version aVer2) {
+
+        List<Integer> majors = []
+        majors << aVer1.getMajor()
+        majors << aVer2.getMajor()
+
+        majors = majors.reverse()
+
+        return ((majors[0] - majors[1]) >= 1)
+    }
+
+    protected isStableVersion() {
+        return (versionStr =~ getVersionRegexExp()).matches()
+    }
 
     String getVersionGitRegexExp() {
 
         String exp
 
-        if(isRcTag())
+        if (isRcTag())
             exp = getGitMatchRcVersion()
         else
             exp = getGitMatchVersionExp()
@@ -98,20 +196,33 @@ abstract class Version {
 
     boolean matchesVersion(String aVersion) {
 
-        if(isRcTag())
+        if (isRcTag())
             return (aVersion =~ getRcRegexExp()).matches()
         else
             return (aVersion =~ getVersionRegexExp()).matches()
     }
 
+    String getTagFromExp(String aExp) {
+
+        Matcher tagMatcher = (aExp =~ getVersionRegexExp())
+
+        if (tagMatcher)
+            return tagMatcher.group(2)
+        else
+            throw new Exception("Unable to get Tag from expression: '${aExp}'.")
+    }
+
     protected abstract void parse()
+
+    protected abstract boolean checkIfHasMajorBreak(Version aVer1, Version aVer2)
 
     abstract boolean match(String aVersion)
 
     abstract String getGitMatchVersionExp()
+
     abstract String getGitMatchRcVersion()
 
     abstract def getVersionRegexExp()
-    abstract def getRcRegexExp()
 
+    abstract def getRcRegexExp()
 }

@@ -1,6 +1,5 @@
-package com.asseco.pst.devops.infrastructure.utils
+package com.assecopst.channels.devops.infrastructure.utils
 
-import java.util.regex.Matcher
 
 class GitUtils {
 
@@ -18,30 +17,40 @@ class GitUtils {
             sha = process.text.trim()
 
             if(!sha)
-                throw new Exception("Unable to get commit sha for tag '${aTag}'.")
+                throw new Exception("Commit sha for tag '${aTag}' is NULL.")
         } catch (e) {
+            throw new Exception("Unable to get commit sha for tag '${aTag}'. Cause: ${e}")
         }
 
         return sha
     }
 
-    static List<String> getTags(String aRepoSshUrl, String aGitVersionRegex) {
+    static List<String> getTags(String aRepoSshUrl, String aGitVersionRegex = null) {
 
-        def process = "git ls-remote -t ${aRepoSshUrl} --match \"*${aGitVersionRegex}\"".execute()
+        String match = (aGitVersionRegex) ? "--match \"*${aGitVersionRegex}\"" : ""
+
+        def process = "git ls-remote -t ${aRepoSshUrl} ${match}".execute()
         process.waitFor()
 
         return cleanAndExtractTags(process.text)
     }
 
 
+    /**
+     * Remove tag objects (the lines that contains the '^{}' characters)
+     * and extract the tag version from each line result
+     *
+     * @param aTagsList
+     * @return clean (i.e, the x.x.x string) tags from the given result
+     */
     private static List<String> cleanAndExtractTags(String aTagsList) {
 
-        def excludePseudoTags = { line -> // removes the lines that contains '^{}' on it
+        def excludePseudoTags = { line ->
             return !(line =~ /^.*\^\{}/).matches()
         }
 
         def extractTag = { line ->
-            return ((String) line).tokenize("\t")[1]
+            return ((String) line.tokenize("\t")[1])
         }
 
         return aTagsList.trim().tokenize("\n").stream().filter(excludePseudoTags).collect(extractTag)

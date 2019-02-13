@@ -1,16 +1,29 @@
-package com.asseco.pst.devops.infrastructure
+package com.assecopst.channels.devops.infrastructure
+
+import com.assecopst.channels.devops.infrastructure.crawlers.CrawlersManager
 
 
-@Singleton
+/**
+ * @TODO
+ *  - Register the calculated dependencies
+ *  - Check if - on the calculated dependencies - there exists duplicate modules with non-retro compatible versions
+ */
+
 class Application {
 
-    void calcDependencies(List<Project> aProjects) {
+    static DependenciesManager dpManager = new DependenciesManager()
+
+    static void calcDependencies(List<Project> aProjects, boolean aSaveOnFile = false) {
 
         aProjects.each { project ->
-            DependenciesCrawlersManager.calcDependencies(project)
-        }
 
-//        DependenciesCrawlersManager.waitUntilFinish()
-        DependenciesCrawlersManager.interruptAll()
+            dpManager.addDependency(project.name, project.version)
+            CrawlersManager.calcDependencies(project)
+        }
+        CrawlersManager.interruptAll()
+
+        println dpManager.getDependencies()
+        dpManager.checkVersionsCompatibility()
+
     }
 }

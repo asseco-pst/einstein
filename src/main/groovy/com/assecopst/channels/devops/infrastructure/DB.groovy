@@ -1,4 +1,4 @@
-package com.asseco.pst.devops.infrastructure
+package com.assecopst.channels.devops.infrastructure
 
 
 class DB {

@@ -1,12 +1,12 @@
-package com.asseco.pst.devops.infrastructure
+package com.assecopst.channels.devops.infrastructure.crawlers
 
-import com.asseco.pst.devops.infrastructure.utils.Console
+import com.assecopst.channels.devops.infrastructure.Project
+import com.assecopst.channels.devops.infrastructure.utils.Console
 
-class DependenciesCrawlersManager {
+class CrawlersManager {
 
     static List<Thread> workers
     static List<String> crawledProjects
-
 
     static {
         workers = []
@@ -17,25 +17,18 @@ class DependenciesCrawlersManager {
     static void calcDependencies(Project aProject) {
 
         String projectId = aProject.name
-        if(crawledProjects.contains(projectId)) {
-            Console.info("Projects '${projectId}' already crawled...")
+        if (crawledProjects.contains(projectId)) {
+            Console.info("'${projectId}' Project was already crawled...")
             return
         }
         crawledProjects << projectId
 
-        Thread t = new Thread(new DependenciesCrawler(aProject))
+        Thread t = new Thread(new Crawler(aProject))
         workers << t
 
         t.start()
         t.join()
     }
-
-//    static void waitUntilFinish() {
-//
-//        workers.each { thread ->
-//            thread.join()
-//        }
-//    }
 
     static void interruptAll() {
 

@@ -1,10 +1,8 @@
-package com.asseco.pst.devops.infrastructure.version
+package com.assecopst.channels.devops.infrastructure.version
 
 import java.util.regex.Matcher
 
 class SemanticVersion extends Version {
-
-    int major, minor, patch
 
     protected SemanticVersion() {}
 
@@ -20,6 +18,11 @@ class SemanticVersion extends Version {
         patch = formatNumber(tokenizedVersion[2])
     }
 
+    @Override
+    protected boolean checkIfHasMajorBreak(Version aVer1, Version aVer2) {
+        return breakOnMajorFields(aVer1, aVer2)
+    }
+    
     @Override
     boolean match(String aVersion) {
         return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+)/)).matches()
