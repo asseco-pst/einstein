@@ -22,7 +22,7 @@ class SemanticVersion extends Version {
     protected boolean checkIfHasMajorBreak(Version aVer1, Version aVer2) {
         return breakOnMajorFields(aVer1, aVer2)
     }
-    
+
     @Override
     boolean match(String aVersion) {
         return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+)/)).matches()
@@ -30,7 +30,8 @@ class SemanticVersion extends Version {
 
     @Override
     String getGitMatchVersionExp() {
-        return "${major}.*"
+        String minorPh = (minor) ? "${minor}." : ""
+        return "${major}.${minorPh}*"
     }
 
     @Override

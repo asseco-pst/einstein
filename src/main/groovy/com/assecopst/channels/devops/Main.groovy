@@ -15,7 +15,7 @@ class Main {
             projects <<
                     new Project.Builder()
                             .setName("a")
-                            .setVersion("1.5.0")
+                            .setVersion("1.7.0")
                             .setRepoHttpsUrl(DB.Repos.A.httpsUrl)
                             .setRepoSshUrl(DB.Repos.A.sshUrl)
                             .build()

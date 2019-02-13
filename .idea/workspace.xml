@@ -2,41 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9fa930fb-262a-4085-b117-cbe1a27d97fb" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/saveactions_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Crawler.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/3/23410cfe7097a824236d58f248b8a880fda5d98c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/c/2c55ccc7064848561170ddd3f7a4edbb046253a0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/8/48f889435703db92f6b3577d12863508e73d7b6c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/c/5cf96f6d62cecceb93c032a8a64fc561a50be39a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/e/ae0efd7b124c4010dd5b78dd89c65490e862dd7d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/9/d9766a5c8fff9057c3a751b34fcc4d8477337451" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.0/taskHistory/fileSnapshots.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.0/taskHistory/fileSnapshots.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.0/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.0/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.0/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.0/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DB.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DB.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesCrawler.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesCrawlersManager.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/CrawlersManager.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependencyRecordParser.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/RecordParser.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Minion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Minion.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Worker.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/FileStorer.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/FileStorer.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/Console.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/Console.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/GitUtils.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/GitUtils.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/GitlabUtils.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/GitlabUtils.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/LegacyVersion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/LegacyVersion.groovy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workspace/a/requirements.txt-2832723b20ed0bb9fa546fbf54a607d02b8640c4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/workspace/a/requirements.txt-35869a8d33fe56a8200b0fa504620d0f206a527b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/workspace/a/requirements.txt-60b553e819c6c5ba7d100a066e8378e964e40b57" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/workspace/a/requirements.txt-b246a80836b34637296162fbafd47224c2d0663e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/workspace/b/requirements.txt-a879fe07dbdc2af681a5b78c8b70d0f770427e65" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -103,42 +83,24 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/CrawlersManager.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
+            <state relative-caret-position="374">
+              <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
               <folding>
-                <element signature="e#63#122#0" expanded="true" />
+                <element signature="e#39#102#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Crawler.groovy">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+            <state relative-caret-position="595">
+              <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
               <folding>
-                <element signature="e#63#122#0" expanded="true" />
+                <element signature="e#54#130#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -147,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="41" column="35" selection-start-line="41" selection-start-column="35" selection-end-line="41" selection-end-column="35" />
+            <state relative-caret-position="422">
+              <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
               <folding>
                 <element signature="e#54#119#0" expanded="true" />
               </folding>
@@ -159,11 +121,39 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1445">
-              <caret line="89" column="17" selection-start-line="89" selection-start-column="17" selection-end-line="89" selection-end-column="17" />
+            <state relative-caret-position="405">
+              <caret line="143" column="1" lean-forward="true" selection-start-line="143" selection-start-column="1" selection-end-line="143" selection-end-column="1" />
               <folding>
                 <element signature="e#54#130#0" expanded="true" />
+                <element signature="n#!!block;n#Builder#0;n#!!block;n#Project#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/FileStorer.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="578">
+              <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/Console.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -171,8 +161,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="66" column="19" selection-start-line="66" selection-start-column="19" selection-end-line="66" selection-end-column="19" />
+            <state relative-caret-position="259">
+              <caret line="97" column="129" lean-forward="true" selection-start-line="97" selection-start-column="129" selection-end-line="97" selection-end-column="129" />
               <folding>
                 <element signature="e#62#127#0" expanded="true" />
               </folding>
@@ -183,26 +173,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Minion.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="30" selection-start-line="30" selection-end-line="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/LegacyVersion.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="86" selection-start-line="25" selection-start-column="86" selection-end-line="25" selection-end-column="86" />
+            <state relative-caret-position="212">
+              <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -219,6 +191,9 @@
       <find>com.assecopst.channels.devops.infrastructure.Project</find>
       <find>com.assecopst.channels.devops.infrastructure.Application</find>
       <find>com.assecopst.channels.devops.infrastructure.DB</find>
+      <find>getVersionGitRegexExp</find>
+      <find>getGitMatchVersionExp</find>
+      <find>Identified</find>
     </findStrings>
     <replaceStrings>
       <replace>Console</replace>
@@ -235,9 +210,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/groovy/com/asseco/pst/devops/infrastructure/RuntimeDependenciesManager.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/asseco/pst/devops/infrastructure/Repos.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/asseco/pst/devops/infrastructure/RequirementsLineParser.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/asseco/pst/devops/infrastructure/LineParser.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/asseco/pst/devops/infrastructure/Version.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/asseco/pst/devops/infrastructure/DependenciesCrawlers.groovy" />
@@ -278,14 +250,17 @@
         <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Crawler.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/FileStorer.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/CrawlersManager.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/LegacyVersion.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/Console.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/FileStorer.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy" />
       </list>
     </option>
   </component>
@@ -303,8 +278,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -375,12 +348,14 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="Course" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/exictos-dev/devops/runtime-dependencies-manager/src/main/groovy/com/asseco/pst/devops/infrastructure/DependenciesCrawler.groovy" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550013812040" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550080304543" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
@@ -498,15 +473,15 @@
     <frame x="-342" y="-1088" width="2576" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2154213" />
-      <window_info id="Structure" order="1" weight="0.23560767" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.22019078" />
+      <window_info id="Structure" order="1" visible="true" weight="0.23529412" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32792208" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32792208" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.40367964" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3809524" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -528,9 +503,9 @@
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Code Iris" order="7" />
       <window_info anchor="right" id="Capture Analysis" order="8" />
-      <window_info anchor="right" id="Gradle" order="9" weight="0.40659776" />
-      <window_info anchor="right" id="Theme Preview" order="10" />
-      <window_info anchor="right" id="Palette" order="11" />
+      <window_info anchor="right" id="Theme Preview" order="9" />
+      <window_info anchor="right" id="Palette" order="10" />
+      <window_info anchor="right" id="Gradle" order="11" weight="0.18282989" />
       <window_info anchor="right" id="Maven" order="12" />
     </layout>
   </component>
@@ -546,13 +521,13 @@
         <line-breakpoint type="java-line">
           <condition expression="project.version == &quot;b&quot;" language="Groovy" />
           <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy</url>
-          <line>134</line>
+          <line>137</line>
           <properties />
           <option name="timeStamp" value="63" />
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy</url>
-          <line>27</line>
+          <line>33</line>
           <properties />
           <option name="timeStamp" value="65" />
         </line-breakpoint>
@@ -570,25 +545,25 @@
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy</url>
-          <line>89</line>
+          <line>106</line>
           <properties />
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy</url>
-          <line>96</line>
+          <line>113</line>
           <properties />
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy</url>
-          <line>93</line>
+          <line>110</line>
           <properties />
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy</url>
-          <line>98</line>
+          <line>115</line>
           <properties />
           <option name="timeStamp" value="73" />
         </line-breakpoint>
@@ -599,10 +574,42 @@
           <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy</url>
-          <line>175</line>
+          <condition expression="aProjectName == 'c'" language="Groovy" />
+          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy</url>
+          <line>11</line>
           <properties />
-          <option name="timeStamp" value="77" />
+          <option name="timeStamp" value="91" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy</url>
+          <line>89</line>
+          <properties />
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy</url>
+          <line>31</line>
+          <properties />
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy</url>
+          <line>53</line>
+          <properties />
+          <option name="timeStamp" value="96" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="projectName == 'c'" language="Groovy" />
+          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy</url>
+          <line>55</line>
+          <properties />
+          <option name="timeStamp" value="97" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy</url>
+          <line>62</line>
+          <properties />
+          <option name="timeStamp" value="98" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -614,6 +621,31 @@
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="breakpointCondition">
+      <expression>
+        <expression-string>projectName == 'c'</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>aProjectName == 'c'</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>name == 'a' &amp;&amp; aProjectName == 'c'</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>name == 'a'</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>aProjectName == 'b'</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>project.version == &quot;b&quot;</expression-string>
         <language-id>Groovy</language-id>
@@ -627,6 +659,36 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>Application.dpManager.getReadDependencies()</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>readDependencies</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>aVersion.getVersionGitRegexExp()</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>aVersion.getVersionStr()</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>matchingTags</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>requirements.getPath()</expression-string>
+        <language-id>Groovy</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>aVersions</expression-string>
         <language-id>Groovy</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -638,36 +700,6 @@
       </expression>
       <expression>
         <expression-string>(&quot;refs/tags/v2.0.0&quot; =~ /^(.)*?(2\.[0-9]+\.[0-9])/).group(0)</expression-string>
-        <language-id>Groovy</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(&quot;refs/tags/v2.0.0&quot; =~ /^(.)*?(2\.[0-9]+\.[0-9])/).group(1)</expression-string>
-        <language-id>Groovy</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(&quot;refs/tags/v2.0.0&quot; =~ /^(.)*?(${major}\.[0-9]+\.[0-9])/).group(0)</expression-string>
-        <language-id>Groovy</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(&quot;refs/tags/v2.0.0&quot; =~ /^(.)*?(${major}\.[0-9]+\.[0-9])/).group(1)</expression-string>
-        <language-id>Groovy</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;refs/tags/v2.0.0&quot;</expression-string>
-        <language-id>Groovy</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(aVersion =~ getVersionRegexExp()).matches()</expression-string>
-        <language-id>Groovy</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>getVersionRegexExp()</expression-string>
         <language-id>Groovy</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -721,13 +753,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/Console.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/GitlabUtils.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="537">
@@ -742,31 +767,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="15" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_162/src.zip!/java/io/Console.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
           <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/FileStorer.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/RecordParser.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -788,16 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
-          <folding>
-            <element signature="e#39#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DB.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -805,17 +799,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        <state relative-caret-position="34">
+          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/CrawlersManager.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
+        <state relative-caret-position="68">
+          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
           <folding>
             <element signature="e#63#122#0" expanded="true" />
           </folding>
@@ -832,47 +833,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="41" column="35" selection-start-line="41" selection-start-column="35" selection-end-line="41" selection-end-column="35" />
-          <folding>
-            <element signature="e#54#119#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1445">
-          <caret line="89" column="17" selection-start-line="89" selection-start-column="17" selection-end-line="89" selection-end-column="17" />
-          <folding>
-            <element signature="e#54#130#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="66" column="19" selection-start-line="66" selection-start-column="19" selection-end-line="66" selection-end-column="19" />
-          <folding>
-            <element signature="e#62#127#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Minion.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/RecordParser.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -883,17 +854,89 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/Worker.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/crawlers/FileStorer.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+        <state relative-caret-position="578">
+          <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_162/src.zip!/java/util/ArrayList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="169" column="65" lean-forward="true" selection-start-line="169" selection-start-column="65" selection-end-line="169" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/utils/Console.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/Main.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+          <folding>
+            <element signature="e#39#102#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/SemanticVersion.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/version/Version.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="97" column="129" lean-forward="true" selection-start-line="97" selection-start-column="129" selection-end-line="97" selection-end-column="129" />
+          <folding>
+            <element signature="e#62#127#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Project.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="143" column="1" lean-forward="true" selection-start-line="143" selection-start-column="1" selection-end-line="143" selection-end-column="1" />
+          <folding>
+            <element signature="e#54#130#0" expanded="true" />
+            <element signature="n#!!block;n#Builder#0;n#!!block;n#Project#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/DependenciesManager.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
+          <folding>
+            <element signature="e#54#119#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/assecopst/channels/devops/infrastructure/Application.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+          <folding>
+            <element signature="e#54#130#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

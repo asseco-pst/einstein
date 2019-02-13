@@ -3,12 +3,12 @@ package com.assecopst.channels.devops.infrastructure.utils
 
 class Console {
 
-    static void print(String aMsg) {
+    static void print(def aMsg) {
         println aMsg
     }
 
-    static void info(String aMsg) {
-        print "[INFO] ${aMsg}"
+    static void info(def aMsg) {
+        print "${aMsg.toString()}"
     }
 
     static void warn(String aMsg) {

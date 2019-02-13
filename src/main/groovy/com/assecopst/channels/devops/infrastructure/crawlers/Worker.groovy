@@ -16,6 +16,7 @@ abstract class Worker implements Runnable {
     void setWorkspace() {
 
         workspaceFolder = new File(WORKSPACE_FOLDER)
+        
         if (!workspaceFolder.exists())
             workspaceFolder.mkdirs()
     }

@@ -38,7 +38,7 @@ class FileStorer implements Runnable {
             File requirements = new File(projectFolder, filename)
             requirements.write(project.requirementsFileContent)
 
-            Console.print("File '${filename}' from '${project.name}' Project successfully stored")
+            Console.print("File '${filename}' from '${project.name}' Project successfully stored into ${requirements.getPath()}")
         } catch (e) {
             throw new Exception("Unable to store requirements file for Project '${project.name}'. Cause: ${e}")
         }

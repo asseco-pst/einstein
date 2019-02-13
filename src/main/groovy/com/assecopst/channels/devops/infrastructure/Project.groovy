@@ -47,6 +47,9 @@ class Project {
     private void parseDependency(String aDependencyRecord) {
 
         RecordParser recordParser = getRecordParser(aDependencyRecord)
+
+        Application.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
+
         String dependencyProjectName = recordParser.getProjectName()
 
         String dependencyVersion
@@ -84,7 +87,7 @@ class Project {
         List<String> tags = GitUtils.getTags(projectDB.sshUrl, aVersion.getVersionGitRegexExp())
         List<String> matchingTags = tags.stream().filter({ line -> aVersion.matchesVersion(line) }).collect({ line -> aVersion.getTagFromExp(line) })
 
-        return matchingTags.reverse()[0] // it returns the biggest/newest sibling version
+        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
     }
 
     private void calcProjectDependencies(String aDependencyProjectName, String aVersion) {

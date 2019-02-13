@@ -85,6 +85,23 @@ abstract class Version {
         return (hasMajorBreak(aVersions) || containsRCVersionAndStableVersion(aVersions))
     }
 
+    /**
+     *
+     * @param aVersions - this parameter represents a Collectio. It can be a List<String> or a Set<String>
+     * @return the biggest version on the given Collection
+     */
+    static String getBiggestVersion(def aVersions) {
+
+        // cast parameter so one can apply the reverse() method over it
+        List<String> versions = (aVersions instanceof List) ? aVersions.clone() : new ArrayList<String>(aVersions as Collection)
+
+        // convert versions - from the given 'aVersions' Set list - to integers and get/calculate the biggest version on the list
+        int biggestIntegerVersion = versions.stream().collect({ version -> version.tokenize(".").join("").toInteger() }).sort().reverse()[0]
+
+        // now that we have the 'biggestIntegerVersion', get the "string version" of it
+        return versions.stream().filter({ version -> version.tokenize(".").join("").toInteger() == biggestIntegerVersion }).collect()
+    }
+
     private static boolean hasMajorBreak(List<Version> aVersions) {
 
         boolean hasMajorBreak = false
@@ -211,6 +228,7 @@ abstract class Version {
         else
             throw new Exception("Unable to get Tag from expression: '${aExp}'.")
     }
+
 
     protected abstract void parse()
 

@@ -5,27 +5,33 @@ import com.assecopst.channels.devops.infrastructure.version.Version
 
 class DependenciesManager {
 
-    Map dependencies = [:]
-
+    Map readDependencies = [:]
+    Map finalDependencies = [:]
 
     void addDependency(String aProjectName, String aVersion) {
-        if (!dependencies[aProjectName])
-            dependencies[aProjectName] = new HashSet<String>()
-        dependencies[aProjectName] << aVersion
+        if (!readDependencies[aProjectName])
+            readDependencies[aProjectName] = new HashSet<String>()
+        readDependencies[aProjectName] << aVersion
     }
 
-    void checkVersionsCompatibility() {
+    void resolveVersions() {
+
+        checkVersionsCompatibility()
+        resolveMultiVersionsDependencies()
+    }
+
+    private void checkVersionsCompatibility() {
 
         boolean foundNonCompatibleVersions = false
 
-        dependencies.each {
+        readDependencies.each {
             String projectName = it.key
             Set<String> dependentVersions = (Set<String>) it.value
 
             if (dependentVersions.size() <= 1)
                 return
 
-            Console.info("Identified multiple versions for Project ${projectName}. Are they compatible? Let's check...")
+            Console.warn("Identified multiple versions for Project ${projectName}. Are they compatible? Let's check...")
 
             if (hasNonCompatibleVersions(dependentVersions)) {
                 Console.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
@@ -36,9 +42,25 @@ class DependenciesManager {
             throw new Exception("Non compatible versions found!")
     }
 
+
     private boolean hasNonCompatibleVersions(Set<String> aVersions) {
-        
+
         List<Version> versions = Version.factory(aVersions)
         return (Version.hasMultipleVersionSpecifications(versions) || Version.hasNonBackwardCompatibleVersions(versions))
+    }
+
+    private void resolveMultiVersionsDependencies() {
+
+        readDependencies.each {
+            String projectName = it.key
+            Set<String> readDependencies = (Set<String>) it.value
+
+            if (readDependencies.size() == 1) {
+                finalDependencies[projectName] = readDependencies
+                return
+            }
+
+            finalDependencies[projectName] = Version.getBiggestVersion(readDependencies)
+        }
     }
 }
