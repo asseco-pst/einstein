@@ -1,6 +1,6 @@
 package com.assecopst.channels.devops
 
-import com.assecopst.channels.devops.infrastructure.RDMApp
+import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.cli.CliParser
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import groovy.json.JsonBuilder
@@ -22,12 +22,12 @@ class Main {
         }
 
         try {
-            RDMApp.calcDependencies(cliParser.rdmOptions.projects)
+            Einstein.calcDependencies(cliParser.einsteinOptions.projects)
 
-            if (cliParser.rdmOptions.saveToFile)
-                RDMApp.saveResultsToJsonFile()
+            if (cliParser.einsteinOptions.saveToFile)
+                Einstein.saveResultsToJsonFile()
 
-            String outputFilePath = cliParser.rdmOptions.saveToFile
+            String outputFilePath = cliParser.einsteinOptions.saveToFile
             if (outputFilePath)
                 saveResultsIntoFile(outputFilePath)
 
@@ -42,7 +42,7 @@ class Main {
     static private void saveResultsIntoFile(String aFilePath) {
 
         try {
-            new File(aFilePath).write(new JsonBuilder(RDMApp.dpManager.finalDependencies).toPrettyString())
+            new File(aFilePath).write(new JsonBuilder(Einstein.dpManager.finalDependencies).toPrettyString())
         } catch (e) {
             Console.err("Unable to save results into output file '${aFilePath}'. Cause: ${e}")
             System.exit(1)

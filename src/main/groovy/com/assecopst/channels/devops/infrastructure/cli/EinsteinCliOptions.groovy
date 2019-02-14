@@ -3,7 +3,7 @@ package com.assecopst.channels.devops.infrastructure.cli
 import com.assecopst.channels.devops.infrastructure.ProjectDAO
 import groovy.cli.Option
 
-class RDMCliOptions {
+class EinsteinCliOptions {
 
     // --help or -h
     @Option(shortName = 'h', description = 'display usage')

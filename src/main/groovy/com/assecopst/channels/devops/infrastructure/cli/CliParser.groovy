@@ -9,7 +9,7 @@ import java.nio.file.Paths
 class CliParser {
 
     CliBuilder cli
-    RDMCliOptions rdmOptions
+    EinsteinCliOptions einsteinOptions
 
     CliParser() {
         cli = new CliBuilder(usage: "Calculate the runtime dependencies of provided Gitlab Projects")
@@ -18,8 +18,8 @@ class CliParser {
 
     void parse(String[] args) {
         try {
-            
-            rdmOptions = cli.parseFromInstance(new RDMCliOptions(), args)
+
+            einsteinOptions = cli.parseFromInstance(new EinsteinCliOptions(), args)
             checkProvidedOptions()
 
         } catch (e) {
@@ -29,15 +29,15 @@ class CliParser {
 
     private void checkProvidedOptions() {
 
-        if (rdmOptions.help) {
+        if (einsteinOptions.help) {
             cli.usage()
             System.exit(0)
         }
 
-        if (!rdmOptions.projects)
+        if (!einsteinOptions.projects)
             throw new Exception("No gitlab projects were provided")
 
-        if (rdmOptions.saveToFile) {
+        if (einsteinOptions.saveToFile) {
             if (!isValidPath())
                 throw new Exception("--saveToFile parameter contains an invalid Path. Please, provide a valid one")
         }
@@ -46,7 +46,7 @@ class CliParser {
     private boolean isValidPath() {
 
         try {
-            Paths.get(rdmOptions.saveToFile)
+            Paths.get(einsteinOptions.saveToFile)
         } catch (InvalidPathException | NullPointerException e) {
             return false
         }

@@ -13,7 +13,7 @@ import com.assecopst.channels.devops.infrastructure.utils.Console
  *  - Save the results as json object on given file
  */
 
-class RDMApp {
+class Einstein {
 
     static DependenciesManager dpManager = new DependenciesManager()
     static List<String> describedDependencies = []

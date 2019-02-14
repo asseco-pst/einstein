@@ -77,7 +77,7 @@ class Project {
 
         RecordParser recordParser = getRecordParser(aDependencyRecord)
 
-        RDMApp.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
+        Einstein.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
 
         String dependencyProjectName = recordParser.getProjectName()
 
@@ -90,7 +90,7 @@ class Project {
         }
 
         if (dependencyVersion) {
-            RDMApp.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
+            Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
             calcProjectDependencies(dependencyProjectName, dependencyVersion)
         }
     }
