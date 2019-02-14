@@ -1,4 +1,4 @@
-group 'com.asseco.pst.devops'
+group 'com.assecopst.channels.devops'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
