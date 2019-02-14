@@ -41,7 +41,8 @@ class SemanticVersion extends Version {
 
     @Override
     def getVersionRegexExp() {
-        def exp = /^(.)*?(${major}\.[0-9]+\.[0-9])/
+        String minorPh = (minor) ? "${minor}\\." : "[0-9]+\\."
+        def exp = /^(.)*?(${major}\.${minorPh}[0-9]+)/
         return exp
     }
 

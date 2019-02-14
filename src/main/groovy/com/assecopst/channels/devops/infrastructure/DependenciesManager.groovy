@@ -56,7 +56,7 @@ class DependenciesManager {
             Set<String> readDependencies = (Set<String>) it.value
 
             if (readDependencies.size() == 1) {
-                finalDependencies[projectName] = readDependencies
+                finalDependencies[projectName] = readDependencies[0]
                 return
             }
 

@@ -19,6 +19,35 @@ class Project {
 
     private Project() {}
 
+    static Project factory(String aName, String aVersion) {
+
+        DB.Repos projectRepo
+        try {
+            projectRepo = aName.toUpperCase() as DB.Repos
+        } catch (e) {
+            Console.err("Unable to find project with name '${aName}'.")
+            throw e
+        }
+
+        Project project
+
+        try {
+            project =
+                    new Project.Builder()
+                            .setName(aName)
+                            .setVersion(aVersion)
+                            .setRepoHttpsUrl(projectRepo.httpsUrl)
+                            .setRepoSshUrl(projectRepo.sshUrl)
+                            .build()
+        } catch (e) {
+            Console.err("Unable to instantiate Project with name '${aName}' and version '${aVersion}'")
+            throw e
+        }
+
+
+        return project
+    }
+
     void loadRequirementsFileContent() {
 
         try {
@@ -48,7 +77,7 @@ class Project {
 
         RecordParser recordParser = getRecordParser(aDependencyRecord)
 
-        Application.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
+        RDMApp.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
 
         String dependencyProjectName = recordParser.getProjectName()
 
@@ -61,7 +90,7 @@ class Project {
         }
 
         if (dependencyVersion) {
-            Application.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
+            RDMApp.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
             calcProjectDependencies(dependencyProjectName, dependencyVersion)
         }
     }
@@ -94,14 +123,7 @@ class Project {
 
         DB.Repos projectDB = aDependencyProjectName.toUpperCase() as DB.Repos
 
-        CrawlersManager.calcDependencies(
-                new Project.Builder()
-                        .setName(aDependencyProjectName)
-                        .setVersion(aVersion)
-                        .setRepoSshUrl(projectDB.sshUrl)
-                        .setRepoHttpsUrl(projectDB.httpsUrl)
-                        .build()
-        )
+        CrawlersManager.calcDependencies(factory(aDependencyProjectName, aVersion))
     }
 
 
@@ -123,13 +145,13 @@ class Project {
             return this
         }
 
-        Builder setRepoSshUrl(String aVersion) {
-            project.repoSshUrl = aVersion
+        Builder setRepoSshUrl(String aRepoSshUrl) {
+            project.repoSshUrl = aRepoSshUrl
             return this
         }
 
-        Builder setRepoHttpsUrl(String aVersion) {
-            project.repoHttpsUrl = aVersion
+        Builder setRepoHttpsUrl(String aRepoHttpsUrl) {
+            project.repoHttpsUrl = aRepoHttpsUrl
             return this
         }
 

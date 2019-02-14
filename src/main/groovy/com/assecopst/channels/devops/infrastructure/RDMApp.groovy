@@ -3,7 +3,6 @@ package com.assecopst.channels.devops.infrastructure
 import com.assecopst.channels.devops.infrastructure.crawlers.CrawlersManager
 import com.assecopst.channels.devops.infrastructure.utils.Console
 
-
 /**
  * @TODO
  *  - DONE - Register the calculated dependencies
@@ -14,18 +13,19 @@ import com.assecopst.channels.devops.infrastructure.utils.Console
  *  - Save the results as json object on given file
  */
 
-class Application {
+class RDMApp {
 
     static DependenciesManager dpManager = new DependenciesManager()
     static List<String> describedDependencies = []
 
-    static void calcDependencies(List<Project> aProjects, boolean aSaveOnFile = false) {
 
-        aProjects.each { project ->
+    static void calcDependencies(List<ProjectDAO> aProjectsData) {
 
+        loadProjects(aProjectsData).each { project ->
             dpManager.addDependency(project.name, project.version)
             CrawlersManager.calcDependencies(project)
         }
+
         CrawlersManager.interruptAll()
 
         Console.print("Check raw dependencies:")
@@ -38,5 +38,19 @@ class Application {
 
         Console.print("Described dependencies:")
         Console.print(describedDependencies.sort().join("\n"))
+    }
+
+    private static List<Project> loadProjects(List<ProjectDAO> aProjectsData) {
+
+        List<Project> projects = []
+        aProjectsData.each {
+            ProjectDAO pData = (ProjectDAO) it
+            projects << Project.factory(pData.name, pData.version)
+        }
+
+        return projects
+    }
+
+    static void saveResultsToJsonFile() {
     }
 }

@@ -44,7 +44,8 @@ class LegacyVersion extends Version {
 
     @Override
     String getGitMatchVersionExp() {
-        return "${nyd}.${major}.*"
+        String minorPh = (minor) ? "${minor}." : ""
+        return "${nyd}.${major}.${minorPh}*"
     }
 
     @Override
@@ -54,7 +55,8 @@ class LegacyVersion extends Version {
 
     @Override
     def getVersionRegexExp() {
-        def exp = /^(.)*?(${nyd}\.${major}\.[0-9]+\.[0-9])/
+        String minorPh = (minor) ? "${minor}\\." : "[0-9]+\\."
+        def exp = /^(.)*?(${nyd}\.${major}\.${minorPh}[0-9]+)/
         return exp
     }
 

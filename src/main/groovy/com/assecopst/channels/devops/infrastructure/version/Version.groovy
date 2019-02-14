@@ -99,7 +99,7 @@ abstract class Version {
         int biggestIntegerVersion = versions.stream().collect({ version -> version.tokenize(".").join("").toInteger() }).sort().reverse()[0]
 
         // now that we have the 'biggestIntegerVersion', get the "string version" of it
-        return versions.stream().filter({ version -> version.tokenize(".").join("").toInteger() == biggestIntegerVersion }).collect()
+        return versions.stream().filter({ version -> version.tokenize(".").join("").toInteger() == biggestIntegerVersion }).collect()[0]
     }
 
     private static boolean hasMajorBreak(List<Version> aVersions) {

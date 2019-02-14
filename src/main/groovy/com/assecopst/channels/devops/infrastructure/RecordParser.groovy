@@ -4,7 +4,7 @@ import com.assecopst.channels.devops.infrastructure.version.Version
 
 class RecordParser {
 
-    private final String operator = "~="
+    private final String operator = "=~"
     private String record
 
     String projectName
@@ -28,7 +28,7 @@ class RecordParser {
 
     private List<String> splitRecord() {
 
-        if(!record.contains("~") || !record.contains("="))
+        if (!record.contains("~") || !record.contains("="))
             throw new Exception("Dependency record line isn't on the right syntax. Right syntax -> [project_id]~=[version]")
 
         return record.tokenize(operator)
