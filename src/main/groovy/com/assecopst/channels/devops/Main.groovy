@@ -24,9 +24,6 @@ class Main {
         try {
             Einstein.calcDependencies(cliParser.einsteinOptions.projects)
 
-            if (cliParser.einsteinOptions.saveToFile)
-                Einstein.saveResultsToJsonFile()
-
             String outputFilePath = cliParser.einsteinOptions.saveToFile
             if (outputFilePath)
                 saveResultsIntoFile(outputFilePath)

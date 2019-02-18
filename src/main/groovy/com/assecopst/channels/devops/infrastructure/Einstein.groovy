@@ -19,7 +19,7 @@ class Einstein {
     static List<String> describedDependencies = []
 
 
-    static void calcDependencies(List<ProjectDAO> aProjectsData) {
+    static void calcDependencies(List<ProjectDao> aProjectsData) {
 
         loadProjects(aProjectsData).each { project ->
             dpManager.addDependency(project.name, project.version)
@@ -40,17 +40,18 @@ class Einstein {
         Console.print(describedDependencies.sort().join("\n"))
     }
 
-    private static List<Project> loadProjects(List<ProjectDAO> aProjectsData) {
+    private static List<Project> loadProjects(List<ProjectDao> aProjectsData) {
 
         List<Project> projects = []
         aProjectsData.each {
-            ProjectDAO pData = (ProjectDAO) it
+            ProjectDao pData = (ProjectDao) it
             projects << Project.factory(pData.name, pData.version)
         }
 
         return projects
     }
 
-    static void saveResultsToJsonFile() {
+    static Map getResults() {
+        return dpManager.getFinalDependencies()
     }
 }

@@ -1,6 +1,6 @@
 package com.assecopst.channels.devops.infrastructure.cli
 
-import com.assecopst.channels.devops.infrastructure.ProjectDAO
+import com.assecopst.channels.devops.infrastructure.ProjectDao
 import groovy.cli.Option
 
 class EinsteinCliOptions {
@@ -10,17 +10,17 @@ class EinsteinCliOptions {
     Boolean help
 
 
-    private List<ProjectDAO> projects
+    private List<ProjectDao> projects
 
     // --projects or -p
     @Option(shortName = 'p', description = 'all projects for which runtime dependencies must be calculated. \nex: `-p server:2.0.0,backofficews:1.7.10`')
     void setProjects(String aProjects) {
 
         String splitter = ":" // character that splits the project name from its version
-        projects = aProjects.tokenize(",").stream().collect({ p -> new ProjectDAO(name: p.split(splitter)[0], version: p.split(splitter)[1]) })
+        projects = aProjects.tokenize(",").stream().collect({ p -> new ProjectDao(name: p.split(splitter)[0], version: p.split(splitter)[1]) })
     }
 
-    List<ProjectDAO> getProjects() { projects }
+    List<ProjectDao> getProjects() { projects }
 
 
     // --saveToFile or -o

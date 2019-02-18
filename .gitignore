@@ -1,3 +1,4 @@
 out/
 threads-workspace/
 .idea/sonarlint/
+build/
