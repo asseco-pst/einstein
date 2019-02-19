@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/einstein.iml" filepath="$PROJECT_DIR$/.idea/modules/einstein.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/einstein_main.iml" filepath="$PROJECT_DIR$/.idea/modules/einstein_main.iml" group="runtime-dependencies-manager" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/einstein_test.iml" filepath="$PROJECT_DIR$/.idea/modules/einstein_test.iml" group="runtime-dependencies-manager" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/einstein_main.iml" filepath="$PROJECT_DIR$/.idea/modules/einstein_main.iml" group="einstein" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/einstein_test.iml" filepath="$PROJECT_DIR$/.idea/modules/einstein_test.iml" group="einstein" />
     </modules>
   </component>
 </project>
