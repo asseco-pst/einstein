@@ -1,9 +1,7 @@
 group 'com.assecopst.channels.devops'
 
 ext {
-    projectBaseName = "einstein"
     version = "vX.x.x"
-    extension = "jar"
 }
 
 buildscript {
@@ -47,14 +45,14 @@ task setProjectVersion {
 }
 
 shadowJar {
-    baseName = "${project.ext.projectBaseName}-${project.ext.version}"
+    baseName = "${rootProject.name}-${project.ext.version}"
 }
 
 createExe {
 
     mainClassName = 'com.assecopst.channels.devops.Main'
     icon = "${projectDir}/assets/einstein.ico"
-    headerType = "console"
-    jar = "../libs/${project.ext.projectBaseName}-${project.ext.version}.${project.ext.extension}"
-    outfile = "${project.ext.projectBaseName}-${project.ext.version}.exe"
+//    headerType = "console"
+    jar = "../libs/${rootProject.name}-${project.ext.version}.jar"
+    outfile = "${rootProject.name}-${project.ext.version}.exe"
 }
