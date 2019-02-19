@@ -1,7 +1,26 @@
 group 'com.assecopst.channels.devops'
-version '1.0-SNAPSHOT'
+
+ext {
+    projectBaseName = "einstein"
+    version = "vX.x.x"
+    extension = "jar"
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+        classpath 'edu.sc.seis.gradle:launch4j:2.4.4'
+    }
+}
 
 apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'edu.sc.seis.launch4j'
+
 
 repositories {
     mavenCentral()
@@ -10,4 +29,32 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.5.6'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.assecopst.channels.devops.Main'
+    }
+}
+
+task setProjectVersion {
+
+    String pVersion = "git describe origin/master --match=\"v*\"".execute().text.trim()
+
+    if (pVersion)
+        project.ext.set "version", pVersion
+}
+
+shadowJar {
+    baseName = "${project.ext.projectBaseName}-${project.ext.version}"
+}
+
+createExe {
+
+    mainClassName = 'com.assecopst.channels.devops.Main'
+    icon = "${projectDir}/assets/einstein.ico"
+    headerType = "console"
+    jar = "../libs/${project.ext.projectBaseName}-${project.ext.version}.${project.ext.extension}"
+    outfile = "${project.ext.projectBaseName}-${project.ext.version}.exe"
 }
