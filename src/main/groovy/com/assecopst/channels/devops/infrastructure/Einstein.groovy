@@ -50,8 +50,4 @@ class Einstein {
 
         return projects
     }
-
-    static Map getResults() {
-        return dpManager.getFinalDependencies()
-    }
 }
