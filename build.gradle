@@ -52,7 +52,6 @@ createExe {
 
     mainClassName = 'com.assecopst.channels.devops.Main'
     icon = "${projectDir}/assets/einstein.ico"
-//    headerType = "console"
     jar = "../libs/${rootProject.name}-${project.ext.version}.jar"
     outfile = "${rootProject.name}-${project.ext.version}.exe"
 }
