@@ -3,16 +3,6 @@ package com.assecopst.channels.devops.infrastructure
 import com.assecopst.channels.devops.infrastructure.crawlers.CrawlersManager
 import com.assecopst.channels.devops.infrastructure.utils.Console
 
-/**
- * @TODO
- *  - DONE - Register the calculated dependencies
- *  - DONE - Check if - on the calculated dependencies - there exists duplicate modules with non-retro compatible versions
- *  - Prepare application to be invoked by command line
- *  - DONE - For projects which were identified more than 1 version, calculate the version that must be sent
- *  - Change syntax of dependencies declaration
- *  - Save the results as json object on given file
- */
-
 class Einstein {
 
     static DependenciesManager dpManager = new DependenciesManager()
