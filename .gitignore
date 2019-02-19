@@ -2,6 +2,7 @@ out/
 threads-workspace/
 build/
 .gradle/
+.idea/libraries/**
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/tasks.xml
