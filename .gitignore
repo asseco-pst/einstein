@@ -1,4 +1,7 @@
 out/
 threads-workspace/
-.idea/sonarlint/
 build/
+.gradle/
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
