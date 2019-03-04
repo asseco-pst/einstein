@@ -39,7 +39,7 @@ class LegacyVersion extends Version {
 
     @Override
     boolean match(String aVersion) {
-        return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+\.?[0-9]*)/)).matches()
+        return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/)).matches()
     }
 
     @Override
