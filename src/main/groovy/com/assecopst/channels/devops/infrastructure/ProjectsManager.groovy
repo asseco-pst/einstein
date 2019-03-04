@@ -13,7 +13,7 @@ class ProjectsManager {
         crawledProjects = []
     }
 
-    void calcDependencies(Project aProject, Worker aObserver = null) {
+    void calcDependencies(Project aProject, Worker aObserver) {
 
         if (isAlreadyCrawled(aProject))
             return
