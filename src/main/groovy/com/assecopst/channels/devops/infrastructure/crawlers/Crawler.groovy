@@ -27,6 +27,6 @@ abstract class Crawler extends Worker {
     }
 
     protected void storeFile() {
-        new FileStorer(project, workspaceFolder).run()
+        new FileStorer(project, workspaceFolder).start()
     }
 }

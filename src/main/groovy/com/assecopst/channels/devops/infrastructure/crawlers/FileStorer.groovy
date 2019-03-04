@@ -9,7 +9,7 @@ import com.assecopst.channels.devops.infrastructure.utils.Console
  *
  * @throws Exception in case it's not able to save the required file
  */
-class FileStorer implements Runnable {
+class FileStorer extends Thread {
 
     File workspaceFolder
     Project project
