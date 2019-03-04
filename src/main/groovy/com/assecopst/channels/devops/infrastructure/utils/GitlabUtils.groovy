@@ -5,17 +5,12 @@ import com.assecopst.channels.devops.infrastructure.Project
 class GitlabUtils {
 
     private static final String GITLAB_TOKEN = "GITLAB_TOKEN"
-    private static final String gitlabToken
-
-    static {
-        gitlabToken = gitlabToken()
-    }
-
+    private static final String gitlabToken = gitlabToken()
 
     private static String gitlabToken() {
 
         String token = System.getenv(GITLAB_TOKEN)
-        if(!token)
+        if (!token)
             throw new Exception("Unable to get value from '${GITLAB_TOKEN}' environment variable")
 
         return token
@@ -27,7 +22,6 @@ class GitlabUtils {
 
         return fileFetcher.fetchFileContent()
     }
-
 
 
     /**
@@ -61,7 +55,7 @@ class GitlabUtils {
 
             String fileContent = ""
 
-            if(fileExistsOnRepo()) {
+            if (fileExistsOnRepo()) {
                 def process = getCurlCmd().execute()
                 process.waitFor()
 
@@ -82,7 +76,7 @@ class GitlabUtils {
                 int httpStatusCode = process.text.trim().toInteger()
                 return (httpStatusCode == 200)
 
-            } catch ( e ) {
+            } catch (e) {
                 throw new Exception("Unable to check if file ${rawFileHttpsUrl} exists. Cause: ${e}")
             }
         }

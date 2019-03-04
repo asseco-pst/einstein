@@ -1,36 +1,32 @@
 package com.assecopst.channels.devops.infrastructure.crawlers
 
+
 import com.assecopst.channels.devops.infrastructure.Project
-import com.assecopst.channels.devops.infrastructure.utils.Console
 
-class Crawler extends Worker {
+abstract class Crawler extends Worker {
 
+    protected final String WORKSPACE_FOLDER = "crawlers-workspace"
+    protected File workspaceFolder
+
+    protected Project project
 
     Crawler(Project aProject) {
-        super(aProject)
+        super()
+
+        project = aProject
+        setWorkspace()
+        setId("$project.name:$project.version")
     }
 
-    @Override
-    void run() {
-        checkDependencies()
+    void setWorkspace() {
+
+        workspaceFolder = new File(WORKSPACE_FOLDER)
+
+        if (!workspaceFolder.exists())
+            workspaceFolder.mkdirs()
     }
 
-
-    private void checkDependencies() {
-
-        Console.print("Checking dependencies for Project '${project.name}'")
-
-        if (project.hasRequirementsFile()) {
-            storeFile() // store file for debug purposes
-            project.parseRequirements()
-        } else {
-            Console.warn("Project ${project.name} doesn't have a requirements file...")
-        }
-    }
-
-    private void storeFile() {
-
-        Thread thread = new Thread(new FileStorer(project, workspaceFolder))
-        thread.start()
+    protected void storeFile() {
+        new FileStorer(project, workspaceFolder).run()
     }
 }

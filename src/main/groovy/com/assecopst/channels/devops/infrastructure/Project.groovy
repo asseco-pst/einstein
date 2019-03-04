@@ -1,10 +1,9 @@
 package com.assecopst.channels.devops.infrastructure
 
-import com.assecopst.channels.devops.infrastructure.crawlers.CrawlersManager
+
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.utils.GitUtils
 import com.assecopst.channels.devops.infrastructure.utils.GitlabUtils
-import com.assecopst.channels.devops.infrastructure.version.Version
 
 class Project {
 
@@ -62,69 +61,63 @@ class Project {
         return requirementsFileContent
     }
 
-    void parseRequirements() {
+//    void parseRequirements() {
+//
+//        requirementsFileContent.eachLine { dependencyLine ->
+//            String line = dependencyLine.trim()
+//            if (!line)
+//                return
+//
+//            parseDependency(line)
+//        }
+//    }
 
-        requirementsFileContent.eachLine { dependencyLine ->
-            String line = dependencyLine.trim()
-            if (!line)
-                return
+//    private void parseDependency(String aDependencyRecord) {
+//
+//        RecordParser recordParser = getRecordParser(aDependencyRecord)
+//
+//        Einstein.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
+//
+//        String dependencyProjectName = recordParser.getProjectName()
+//
+//        String dependencyVersion
+//        try {
+//            dependencyVersion = getSiblingVersion(dependencyProjectName, recordParser.getVersionWrapper())
+//
+//        } catch (e) {
+//            Console.err("Unable to get sibling version for dependency record '${aDependencyRecord}' of Project '${name}'. Cause: ${e}")
+//            throw e
+//        }
+//
+//        if (dependencyVersion) {
+//            Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
+//            MinionsFactory.calcDependencies(factory(dependencyProjectName, dependencyVersion))
+//        }
+//    }
 
-            parseDependency(line)
-        }
-    }
+//    private RecordParser getRecordParser(String aDependencyRecord) {
+//
+//        RecordParser recordParser
+//
+//        try {
+//            recordParser = new RecordParser(aDependencyRecord)
+//        } catch (e) {
+//            Console.err("Unable to parse line '${aDependencyRecord}' from '${requirementsFilename}' file of Project '${name}'. Cause: ${e}")
+//            throw e
+//        }
+//
+//        return recordParser
+//    }
 
-    private void parseDependency(String aDependencyRecord) {
-
-        RecordParser recordParser = getRecordParser(aDependencyRecord)
-
-        Einstein.getDescribedDependencies().add("Project '${name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
-
-        String dependencyProjectName = recordParser.getProjectName()
-
-        String dependencyVersion
-        try {
-            dependencyVersion = getSiblingVersion(dependencyProjectName, recordParser.getVersionWrapper())
-
-        } catch (e) {
-            Console.err("Unable to get sibling version for dependency record '${aDependencyRecord}' of Project '${name}'. Cause: ${e}")
-        }
-
-        if (dependencyVersion) {
-            Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
-            calcProjectDependencies(dependencyProjectName, dependencyVersion)
-        }
-    }
-
-    private RecordParser getRecordParser(String aDependencyRecord) {
-
-        RecordParser recordParser
-
-        try {
-            recordParser = new RecordParser(aDependencyRecord)
-        } catch (e) {
-            Console.err("Unable to parse line '${aDependencyRecord}' from '${requirementsFilename}' file of Project '${name}'. Cause: ${e}")
-            throw e
-        }
-
-        return recordParser
-    }
-
-    private String getSiblingVersion(String aProjectName, Version aVersion) {
-
-        DB.Repos projectDB = (aProjectName.trim().toUpperCase() as DB.Repos)
-
-        List<String> tags = GitUtils.getTags(projectDB.sshUrl, aVersion.getVersionGitRegexExp())
-        List<String> matchingTags = tags.stream().filter({ line -> aVersion.matchesVersion(line) }).collect({ line -> aVersion.getTagFromExp(line) })
-
-        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
-    }
-
-    private void calcProjectDependencies(String aDependencyProjectName, String aVersion) {
-
-        DB.Repos projectDB = aDependencyProjectName.toUpperCase() as DB.Repos
-
-        CrawlersManager.calcDependencies(factory(aDependencyProjectName, aVersion))
-    }
+//    private String getSiblingVersion(String aProjectName, Version aVersion) {
+//
+//        DB.Repos projectDB = (aProjectName.trim().toUpperCase() as DB.Repos)
+//
+//        List<String> tags = GitUtils.getTags(projectDB.sshUrl, aVersion.getVersionGitRegexExp())
+//        List<String> matchingTags = tags.stream().filter({ line -> aVersion.matchesVersion(line) }).collect({ line -> aVersion.getTagFromExp(line) })
+//
+//        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
+//    }
 
 
     static class Builder {

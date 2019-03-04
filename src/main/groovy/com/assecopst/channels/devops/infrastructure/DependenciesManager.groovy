@@ -8,7 +8,7 @@ class DependenciesManager {
     Map readDependencies = [:]
     Map finalDependencies = [:]
 
-    void addDependency(String aProjectName, String aVersion) {
+    synchronized void addDependency(String aProjectName, String aVersion) {
         if (!readDependencies[aProjectName])
             readDependencies[aProjectName] = new HashSet<String>()
         readDependencies[aProjectName] << aVersion

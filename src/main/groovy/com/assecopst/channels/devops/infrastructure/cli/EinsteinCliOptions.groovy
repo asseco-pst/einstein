@@ -9,10 +9,12 @@ class EinsteinCliOptions {
     @Option(shortName = 'h', description = 'display usage')
     Boolean help
 
-
-    private List<ProjectDao> projects
+    @Option(shortName = 'verbose', description = 'Show additional information about the dependencies calculation process')
+    boolean verbose
 
     // --projects or -p
+    private List<ProjectDao> projects
+
     @Option(shortName = 'p', description = 'all projects for which runtime dependencies must be calculated. \nex: `-p server:2.0.0,backofficews:1.7.10`')
     void setProjects(String aProjects) {
 

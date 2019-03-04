@@ -4,9 +4,10 @@ package com.assecopst.channels.devops.infrastructure
 class DB {
     enum Repos {
 
-        A("git@gitlab.dcs.exictos.com:cegoncalves/runtime-requirements-project-a.git", "https://gitlab.dcs.exictos.com/cegoncalves/runtime-requirements-project-a"),
-        B("git@gitlab.dcs.exictos.com:cegoncalves/runtime-requirements-project-b.git", "https://gitlab.dcs.exictos.com/cegoncalves/runtime-requirements-project-b"),
-        C("git@gitlab.dcs.exictos.com:cegoncalves/runtime-requirements-project-c.git", "https://gitlab.dcs.exictos.com/cegoncalves/runtime-requirements-project-c")
+        AAA("git@gitlab.dcs.exictos.com:cegoncalves/aaa.git", "https://gitlab.dcs.exictos.com/cegoncalves/aaa"),
+        BBB("git@gitlab.dcs.exictos.com:cegoncalves/bbb.git", "https://gitlab.dcs.exictos.com/cegoncalves/bbb"),
+        CCC("git@gitlab.dcs.exictos.com:cegoncalves/ccc.git", "https://gitlab.dcs.exictos.com/cegoncalves/ccc"),
+        DDD("git@gitlab.dcs.exictos.com:cegoncalves/ddd.git", "https://gitlab.dcs.exictos.com/cegoncalves/ddd")
 
         String sshUrl, httpsUrl
 

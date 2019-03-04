@@ -11,7 +11,7 @@ class Main {
 
     static void main(String[] args) {
 
-        cliParser = new CliParser()
+        cliParser = Einstein.getCli()
 
         try {
             cliParser.parse(args)
@@ -29,7 +29,8 @@ class Main {
                 saveResultsIntoFile(outputFilePath)
 
         } catch (e) {
-            Console.err("Unable to calculate provided Projects Runtime dependencies. Cause: ${e}")
+            Console.err("An error occurred. Cause: ${e}")
+            Console.err(e.printStackTrace())
             System.exit(1)
         }
 

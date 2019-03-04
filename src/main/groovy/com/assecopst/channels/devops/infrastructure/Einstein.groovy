@@ -1,22 +1,49 @@
 package com.assecopst.channels.devops.infrastructure
 
-import com.assecopst.channels.devops.infrastructure.crawlers.CrawlersManager
+import com.assecopst.channels.devops.infrastructure.cli.CliParser
+import com.assecopst.channels.devops.infrastructure.crawlers.ProjectsCrawler
+import com.assecopst.channels.devops.infrastructure.metrics.Metrics
 import com.assecopst.channels.devops.infrastructure.utils.Console
+import com.assecopst.channels.devops.infrastructure.utils.EinsteinProperties
 
-class Einstein {
+abstract class Einstein {
 
+    static CliParser cli
+
+    static synchronized List<String> describedDependencies = []
     static DependenciesManager dpManager = new DependenciesManager()
-    static List<String> describedDependencies = []
+    static EinsteinProperties properties = new EinsteinProperties()
+    static ProjectsManager projectsManager = new ProjectsManager()
+    static Metrics metrics = new Metrics()
 
+
+    static CliParser getCli() {
+
+        cli = new CliParser()
+        return cli
+    }
+
+    static boolean isDebugModeOn() {
+
+        if (cli) {
+            if (cli.einsteinOptions.verbose)
+                return true
+        }
+
+        return properties.isDebugModeOn()
+    }
 
     static void calcDependencies(List<ProjectDao> aProjectsData) {
 
-        loadProjects(aProjectsData).each { project ->
-            dpManager.addDependency(project.name, project.version)
-            CrawlersManager.calcDependencies(project)
-        }
+        Console.debug("Start tracking timer...")
+        metrics.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
-        CrawlersManager.interruptAll()
+        ProjectsCrawler pCrawler = new ProjectsCrawler(loadProjects(aProjectsData))
+        pCrawler.start()
+        pCrawler.join()
+
+        Console.debug("Stop tracking timer...")
+        metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
         Console.print("Check raw dependencies:")
         Console.print(dpManager.getReadDependencies())
@@ -28,6 +55,10 @@ class Einstein {
 
         Console.print("Described dependencies:")
         Console.print(describedDependencies.sort().join("\n"))
+
+        Console.info("Einstein took " +
+                metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString() +
+                " calculating required dependencies")
     }
 
     private static List<Project> loadProjects(List<ProjectDao> aProjectsData) {
