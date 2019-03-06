@@ -19,7 +19,8 @@ abstract class Einstein {
 
     static CliParser getCli() {
 
-        cli = new CliParser()
+        if (!cli)
+            cli = new CliParser()
         return cli
     }
 
