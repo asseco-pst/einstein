@@ -4,10 +4,10 @@ import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.Project
 import com.assecopst.channels.devops.infrastructure.utils.Console
 
-class Minion extends Crawler {
+class FileParserMinion extends Crawler {
 
 
-    Minion(Project aProject) {
+    FileParserMinion(Project aProject) {
         super(aProject)
     }
 

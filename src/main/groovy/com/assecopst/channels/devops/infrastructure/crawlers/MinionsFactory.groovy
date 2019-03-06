@@ -16,10 +16,10 @@ abstract class MinionsFactory {
 
         switch (Type) {
             case Type.CRAWLER:
-                minion = new Minion(aProject)
+                minion = new FileParserMinion(aProject)
                 break
             case Type.VERSION_PARSER:
-                minion = new VersionParserMinion(aProject, aDependencyLine)
+                minion = new VersionSeekerMinion(aProject, aDependencyLine)
                 break
         }
 

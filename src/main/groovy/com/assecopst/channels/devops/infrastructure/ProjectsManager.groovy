@@ -19,7 +19,7 @@ class ProjectsManager {
             return
         addCrawledProject(aProject)
 
-        Console.debug("Launching Minion to calculate dependencies of Project $aProject.name:$aProject.version")
+        Console.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.name:$aProject.version")
         MinionsFactory.create(MinionsFactory.Type.CRAWLER, aProject, aObserver)
     }
 

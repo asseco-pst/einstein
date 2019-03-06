@@ -8,12 +8,12 @@ import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.utils.GitUtils
 import com.assecopst.channels.devops.infrastructure.version.Version
 
-class VersionParserMinion extends Worker {
+class VersionSeekerMinion extends Worker {
 
     private final Project project
     private final String dependencyLine
 
-    VersionParserMinion(Project aProject, String aDependencyLine) {
+    VersionSeekerMinion(Project aProject, String aDependencyLine) {
         super()
 
         project = aProject
