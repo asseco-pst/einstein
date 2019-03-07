@@ -35,7 +35,7 @@ class Main {
             interrupt(e)
         }
 
-        Console.print("FiniTshed!")
+        Console.print("Finished!")
     }
 
     static private void saveResultsIntoFile(String aFilePath) {
