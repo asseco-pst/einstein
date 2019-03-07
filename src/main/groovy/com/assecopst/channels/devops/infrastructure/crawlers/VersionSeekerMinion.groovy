@@ -39,7 +39,7 @@ class VersionSeekerMinion extends Worker {
 
         String dependencyVersion
         try {
-            dependencyVersion = getSiblingVersion(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyParser.getVersionWrapper())
+            dependencyVersion = (dependencyParser.getVersionWrapper().isRcTag()) ? dependencyParser.getReadVersion() : getSiblingVersion(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyParser.getVersionWrapper())
         } catch (e) {
             Console.err("Unable to get sibling version for dependency record '${dependencyRecord}' of Project '${project.name}'. Cause: ${e}")
             throw e
