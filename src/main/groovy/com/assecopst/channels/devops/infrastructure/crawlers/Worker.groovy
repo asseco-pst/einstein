@@ -1,5 +1,6 @@
 package com.assecopst.channels.devops.infrastructure.crawlers
 
+import com.assecopst.channels.devops.Main
 import com.assecopst.channels.devops.infrastructure.utils.Console
 
 abstract class Worker extends Thread implements Observer, Observable {
@@ -24,9 +25,14 @@ abstract class Worker extends Thread implements Observer, Observable {
     @Override
     void run() {
 
-        work()
-        wait4SubscribedMinions()
-        _notify()
+        try {
+            work()
+            wait4SubscribedMinions()
+            _notify()
+        } catch (Exception e) {
+            Console.debug("An error occured on Thread '$_id'")
+            Main.interrupt(e)
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ class ProjectsManager {
 
         String projectId = aProject.name
         if (crawledProjects.contains(projectId)) {
-            Console.debug("'${projectId}' Project was already crawled...")
+            Console.debug("Project '${projectId}' was already crawled...")
             return true
         }
         crawledProjects << projectId

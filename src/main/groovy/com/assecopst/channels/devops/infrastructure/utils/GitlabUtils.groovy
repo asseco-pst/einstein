@@ -18,7 +18,7 @@ class GitlabUtils {
 
     static String getFileContentFromRepo(Project aProject) {
 
-        FileFetcher fileFetcher = new FileFetcher(aProject.getRepoHttpsUrl(), aProject.versionCommitSha, Project.requirementsFilename)
+        FileFetcher fileFetcher = new FileFetcher(aProject.getRepoHttpsUrl(), aProject.versionCommitSha, Project.REQUIREMENTS_FILE)
 
         return fileFetcher.fetchFileContent()
     }

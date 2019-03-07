@@ -72,7 +72,7 @@ abstract class Version {
         aVersions.each { version ->
             if (lastStatedVersion && (lastStatedVersion.getClass() != version.getClass())) {
                 Console.warn("Versions ${lastStatedVersion.getVersionStr()} and ${version.getVersionStr()} have " +
-                        "different specification (${lastStatedVersion.getClass().getName()} <> ${version.getClass().getName()})")
+                        "different specification (${lastStatedVersion.getClass().getSimpleName()} <> ${version.getClass().getSimpleName()})")
                 hasMultSpecs = true
             }
             lastStatedVersion = version

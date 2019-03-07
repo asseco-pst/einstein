@@ -15,11 +15,13 @@ class EinsteinCliOptions {
     // --projects or -p
     private List<ProjectDao> projects
 
-    @Option(shortName = 'p', description = 'all projects for which runtime dependencies must be calculated. \nex: `-p server:2.0.0,backofficews:1.7.10`')
+    @Option(shortName = 'p', description = 'all projects for which runtime dependencies must be calculated. \nex: `-p middleware/server:2.0.0,middleware/backofficews:1.7.10`')
     void setProjects(String aProjects) {
 
-        String splitter = ":" // character that splits the project name from its version
-        projects = aProjects.tokenize(",").stream().collect({ p -> new ProjectDao(name: p.split(splitter)[0], version: p.split(splitter)[1]) })
+        projects = aProjects.tokenize(",").stream().collect({ p ->
+            ProjectDao.fromFullName(p)
+        })
+
     }
 
     List<ProjectDao> getProjects() { projects }

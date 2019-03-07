@@ -1,9 +1,9 @@
 package com.assecopst.channels.devops.infrastructure.crawlers
 
-import com.assecopst.channels.devops.infrastructure.DB
+import com.assecopst.channels.devops.http.RepoExplorerFactory
+import com.assecopst.channels.devops.infrastructure.DependencyParser
 import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.Project
-import com.assecopst.channels.devops.infrastructure.RecordParser
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.utils.GitUtils
 import com.assecopst.channels.devops.infrastructure.version.Version
@@ -11,66 +11,71 @@ import com.assecopst.channels.devops.infrastructure.version.Version
 class VersionSeekerMinion extends Worker {
 
     private final Project project
-    private final String dependencyLine
+    private final String dependencyRecord
 
     VersionSeekerMinion(Project aProject, String aDependencyLine) {
         super()
 
         project = aProject
-        dependencyLine = aDependencyLine
-        setId("$project.name:$project.version<>$dependencyLine")
+        dependencyRecord = aDependencyLine
+        setId("$project.name:$project.version<>$dependencyRecord")
     }
 
     @Override
     protected void work() {
 
-        parseDependencyVersion()
+        parseDependency()
     }
 
-    private void parseDependencyVersion() {
+    private void parseDependency() {
 
-        RecordParser recordParser = getRecordParser(dependencyLine)
+        Console.info("Project '$project.name:$project.version' - Parsing dependency record '$dependencyRecord'")
 
-        Einstein.getDescribedDependencies().add("Project '${project.name}' requires Project '${recordParser.projectName}' on version ${recordParser.versionWrapper.versionStr}")
+        DependencyParser dependencyParser = getDependencyParser(dependencyRecord)
 
-        String dependencyProjectName = recordParser.getProjectName()
+        Einstein.getDescribedDependencies().add("Project '$project.name:$project.version' requires Project $dependencyParser.projectName:$dependencyParser.versionWrapper.versionStr")
+
+        String dependencyProjectName = dependencyParser.getProjectName()
 
         String dependencyVersion
         try {
-            dependencyVersion = getSiblingVersion(dependencyProjectName, recordParser.getVersionWrapper())
-
+            dependencyVersion = getSiblingVersion(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyParser.getVersionWrapper())
         } catch (e) {
-            Console.err("Unable to get sibling version for dependency record '${dependencyLine}' of Project '${project.name}'. Cause: ${e}")
+            Console.err("Unable to get sibling version for dependency record '${dependencyRecord}' of Project '${project.name}'. Cause: ${e}")
             throw e
         }
 
         if (dependencyVersion) {
+            Console.info("Project '$project.name:$project.version' - Dependency identified: $dependencyProjectName:$dependencyVersion")
             Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
-            Einstein.getProjectsManager().calcDependencies(Project.factory(dependencyProjectName, dependencyVersion), this)
+            Einstein.getProjectsManager().calcDependencies(Project.factory(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyVersion), this)
         }
     }
 
-    private String getSiblingVersion(String aProjectName, Version aVersion) {
+    private DependencyParser getDependencyParser(String aDependencyRecord) {
 
-        DB.Repos projectDB = (aProjectName.trim().toUpperCase() as DB.Repos)
-
-        List<String> tags = GitUtils.getTags(projectDB.sshUrl, aVersion.getVersionGitRegexExp())
-        List<String> matchingTags = tags.stream().filter({ line -> aVersion.matchesVersion(line) }).collect({ line -> aVersion.getTagFromExp(line) })
-
-        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
-    }
-
-    private RecordParser getRecordParser(String aDependencyRecord) {
-
-        RecordParser recordParser
+        DependencyParser recordParser
 
         try {
-            recordParser = new RecordParser(aDependencyRecord)
+            recordParser = new DependencyParser(aDependencyRecord)
         } catch (e) {
-            Console.err("Unable to parse line '${aDependencyRecord}' from '${project.getRequirementsFilename()}' file of Project '${project.name}'. Cause: ${e}")
+            Console.err("Unable to parse line '${aDependencyRecord}' from '${Project.REQUIREMENTS_FILE}' file of Project '${project.name}'. Cause: ${e}")
             throw e
         }
 
         return recordParser
+    }
+
+    private String getSiblingVersion(String aProjectNamespace, String aProjectName, Version aVersion) {
+
+        String sshUrl = RepoExplorerFactory.get().getRepoSshUrl(aProjectNamespace, aProjectName)
+
+        List<String> tags = GitUtils.getTags(sshUrl, aVersion.getVersionGitRegexExp())
+        List<String> matchingTags = tags.stream().filter({ line -> aVersion.matchesVersion(line) }).collect({ line -> aVersion.getTagFromExp(line) })
+
+        if (!matchingTags)
+            throw new Exception("Unable to get sibling version for $aProjectName:${aVersion.getVersionStr()}")
+
+        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
     }
 }

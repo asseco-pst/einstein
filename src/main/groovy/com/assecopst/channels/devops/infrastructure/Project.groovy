@@ -1,15 +1,16 @@
 package com.assecopst.channels.devops.infrastructure
 
-
+import com.assecopst.channels.devops.http.RepoExplorerFactory
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.utils.GitUtils
 import com.assecopst.channels.devops.infrastructure.utils.GitlabUtils
 
 class Project {
 
-    static final String requirementsFilename = "requirements.txt"
+    static final String REQUIREMENTS_FILE = "requirements.txt"
 
     String name
+    String namespace
     String version
     String versionCommitSha
     String repoSshUrl
@@ -18,31 +19,21 @@ class Project {
 
     private Project() {}
 
-    static Project factory(String aName, String aVersion) {
-
-        DB.Repos projectRepo
-        try {
-            projectRepo = aName.toUpperCase() as DB.Repos
-        } catch (e) {
-            Console.err("Unable to find project with name '${aName}'.")
-            throw e
-        }
+    static Project factory(String aNamespace, String aName, String aVersion) {
 
         Project project
 
         try {
             project =
                     new Project.Builder()
+                            .setNamespace(aNamespace)
                             .setName(aName)
                             .setVersion(aVersion)
-                            .setRepoHttpsUrl(projectRepo.httpsUrl)
-                            .setRepoSshUrl(projectRepo.sshUrl)
                             .build()
         } catch (e) {
             Console.err("Unable to instantiate Project with name '${aName}' and version '${aVersion}'")
             throw e
         }
-
 
         return project
     }
@@ -52,7 +43,7 @@ class Project {
         try {
             requirementsFileContent = GitlabUtils.getFileContentFromRepo(this)
         } catch (e) {
-            Console.err("Unable to load ${requirementsFilename} file content of ${name} Project")
+            Console.err("Unable to load ${REQUIREMENTS_FILE} file content of ${name} Project")
             throw e
         }
     }
@@ -119,13 +110,17 @@ class Project {
 //        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
 //    }
 
-
     static class Builder {
 
         private Project project
 
         Builder() {
             project = new Project()
+        }
+
+        Builder setNamespace(String namespace) {
+            project.namespace = namespace
+            return this
         }
 
         Builder setName(String aName) {
@@ -138,19 +133,12 @@ class Project {
             return this
         }
 
-        Builder setRepoSshUrl(String aRepoSshUrl) {
-            project.repoSshUrl = aRepoSshUrl
-            return this
-        }
-
-        Builder setRepoHttpsUrl(String aRepoHttpsUrl) {
-            project.repoHttpsUrl = aRepoHttpsUrl
-            return this
-        }
-
         Project build() {
 
+            project.setRepoSshUrl(RepoExplorerFactory.get().getRepoSshUrl(project.namespace, project.name))
+            project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
             project.versionCommitSha = GitUtils.getTagCommitSha(project.repoSshUrl, project.version)
+
             project.loadRequirementsFileContent()
 
             return project

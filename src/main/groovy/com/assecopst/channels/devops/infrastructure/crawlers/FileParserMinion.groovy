@@ -18,14 +18,14 @@ class FileParserMinion extends Crawler {
 
     private void checkProjectDependencies() {
 
-        Console.print("Checking dependencies for Project '${project.name}'")
+        Console.print("Project '$project.name:$project.version' - Checking dependencies...")
 
         if (project.hasRequirementsFile()) {
             if (Einstein.properties.isDebugModeOn())
                 storeFile() // store file for debug purposes
             parseRequirements()
         } else {
-            Console.warn("Project ${project.name} doesn't have a requirements file...")
+            Console.warn("Project '$project.name:$project.version' doesn't have a requirements file...")
         }
     }
 
@@ -36,7 +36,7 @@ class FileParserMinion extends Crawler {
             if (!line)
                 return
 
-            MinionsFactory.create(MinionsFactory.Type.VERSION_PARSER, project, this, line)
+            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, line)
         }
     }
 }
