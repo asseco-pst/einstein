@@ -5,7 +5,6 @@ import com.assecopst.channels.devops.infrastructure.DependencyParser
 import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.Project
 import com.assecopst.channels.devops.infrastructure.utils.Console
-import com.assecopst.channels.devops.infrastructure.utils.GitUtils
 import com.assecopst.channels.devops.infrastructure.version.Version
 
 class VersionSeekerMinion extends Worker {
@@ -68,10 +67,8 @@ class VersionSeekerMinion extends Worker {
 
     private String getSiblingVersion(String aProjectNamespace, String aProjectName, Version aVersion) {
 
-        String sshUrl = RepoExplorerFactory.get().getRepoSshUrl(aProjectNamespace, aProjectName)
-
-        List<String> tags = GitUtils.getTags(sshUrl, aVersion.getVersionGitRegexExp())
-        List<String> matchingTags = tags.stream().filter({ line -> aVersion.matchesVersion(line) }).collect({ line -> aVersion.getTagFromExp(line) })
+        List<String> matchingTags = RepoExplorerFactory.get().listTags(aProjectNamespace, aProjectName
+                , { tag -> aVersion.matchesVersion(tag.getName())})
 
         if (!matchingTags)
             throw new Exception("Unable to get sibling version for $aProjectName:${aVersion.getVersionStr()}")

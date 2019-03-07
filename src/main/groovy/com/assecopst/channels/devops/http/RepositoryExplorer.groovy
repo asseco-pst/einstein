@@ -1,6 +1,8 @@
 package com.assecopst.channels.devops.http
 
-import java.util.regex.Pattern
+import org.gitlab4j.api.models.Tag
+
+import java.util.function.Predicate
 
 abstract class RepositoryExplorer {
 
@@ -26,6 +28,6 @@ abstract class RepositoryExplorer {
 
     abstract String getTagHash(String tagName, String namespace, String projectName)
 
-    abstract List listTags(String namespace, String projectName, Pattern regex)
+    abstract List listTags(String namespace, String projectName, Predicate<? super Tag> predicate)
 
 }

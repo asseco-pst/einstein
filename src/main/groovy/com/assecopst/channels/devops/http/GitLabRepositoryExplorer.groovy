@@ -1,12 +1,11 @@
 package com.assecopst.channels.devops.http
 
-
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 
-import java.util.regex.Pattern
+import java.util.function.Predicate
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
@@ -152,14 +151,14 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @return a list of tags
      */
     @Override
-    List<Tag> listTags(String namespace, String projectName, Pattern regex = null) {
+    List<Tag> listTags(String namespace, String projectName, Predicate<? super Tag> predicate = null) {
         try {
             Project project = findProject(namespace, projectName)
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
 
-            if(regex != null)
-                return tags.filter({ tag -> tag.getName() ==~ regex }).collect(Collectors.toList())
+            if(predicate != null)
+                return tags.filter(predicate).collect(Collectors.toList())
             else
                 return tags.collect(Collectors.toList())
 

@@ -2,8 +2,6 @@ package com.assecopst.channels.devops.infrastructure
 
 import com.assecopst.channels.devops.http.RepoExplorerFactory
 import com.assecopst.channels.devops.infrastructure.utils.Console
-import com.assecopst.channels.devops.infrastructure.utils.GitUtils
-import com.assecopst.channels.devops.infrastructure.utils.GitlabUtils
 
 class Project {
 
@@ -41,7 +39,10 @@ class Project {
     void loadRequirementsFileContent() {
 
         try {
-            requirementsFileContent = GitlabUtils.getFileContentFromRepo(this)
+
+            requirementsFileContent = RepoExplorerFactory.get().getFileContents(REQUIREMENTS_FILE, this.versionCommitSha,
+                    this.namespace, this.name)
+
         } catch (e) {
             Console.err("Unable to load ${REQUIREMENTS_FILE} file content of ${name} Project")
             throw e
@@ -137,7 +138,7 @@ class Project {
 
             project.setRepoSshUrl(RepoExplorerFactory.get().getRepoSshUrl(project.namespace, project.name))
             project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
-            project.versionCommitSha = GitUtils.getTagCommitSha(project.repoSshUrl, project.version)
+            project.versionCommitSha = RepoExplorerFactory.get().getTagHash(project.version, project.namespace, project.name)
 
             project.loadRequirementsFileContent()
 
