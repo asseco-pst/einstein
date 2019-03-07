@@ -35,7 +35,7 @@ class CliParser {
         }
 
         if (!einsteinOptions.projects)
-            throw new Exception("No gitlab projects were provided")
+            throw new Exception("No projects were provided")
 
         if (einsteinOptions.saveToFile) {
             if (!isValidPath())

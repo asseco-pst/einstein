@@ -55,7 +55,9 @@ abstract class Einstein {
         Console.print(dpManager.getFinalDependencies())
 
         Console.print("Described dependencies:")
-        Console.print(describedDependencies.sort().join("\n"))
+        describedDependencies.sort().each { d ->
+            Console.info(d)
+        }
 
         Console.info("Einstein took " +
                 metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString() +
@@ -66,8 +68,7 @@ abstract class Einstein {
 
         List<Project> projects = []
         aProjectsData.each {
-            ProjectDao pData = (ProjectDao) it
-            projects << Project.factory(pData.name, pData.version)
+            projects << Project.factory(it.namespace, it.name, it.version)
         }
 
         return projects

@@ -1,24 +1,25 @@
 package com.assecopst.channels.devops.infrastructure.crawlers
 
+
 import com.assecopst.channels.devops.infrastructure.Project
 
 abstract class MinionsFactory {
 
     enum Type {
         CRAWLER,
-        VERSION_PARSER
+        VERSION_SEEKER
     }
 
 
-    static void create(Type Type, Project aProject, Worker aObserver, String aDependencyLine = null) {
+    static void create(Type aType, Project aProject, Worker aObserver, String aDependencyLine = null) {
 
         Worker minion
 
-        switch (Type) {
+        switch (aType) {
             case Type.CRAWLER:
                 minion = new FileParserMinion(aProject)
                 break
-            case Type.VERSION_PARSER:
+            case Type.VERSION_SEEKER:
                 minion = new VersionSeekerMinion(aProject, aDependencyLine)
                 break
         }
