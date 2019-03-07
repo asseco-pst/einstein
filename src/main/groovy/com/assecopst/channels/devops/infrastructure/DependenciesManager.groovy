@@ -22,8 +22,6 @@ class DependenciesManager {
 
     private void checkVersionsCompatibility() {
 
-        boolean foundNonCompatibleVersions = false
-
         readDependencies.each {
             String projectName = it.key
             Set<String> dependentVersions = (Set<String>) it.value
@@ -35,11 +33,9 @@ class DependenciesManager {
 
             if (hasNonCompatibleVersions(dependentVersions)) {
                 Console.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
-                foundNonCompatibleVersions = true
+                throw new Exception("Non compatible versions found!")
             }
         }
-        if (foundNonCompatibleVersions)
-            throw new Exception("Non compatible versions found!")
     }
 
 
