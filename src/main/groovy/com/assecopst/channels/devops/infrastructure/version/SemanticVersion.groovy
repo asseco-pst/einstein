@@ -19,13 +19,18 @@ class SemanticVersion extends Version {
     }
 
     @Override
+    protected String purge() {
+        return (versionStr =~ /([0-9]+\.[0-9]+\.[0-9]+)/)[0][1]
+    }
+
+    @Override
     protected boolean checkIfHasMajorBreak(Version aVer1, Version aVer2) {
         return breakOnMajorFields(aVer1, aVer2)
     }
 
     @Override
     boolean match(String aVersion) {
-        return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+)/)).matches()
+        return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+${getRcExp()})/)).matches()
     }
 
     @Override
@@ -48,7 +53,7 @@ class SemanticVersion extends Version {
 
     @Override
     def getRcRegexExp() {
-        def exp = /^(.)*?(${major}\.${minor}\.[0-9]+-rc\..)/
+        def exp = /^(.)*?(${major}\.${minor}\.[0-9]+)/
         return exp
     }
 }
