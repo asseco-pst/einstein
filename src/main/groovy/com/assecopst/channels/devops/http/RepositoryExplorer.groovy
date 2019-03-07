@@ -1,5 +1,7 @@
 package com.assecopst.channels.devops.http
 
+import java.util.regex.Pattern
+
 abstract class RepositoryExplorer {
 
     String repoUrl
@@ -24,6 +26,6 @@ abstract class RepositoryExplorer {
 
     abstract String getTagHash(String tagName, String namespace, String projectName)
 
-    abstract List listTags(int page, int tagsPerPage, String namespace, String projectName)
+    abstract List listTags(String namespace, String projectName, Pattern regex)
 
 }

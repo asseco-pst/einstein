@@ -6,6 +6,10 @@ import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 
+import java.util.regex.Pattern
+import java.util.stream.Collectors
+import java.util.stream.Stream
+
 /**
  *  This class makes use of GitLab's REST API to get information about repos
  */
@@ -139,20 +143,26 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     }
 
     /**
-     *  Returns a list of tags existing in the projects repo. If no page and tags per page are specified this method
-     *  will return the latest tag.
+     *  Returns a list of tags existing in the projects repo.
+     *  If provided a regular expression, this method will return only tags that match with the pattern.
      *
-     * @param page the page to get
-     * @param tagsPerPage the number of Tag instances per page
      * @param namespace the namespace of the project (ie. group)
-     * @param projectName the project name
+     * @param projectName the name of the project
+     * @param regex a pattern to filter the tags
      * @return a list of tags
      */
     @Override
-    List<Tag> listTags(int page = 1, int tagsPerPage = 1, String namespace, String projectName) {
+    List<Tag> listTags(String namespace, String projectName, Pattern regex = null) {
         try {
             Project project = findProject(namespace, projectName)
-            return api.getTagsApi().getTags(project, page, tagsPerPage)
+
+            Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
+
+            if(regex != null)
+                return tags.filter({ tag -> tag.getName() ==~ regex }).collect(Collectors.toList())
+            else
+                return tags.collect(Collectors.toList())
+
         } catch (Exception e) {
             Console.err("Could not get tags for project $projectName. Cause: $e")
             throw e
