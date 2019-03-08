@@ -134,7 +134,13 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     String getTagHash(String tagName, String namespace, String projectName) {
         try {
             Project project = findProject(namespace, projectName)
-            return api.getTagsApi().getTag(project, tagName).getCommit().getId()
+
+            Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
+
+            Tag tag = tags.filter({ tag -> tag.getName().endsWith(tagName) }).findFirst().get()
+
+            return tag.getCommit().getId()
+
         } catch (Exception e) {
             Console.err("Could not get Tag $tagName hash. Cause: $e")
             throw e
@@ -151,16 +157,23 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @return a list of tags
      */
     @Override
-    List<Tag> listTags(String namespace, String projectName, Predicate<? super Tag> predicate = null) {
+    List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate = null) {
         try {
             Project project = findProject(namespace, projectName)
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
 
-            if(predicate != null)
-                return tags.filter(predicate).collect(Collectors.toList())
-            else
-                return tags.collect(Collectors.toList())
+            if(predicate != null) {
+                return tags
+                        .filter(predicate)
+                        .flatMap({ tag -> Stream.of(tag.getName()) })
+                        .collect(Collectors.toList())
+            }
+            else {
+                return tags
+                        .flatMap({ tag -> Stream.of(tag.getName()) })
+                        .collect(Collectors.toList())
+            }
 
         } catch (Exception e) {
             Console.err("Could not get tags for project $projectName. Cause: $e")

@@ -34,6 +34,21 @@ abstract class Version {
         parse()
     }
 
+    static String extractVersionFromString(String value){
+        switch(getVersionType(value)){
+            case Type.LEGACY:
+                return new LegacyVersion().extractVersion(value)
+                break
+            case Type.SEMANTIC:
+                return new SemanticVersion().extractVersion(value)
+                break
+            default:
+                //TODO: Provide exception message
+                throw new IllegalArgumentException("")
+        }
+    }
+
+    abstract String extractVersion(String value)
 
     static List<Version> factory(def aVersions) {
 
@@ -243,4 +258,6 @@ abstract class Version {
     abstract def getVersionRegexExp()
 
     abstract def getRcRegexExp()
+
+    abstract String tobedeterminded(String value)
 }

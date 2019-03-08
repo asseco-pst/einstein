@@ -1,6 +1,7 @@
 package com.assecopst.channels.devops.infrastructure.version
 
 import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class LegacyVersion extends Version {
 
@@ -64,5 +65,13 @@ class LegacyVersion extends Version {
     def getRcRegexExp() {
         def exp = /^(.)*?(${nyd}\.${major}\.${minor}\.[0-9]+-rc\..)/
         return exp
+    }
+
+    static Pattern getVersionRegex(){
+        return ~/^(.)*?([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/
+    }
+
+    static Pattern getRcVersionRegex(){
+        return ~/^(.)*?([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-rc\..)/
     }
 }

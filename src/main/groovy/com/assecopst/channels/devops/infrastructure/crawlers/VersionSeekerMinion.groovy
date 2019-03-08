@@ -6,6 +6,7 @@ import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.Project
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.version.Version
+import org.gitlab4j.api.models.Tag
 
 class VersionSeekerMinion extends Worker {
 

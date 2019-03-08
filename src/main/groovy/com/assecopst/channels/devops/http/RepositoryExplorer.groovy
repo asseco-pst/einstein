@@ -28,6 +28,6 @@ abstract class RepositoryExplorer {
 
     abstract String getTagHash(String tagName, String namespace, String projectName)
 
-    abstract List listTags(String namespace, String projectName, Predicate<? super Tag> predicate)
+    abstract List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate)
 
 }

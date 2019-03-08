@@ -1,6 +1,7 @@
 package com.assecopst.channels.devops.infrastructure.version
 
 import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class SemanticVersion extends Version {
 
@@ -8,6 +9,13 @@ class SemanticVersion extends Version {
 
     SemanticVersion(String aVersionStr) {
         super(aVersionStr)
+    }
+
+    @Override
+    String extractVersion(String value) {
+        if((value =~ getRcRegexExp()).matches()){
+            return
+        }
     }
 
     @Override
@@ -50,5 +58,20 @@ class SemanticVersion extends Version {
     def getRcRegexExp() {
         def exp = /^(.)*?(${major}\.${minor}\.[0-9]+-rc\..)/
         return exp
+    }
+
+    static Pattern getVersionRegex(){
+        return ~/^(.)*?([0-9]+\.[0-9]+\.[0-9]+)/
+    }
+
+    static Pattern getRcVersionRegex(){
+        return ~/^(.)*?([0-9]+\.[0-9]+\.[0-9]+-rc\..)/
+    }
+
+    @Override
+    String tobedeterminded(String value) {
+
+
+
     }
 }
