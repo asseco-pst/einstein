@@ -66,7 +66,7 @@ abstract class Version {
     static Version factory(String aVersionStr) {
 
         if (!isValidVersion(aVersionStr))
-            throw new Exception("Version '${aVersionStr}' is not a valid version. Accepted version sintaxes: 'x.x.x' or 'x.x.x.x'")
+            throw new Exception("Version '${aVersionStr}' is not a valid version. Accepted version sintaxes: 'x.x.x(-rc\\.?([0-9]+)?)?' or 'x.x.x.x(-rc\\.?([0-9]+)?)?'")
 
         switch (getVersionType(aVersionStr)) {
             case Type.SEMANTIC:
@@ -117,6 +117,10 @@ abstract class Version {
         return versions.stream().filter({ version -> version.tokenize(".").join("").toInteger() == biggestIntegerVersion }).collect()[0]
     }
 
+    protected String getRcExp() {
+        return "(-rc\\.?([0-9]+)?)?"
+    }
+
     private static boolean hasMajorBreak(List<Version> aVersions) {
 
         boolean hasMajorBreak = false
@@ -155,7 +159,7 @@ abstract class Version {
     }
 
     protected void tokenizeVersion() {
-        tokenizedVersion = versionStr.tokenize(".")
+        tokenizedVersion = purge().tokenize(".")
     }
 
     private static Type getVersionType(String aVersionStr) {
@@ -186,8 +190,8 @@ abstract class Version {
         return nbr
     }
 
-    protected boolean isRcTag() {
-        return ((Matcher) (versionStr =~ /^.*rc.*/)).matches()
+    boolean isRcTag() {
+        return ((Matcher) (versionStr =~ /^.*rc\.?([0-9]+)?/)).matches()
     }
 
     protected boolean isMajorBreak(Version aVer1, Version aVer2) {
@@ -246,6 +250,8 @@ abstract class Version {
 
 
     protected abstract void parse()
+
+    protected abstract String purge()
 
     protected abstract boolean checkIfHasMajorBreak(Version aVer1, Version aVer2)
 
