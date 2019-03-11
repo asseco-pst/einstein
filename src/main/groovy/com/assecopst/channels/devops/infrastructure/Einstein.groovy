@@ -35,6 +35,12 @@ abstract class Einstein {
         return properties.isDebugModeOn()
     }
 
+    static void addScannedProject(Project aProject) {
+
+        if (!scannedDependencies.contains(aProject))
+            scannedDependencies << aProject
+    }
+
     static void calcDependencies(List<ProjectDao> aProjectsData) {
 
         Console.debug("Start tracking timer...")

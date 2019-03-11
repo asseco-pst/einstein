@@ -10,13 +10,14 @@ class Project {
     static final String REQUIREMENTS_FILE = "requirements.txt"
 
     String name
-    String namespace
     String version
-    String versionCommitSha
+    String namespace
+    String projectRef
     String repoSshUrl
     String repoHttpsUrl
-    String requirementsFileContent
+    String versionCommitSha
     List<Project> dependencies
+    String requirementsFileContent
 
     private Project() {
         dependencies = []
@@ -84,6 +85,7 @@ class Project {
             project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
             project.versionCommitSha = GitUtils.getTagCommitSha(project.repoSshUrl, project.version)
 
+            project.setProjectRef("$project.namespace/$project.name:$project.version")
             project.loadRequirementsFileContent()
 
             return project

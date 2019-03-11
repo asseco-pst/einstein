@@ -25,7 +25,7 @@ class DependenciesManager {
 
         aProjects.each { project ->
             saveProjectByIndex(project)
-            addDependency(project.name, project.version)
+            addDependency(project)
 
             List<Project> dependencies = project.getDependencies()
             if (!dependencies)
@@ -33,20 +33,22 @@ class DependenciesManager {
 
             dependencies.each {
                 Project dependency = (Project) it
-                addDependency(dependency.name, dependency.version)
+                addDependency(dependency)
             }
         }
     }
 
-    private void addDependency(String aProjectName, String aVersion) {
-        if (!readDependencies[aProjectName])
-            readDependencies[aProjectName] = new HashSet<String>()
-        readDependencies[aProjectName] << aVersion
+    private void addDependency(Project aProject) {
+
+        String projectRef = aProject.getProjectRef()
+        if (!readDependencies[projectRef])
+            readDependencies[projectRef] = new HashSet<String>()
+        readDependencies[projectRef] << aProject.version
     }
 
     private void saveProjectByIndex(Project aProject) {
-        String projectRef = "$aProject.name:$aProject.version"
 
+        String projectRef = aProject.getProjectRef()
         if (projectsByIndex[projectRef])
             return
 
@@ -123,9 +125,9 @@ class DependenciesManager {
 
     private boolean isAcceptedDependency(Project aProject) {
 
-        if (!readDependencies[aProject.name])
+        if (!readDependencies[aProject.getProjectRef()])
             return false
-        if (!((Set) readDependencies[aProject.name]).contains(aProject.version))
+        if (!((Set) readDependencies[aProject.getProjectRef()]).contains(aProject.version))
             return false
         return true
     }
