@@ -8,14 +8,18 @@ class Project {
     static final String REQUIREMENTS_FILE = "requirements.txt"
 
     String name
-    String namespace
     String version
-    String versionCommitSha
+    String namespace
+    String projectRef
     String repoSshUrl
     String repoHttpsUrl
+    String versionCommitSha
+    List<Project> dependencies
     String requirementsFileContent
 
-    private Project() {}
+    private Project() {
+        dependencies = []
+    }
 
     static Project factory(String aNamespace, String aName, String aVersion) {
 
@@ -82,6 +86,7 @@ class Project {
             project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
             project.versionCommitSha = RepoExplorerFactory.get().getTagHash(project.version, project.namespace, project.name)
 
+            project.setProjectRef("$project.namespace/$project.name:$project.version")
             project.loadRequirementsFileContent()
 
             return project

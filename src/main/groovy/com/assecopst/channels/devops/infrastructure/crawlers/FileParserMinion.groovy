@@ -14,6 +14,7 @@ class FileParserMinion extends Crawler {
     @Override
     void work() {
         checkProjectDependencies()
+        Einstein.addScannedProject(project)
     }
 
     private void checkProjectDependencies() {

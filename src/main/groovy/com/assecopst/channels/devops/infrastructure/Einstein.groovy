@@ -10,11 +10,12 @@ abstract class Einstein {
 
     static CliParser cli
 
-    static synchronized List<String> describedDependencies = []
+    static Metrics metrics = new Metrics()
     static DependenciesManager dpManager = new DependenciesManager()
     static EinsteinProperties properties = new EinsteinProperties()
     static ProjectsManager projectsManager = new ProjectsManager()
-    static Metrics metrics = new Metrics()
+    static synchronized List<Project> scannedDependencies = []
+    static synchronized List<String> describedDependencies = []
 
 
     static CliParser getCli() {
@@ -34,6 +35,12 @@ abstract class Einstein {
         return properties.isDebugModeOn()
     }
 
+    static void addScannedProject(Project aProject) {
+
+        if (!scannedDependencies.contains(aProject))
+            scannedDependencies << aProject
+    }
+
     static void calcDependencies(List<ProjectDao> aProjectsData) {
 
         Console.debug("Start tracking timer...")
@@ -46,10 +53,10 @@ abstract class Einstein {
         Console.debug("Stop tracking timer...")
         metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
-        Console.print("Check raw dependencies:")
-        Console.print(dpManager.getReadDependencies())
+//        Console.print("Check raw dependencies:")
+//        Console.print(dpManager.getReadDependencies())
 
-        dpManager.resolveVersions()
+        dpManager.resolveVersions(scannedDependencies)
 
         Console.print("Check cleaned dependencies:")
         Console.print(dpManager.getFinalDependencies())

@@ -47,8 +47,12 @@ class VersionSeekerMinion extends Worker {
 
         if (dependencyVersion) {
             Console.info("Project '$project.name:$project.version' - Dependency identified: $dependencyProjectName:$dependencyVersion")
-            Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
-            Einstein.getProjectsManager().calcDependencies(Project.factory(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyVersion), this)
+
+            Project dependantProject = Project.factory(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyVersion)
+            project.getDependencies().add(dependantProject)
+
+//            Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
+            Einstein.getProjectsManager().calcDependencies(dependantProject, this)
         }
     }
 
