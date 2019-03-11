@@ -16,8 +16,11 @@ class Project {
     String repoSshUrl
     String repoHttpsUrl
     String requirementsFileContent
+    List<Project> dependencies
 
-    private Project() {}
+    private Project() {
+        dependencies = []
+    }
 
     static Project factory(String aNamespace, String aName, String aVersion) {
 

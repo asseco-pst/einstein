@@ -7,7 +7,7 @@ import com.assecopst.channels.devops.infrastructure.utils.Console
 
 class ProjectsManager {
 
-    private synchronized List<String> crawledProjects
+    private synchronized Set<String> crawledProjects
 
     ProjectsManager() {
         crawledProjects = []
@@ -25,18 +25,21 @@ class ProjectsManager {
 
     private boolean isAlreadyCrawled(Project aProject) {
 
-        String projectId = aProject.name
-        if (crawledProjects.contains(projectId)) {
-            Console.debug("Project '${projectId}' was already crawled...")
+        String ref = getProjectRef(aProject)
+        if (crawledProjects.contains(ref)) {
+            Console.debug("Project '${ref}' was already crawled...")
             return true
         }
-        crawledProjects << projectId
+        crawledProjects << ref
 
         return false
     }
 
     private void addCrawledProject(Project aProject) {
-        crawledProjects << aProject.name
-        // TODO: check if save only the project's name is enough...
+        crawledProjects << getProjectRef(aProject)
+    }
+
+    private String getProjectRef(Project aProject) {
+        return "$aProject.name:$aProject.version"
     }
 }
