@@ -25,7 +25,7 @@ class ProjectsCrawler extends Worker {
         projects.each { project ->
 
 //            Einstein.getDpManager().addDependency(project.name, project.version)
-            Einstein.getScannedDependencies().add(project)
+            Einstein.addScannedProject(project)
 
             Console.debug("Calculating dependencies of Project '$project.name'")
             Einstein.getProjectsManager().calcDependencies(project, this)
