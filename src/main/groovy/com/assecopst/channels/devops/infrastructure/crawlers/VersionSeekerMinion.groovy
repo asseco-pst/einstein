@@ -6,7 +6,6 @@ import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.Project
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.version.Version
-import org.gitlab4j.api.models.Tag
 
 class VersionSeekerMinion extends Worker {
 
@@ -36,7 +35,6 @@ class VersionSeekerMinion extends Worker {
         Einstein.getDescribedDependencies().add("Project '$project.name:$project.version' requires Project $dependencyParser.projectName:$dependencyParser.versionWrapper.versionStr")
 
         String dependencyProjectName = dependencyParser.getProjectName()
-
         String dependencyVersion
         try {
             dependencyVersion = (dependencyParser.getVersionWrapper().isRcTag()) ? dependencyParser.getReadVersion() : getSiblingVersion(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyParser.getVersionWrapper())
@@ -72,8 +70,8 @@ class VersionSeekerMinion extends Worker {
 
     private String getSiblingVersion(String aProjectNamespace, String aProjectName, Version aVersion) {
 
-        List<String> matchingTags = RepoExplorerFactory.get().listTags(aProjectNamespace, aProjectName
-                , { tag -> aVersion.matchesVersion(tag.getName())})
+        List<String> matchingTags = RepoExplorerFactory.get().listTags(aProjectNamespace, aProjectName,
+                { tag -> aVersion.matchesVersion(tag.getName()) })
 
         if (!matchingTags)
             throw new Exception("Unable to get sibling version for $aProjectName:${aVersion.getVersionStr()}")

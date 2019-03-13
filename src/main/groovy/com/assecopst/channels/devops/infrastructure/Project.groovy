@@ -10,7 +10,8 @@ class Project {
     String name
     String version
     String namespace
-    String projectRef
+    String id // identifies the Project by: namespace and name
+    String ref // identifies the Project by: namespace, name and version
     String repoSshUrl
     String repoHttpsUrl
     String versionCommitSha
@@ -43,13 +44,9 @@ class Project {
     void loadRequirementsFileContent() {
 
         try {
-
-            requirementsFileContent = RepoExplorerFactory.get().getFileContents(REQUIREMENTS_FILE, this.versionCommitSha,
-                    this.namespace, this.name)
-
+            requirementsFileContent = RepoExplorerFactory.get().getFileContents(REQUIREMENTS_FILE, versionCommitSha, namespace, name)
         } catch (e) {
-            Console.err("Unable to load ${REQUIREMENTS_FILE} file content of ${name} Project")
-            throw e
+            Console.warn("Project '$name' does not have $REQUIREMENTS_FILE file...")
         }
     }
 
@@ -86,7 +83,8 @@ class Project {
             project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
             project.versionCommitSha = RepoExplorerFactory.get().getTagHash(project.version, project.namespace, project.name)
 
-            project.setProjectRef("$project.namespace/$project.name:$project.version")
+            project.setId("$project.namespace/$project.name")
+            project.setRef("$project.namespace/$project.name:$project.version")
             project.loadRequirementsFileContent()
 
             return project

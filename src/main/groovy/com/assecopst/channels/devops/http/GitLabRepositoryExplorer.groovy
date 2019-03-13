@@ -1,12 +1,12 @@
 package com.assecopst.channels.devops.http
 
 import com.assecopst.channels.devops.infrastructure.utils.Console
+import com.assecopst.channels.devops.infrastructure.version.Version
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 
 import java.util.function.Predicate
-import java.util.stream.Collectors
 import java.util.stream.Stream
 
 /**
@@ -43,7 +43,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
         try {
             Project project = api.getProjectApi().getProject(namespace, projectName)
-            
+
             return project
         } catch (Exception e) {
             Console.err("Could not find project $namespace/$projectName. Cause: $e")
@@ -163,16 +163,13 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
 
-            if(predicate != null) {
+            if (predicate != null) {
                 return tags
                         .filter(predicate)
-                        .flatMap({ tag -> Stream.of(tag.getName()) })
-                        .collect(Collectors.toList())
-            }
-            else {
+                        .collect({ tag -> Version.extractVersionFrom(tag.getName()) })
+            } else {
                 return tags
-                        .flatMap({ tag -> Stream.of(tag.getName()) })
-                        .collect(Collectors.toList())
+                        .collect({ tag -> Version.extractVersionFrom(tag.getName()) })
             }
 
         } catch (Exception e) {

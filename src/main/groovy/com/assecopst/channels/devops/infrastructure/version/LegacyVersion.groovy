@@ -1,8 +1,5 @@
 package com.assecopst.channels.devops.infrastructure.version
 
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-
 class LegacyVersion extends Version {
 
     int nyd
@@ -23,11 +20,6 @@ class LegacyVersion extends Version {
     }
 
     @Override
-    protected String purge() {
-        return (versionStr =~ /([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/)[0][1]
-    }
-
-    @Override
     protected boolean checkIfHasMajorBreak(Version aVer1, Version aVer2) {
         return (breakOnNydFields((LegacyVersion) aVer1, (LegacyVersion) aVer2) || breakOnMajorFields(aVer1, aVer2))
     }
@@ -43,40 +35,44 @@ class LegacyVersion extends Version {
         return ((nyds[0] - nyds[1]) >= 1)
     }
 
-    @Override
-    boolean match(String aVersion) {
-        return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+${getRcExp()})/)).matches()
-    }
 
     @Override
-    String getGitMatchVersionExp() {
-        String minorPh = (minor) ? "${minor}." : ""
-        return "${nyd}.${major}.${minorPh}*"
+    String getVersionMatchPattern() {
+
+        String pattern = /${getVersionPrefixPattern()}(([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)(${getRcPostfixPattern()})?)$/
+        return pattern
     }
 
     @Override
-    String getGitMatchRcVersion() {
-        return "${nyd}.${major}.${minor}.*rc*"
+    boolean match(String aVersion) {
+
+        return (aVersion =~ getVersionMatchPattern()).matches()
     }
 
     @Override
-    def getVersionRegexExp() {
-        String minorPh = (minor) ? "${minor}\\." : "[0-9]+\\."
-        def exp = /^(.)*?(${nyd}\.${major}\.${minorPh}[0-9]+)/
-        return exp
+    String getVersionRegexPattern() {
+
+        String nydPlaceHolder = (nyd) ? "$nyd" : "[0-9]+"
+        String majorPlaceHolder = (major) ? "$major" : "[0-9]+"
+        String minorPlaceHolder = (minor) ? "$minor" : "[0-9]+"
+
+        String patternExp =
+                /${getVersionPrefixPattern()}(${nydPlaceHolder}\.${majorPlaceHolder}\.${minorPlaceHolder}\.[0-9]+)/
+
+        return patternExp
     }
 
     @Override
-    def getRcRegexExp() {
-        def exp = /^(.)*?(${nyd}\.${major}\.${minor}\.[0-9]+-rc\..)/
-        return exp
-    }
+    String getRcVersionRegexPattern() {
 
-    static Pattern getVersionRegex(){
-        return ~/^(.)*?([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/
-    }
+        String nydPlaceHolder = (nyd) ? "$nyd" : "[0-9]+"
+        String majorPlaceHolder = (major) ? "$major" : "[0-9]+"
+        String minorPlaceHolder = (minor) ? "$minor" : "[0-9]+"
 
-    static Pattern getRcVersionRegex(){
-        return ~/^(.)*?([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-rc\..)/
+        String patternExp =
+                /${getVersionPrefixPattern()}(${nydPlaceHolder}\.${majorPlaceHolder}\.${minorPlaceHolder}[0-9]+
+                    ${getRcPostfixPattern()})/
+
+        return patternExp
     }
 }
