@@ -156,15 +156,7 @@ abstract class Version implements Comparable<Version> {
      * @return the biggest version on the given Collection
      */
     synchronized static <T extends Collection> String getBiggestVersion(T aVersions) {
-
-//        // cast parameter so one can apply the reverse() method over it
-//        List<String> versions = (aVersions instanceof List) ? aVersions.clone() : new ArrayList<String>(aVersions as Collection)
-//
-//        // convert versions - from the given 'aVersions' - to integers and get/calculate the biggest version on the list
-//        int biggestIntegerVersion = versions.stream().collect({ version -> version.tokenize(".").join("").toInteger() }).sort().reverse()[0]
-
-        // now that we have the 'biggestIntegerVersion', get the "string version" of it
-
+        
         List<Version> versionsToCompare = []
         aVersions.each { v ->
             try {
