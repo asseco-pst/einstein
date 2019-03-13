@@ -14,6 +14,7 @@ class DependenciesManager {
     void resolveVersions(List<Project> aScannedProjects) {
 
         collectDependencies(aScannedProjects)
+        printRawDependencies()
 
         checkVersionsCompatibility()
         resolveMultiVersionsDependencies()
@@ -40,15 +41,14 @@ class DependenciesManager {
 
     private void addDependency(Project aProject) {
 
-        String projectRef = aProject.getProjectRef()
-        if (!readDependencies[projectRef])
-            readDependencies[projectRef] = new HashSet<String>()
-        readDependencies[projectRef] << aProject.version
+        if (!readDependencies[aProject.getId()])
+            readDependencies[aProject.getId()] = new HashSet<String>()
+        readDependencies[aProject.getId()] << aProject.version
     }
 
     private void saveProjectByIndex(Project aProject) {
 
-        String projectRef = aProject.getProjectRef()
+        String projectRef = aProject.getRef()
         if (projectsByIndex[projectRef])
             return
 
@@ -93,12 +93,12 @@ class DependenciesManager {
         }
     }
 
-
     private boolean hasNonCompatibleVersions(Set<String> aVersions) {
 
         List<Version> versions = Version.factory(aVersions)
         return (Version.hasMultipleVersionSpecifications(versions) || Version.hasNonBackwardCompatibleVersions(versions))
     }
+
 
     private void resolveMultiVersionsDependencies() {
 
@@ -125,10 +125,30 @@ class DependenciesManager {
 
     private boolean isAcceptedDependency(Project aProject) {
 
-        if (!readDependencies[aProject.getProjectRef()])
+        if (!readDependencies[aProject.getId()])
             return false
-        if (!((Set) readDependencies[aProject.getProjectRef()]).contains(aProject.version))
+        if (!((Set) readDependencies[aProject.getId()]).contains(aProject.version))
             return false
         return true
+    }
+
+    private void printRawDependencies() {
+
+        Console.info("Check raw dependencies:\n")
+        projectsByIndex.each { p ->
+            String projectRef = p.key
+            Project project = (Project) p.value
+
+            if (!project.getDependencies())
+                return
+
+            Console.print("$projectRef:")
+            project.getDependencies().each { d ->
+                Console.print("   >> ${d.getRef()}")
+            }
+        }
+        Console.print("\n")
+        Console.info("Check required dependencies by Project:")
+        Console.print("$readDependencies\n")
     }
 }

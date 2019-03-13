@@ -5,7 +5,7 @@ import com.assecopst.channels.devops.infrastructure.Einstein
 class Console {
 
     static void print(def aMsg) {
-        info(aMsg)
+        println aMsg
     }
 
     static void info(def aMsg) {

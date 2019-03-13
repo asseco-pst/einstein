@@ -1,10 +1,13 @@
 package com.assecopst.channels.devops.http
 
-
 import com.assecopst.channels.devops.infrastructure.utils.Console
+import com.assecopst.channels.devops.infrastructure.version.Version
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
+
+import java.util.function.Predicate
+import java.util.stream.Stream
 
 /**
  *  This class makes use of GitLab's REST API to get information about repos
@@ -40,7 +43,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
         try {
             Project project = api.getProjectApi().getProject(namespace, projectName)
-            
+
             return project
         } catch (Exception e) {
             Console.err("Could not find project $namespace/$projectName. Cause: $e")
@@ -131,7 +134,13 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     String getTagHash(String tagName, String namespace, String projectName) {
         try {
             Project project = findProject(namespace, projectName)
-            return api.getTagsApi().getTag(project, tagName).getCommit().getId()
+
+            Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
+
+            Tag tag = tags.filter({ tag -> tag.getName().endsWith(tagName) }).findFirst().get()
+
+            return tag.getCommit().getId()
+
         } catch (Exception e) {
             Console.err("Could not get Tag $tagName hash. Cause: $e")
             throw e
@@ -139,20 +148,30 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     }
 
     /**
-     *  Returns a list of tags existing in the projects repo. If no page and tags per page are specified this method
-     *  will return the latest tag.
+     *  Returns a list of tags existing in the projects repo.
+     *  If provided a regular expression, this method will return only tags that match with the pattern.
      *
-     * @param page the page to get
-     * @param tagsPerPage the number of Tag instances per page
      * @param namespace the namespace of the project (ie. group)
-     * @param projectName the project name
+     * @param projectName the name of the project
+     * @param regex a pattern to filter the tags
      * @return a list of tags
      */
     @Override
-    List<Tag> listTags(int page = 1, int tagsPerPage = 1, String namespace, String projectName) {
+    List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate = null) {
         try {
             Project project = findProject(namespace, projectName)
-            return api.getTagsApi().getTags(project, page, tagsPerPage)
+
+            Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
+
+            if (predicate != null) {
+                return tags
+                        .filter(predicate)
+                        .collect({ tag -> Version.extractVersionFrom(tag.getName()) })
+            } else {
+                return tags
+                        .collect({ tag -> Version.extractVersionFrom(tag.getName()) })
+            }
+
         } catch (Exception e) {
             Console.err("Could not get tags for project $projectName. Cause: $e")
             throw e

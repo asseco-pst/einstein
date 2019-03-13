@@ -1,14 +1,14 @@
 package com.assecopst.channels.devops.infrastructure.version
 
-import java.util.regex.Matcher
-
 class SemanticVersion extends Version {
+
 
     protected SemanticVersion() {}
 
     SemanticVersion(String aVersionStr) {
         super(aVersionStr)
     }
+
 
     @Override
     protected void parse() {
@@ -19,41 +19,43 @@ class SemanticVersion extends Version {
     }
 
     @Override
-    protected String purge() {
-        return (versionStr =~ /([0-9]+\.[0-9]+\.[0-9]+)/)[0][1]
-    }
-
-    @Override
     protected boolean checkIfHasMajorBreak(Version aVer1, Version aVer2) {
         return breakOnMajorFields(aVer1, aVer2)
     }
 
     @Override
+    String getVersionMatchPattern() {
+
+        String pattern = /${getVersionPrefixPattern()}(([0-9]+\.[0-9]+\.[0-9]+)(${getRcPostfixPattern()})?)$/
+        return pattern
+    }
+
+    @Override
     boolean match(String aVersion) {
-        return ((Matcher) (aVersion =~ /([0-9]+\.[0-9]+\.[0-9]+${getRcExp()})/)).matches()
+
+        return (aVersion =~ getVersionMatchPattern()).matches()
     }
 
     @Override
-    String getGitMatchVersionExp() {
-        String minorPh = (minor) ? "${minor}." : ""
-        return "${major}.${minorPh}*"
+    String getVersionRegexPattern() {
+
+        String majorPlaceHolder = (major) ? "${major}" : "[0-9]+"
+        String minorPlaceHolder = (minor) ? "${minor}" : "[0-9]+"
+
+        String patternExp = /${getVersionPrefixPattern()}($majorPlaceHolder\.$minorPlaceHolder\.[0-9]+)/
+
+        return patternExp
     }
 
     @Override
-    String getGitMatchRcVersion() {
-        return "${major}.${minor}*rc*"
-    }
+    String getRcVersionRegexPattern() {
 
-    @Override
-    def getVersionRegexExp() {
-        String minorPh = (minor) ? "${minor}\\." : "[0-9]+\\."
-        def exp = /^(.)*?(${major}\.${minorPh}[0-9]+)/
-        return exp
-    }
+        String majorPlaceHolder = (major) ? "${major}" : "[0-9]+"
+        String minorPlaceHolder = (minor) ? "${minor}" : "[0-9]+"
 
-    @Override
-    def getRcRegexExp() {
-        def exp = /^(.)*?(${major}\.${minor}\.[0-9]+)/
-        return exp
+        String patternExp =
+                /${getVersionPrefixPattern()}($majorPlaceHolder\.$minorPlaceHolder\.[0-9]+${getRcPostfixPattern()})/
+
+        return patternExp
     }
 }

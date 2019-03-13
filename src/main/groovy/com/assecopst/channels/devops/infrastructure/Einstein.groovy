@@ -53,18 +53,10 @@ abstract class Einstein {
         Console.debug("Stop tracking timer...")
         metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
-//        Console.print("Check raw dependencies:")
-//        Console.print(dpManager.getReadDependencies())
-
         dpManager.resolveVersions(scannedDependencies)
 
-        Console.print("Check cleaned dependencies:")
+        Console.info("Check cleaned dependencies:")
         Console.print(dpManager.getFinalDependencies())
-
-        Console.print("Described dependencies:")
-        describedDependencies.sort().each { d ->
-            Console.info(d)
-        }
 
         Console.info("Einstein took " +
                 metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString() +

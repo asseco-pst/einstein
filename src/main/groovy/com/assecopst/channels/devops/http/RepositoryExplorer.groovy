@@ -1,5 +1,9 @@
 package com.assecopst.channels.devops.http
 
+import org.gitlab4j.api.models.Tag
+
+import java.util.function.Predicate
+
 abstract class RepositoryExplorer {
 
     String repoUrl
@@ -24,6 +28,6 @@ abstract class RepositoryExplorer {
 
     abstract String getTagHash(String tagName, String namespace, String projectName)
 
-    abstract List listTags(int page, int tagsPerPage, String namespace, String projectName)
+    abstract List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate)
 
 }

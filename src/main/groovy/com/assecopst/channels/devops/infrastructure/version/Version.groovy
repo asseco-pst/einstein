@@ -34,8 +34,68 @@ abstract class Version {
         parse()
     }
 
+    protected String purge() {
 
-    static List<Version> factory(def aVersions) {
+        Matcher matcher = versionStr =~ getVersionMatchPattern()
+
+        try {
+            if (matcher.matches()) {
+                return matcher.group(3)
+            }
+            throw new Exception("'$versionStr' doesn't match pattern '${getVersionMatchPattern()}'")
+        } catch (Exception e) {
+            Console.err("Unable to purge version '$versionStr'. Cause: $e")
+            throw e
+        }
+    }
+
+    static synchronized String extractVersionFrom(String aSentence) {
+
+        Version version
+
+        switch (getVersionType(aSentence)) {
+            case Type.SEMANTIC:
+                version = semanticVersion
+                break
+            case Type.LEGACY:
+                version = legacyVersion
+                break
+            default:
+                throw new IllegalArgumentException("Provided version string does not match any of the " +
+                        "existing versions specifications...")
+        }
+
+        return extractVersion(version, aSentence)
+    }
+
+    private static String extractVersion(Version aVersion, String aSentence) {
+
+        Matcher matcher
+
+        if ((aSentence =~ aVersion.getRcPostfixPattern()).matches()) {
+            matcher = (aSentence =~ aVersion.getRcVersionRegexPattern())
+        } else if ((aSentence =~ aVersion.getVersionRegexPattern()).matches()) {
+            matcher = (aSentence =~ aVersion.getVersionRegexPattern())
+        } else {
+            throw new IllegalArgumentException("Unable to extract ${aVersion.getClass().getSimpleName()} version from String '$aSentence'")
+        }
+
+        String extractedVersion
+
+        try {
+            if (matcher)
+                extractedVersion = matcher.group(2)
+            else
+                throw new Exception("Unable to extract version. 'matcher' is undefined...")
+        } catch (Exception e) {
+            Console.err("Unable to get version from matcher's group. Cause $e")
+            throw e
+        }
+
+        return extractedVersion
+    }
+
+    synchronized static List<Version> factory(def aVersions) {
 
         if (!aVersions)
             return []
@@ -48,7 +108,7 @@ abstract class Version {
         return versions
     }
 
-    static Version factory(String aVersionStr) {
+    synchronized static Version factory(String aVersionStr) {
 
         if (!isValidVersion(aVersionStr))
             throw new Exception("Version '${aVersionStr}' is not a valid version. Accepted version sintaxes: 'x.x.x(-rc\\.?([0-9]+)?)?' or 'x.x.x.x(-rc\\.?([0-9]+)?)?'")
@@ -64,7 +124,7 @@ abstract class Version {
 
     }
 
-    static boolean hasMultipleVersionSpecifications(List<Version> aVersions) {
+    synchronized static boolean hasMultipleVersionSpecifications(List<Version> aVersions) {
 
         boolean hasMultSpecs = false
 
@@ -81,7 +141,7 @@ abstract class Version {
         return hasMultSpecs
     }
 
-    static boolean hasNonBackwardCompatibleVersions(List<Version> aVersions) {
+    synchronized static boolean hasNonBackwardCompatibleVersions(List<Version> aVersions) {
         return (hasMajorBreak(aVersions) || containsRCVersionAndStableVersion(aVersions))
     }
 
@@ -90,7 +150,7 @@ abstract class Version {
      * @param aVersions - this parameter represents a Collectio. It can be a List<String> or a Set<String>
      * @return the biggest version on the given Collection
      */
-    static String getBiggestVersion(def aVersions) {
+    synchronized static String getBiggestVersion(def aVersions) {
 
         // cast parameter so one can apply the reverse() method over it
         List<String> versions = (aVersions instanceof List) ? aVersions.clone() : new ArrayList<String>(aVersions as Collection)
@@ -102,8 +162,13 @@ abstract class Version {
         return versions.stream().filter({ version -> version.tokenize(".").join("").toInteger() == biggestIntegerVersion }).collect()[0]
     }
 
-    protected String getRcExp() {
-        return "(-rc\\.?([0-9]+)?)?"
+    protected String getVersionPrefixPattern() {
+        return "^([a-zA-Z])*?"
+    }
+
+    protected String getRcPostfixPattern() {
+
+        return "-rc\\.?([0-9]+)?"
     }
 
     private static boolean hasMajorBreak(List<Version> aVersions) {
@@ -175,8 +240,8 @@ abstract class Version {
         return nbr
     }
 
-    boolean isRcTag() {
-        return ((Matcher) (versionStr =~ /^.*rc\.?([0-9]+)?/)).matches()
+    synchronized boolean isRcTag() {
+        return ((Matcher) (versionStr =~ /^(.)*?${getRcPostfixPattern()}$/)).matches()
     }
 
     protected boolean isMajorBreak(Version aVer1, Version aVer2) {
@@ -200,53 +265,27 @@ abstract class Version {
     }
 
     protected isStableVersion() {
-        return (versionStr =~ getVersionRegexExp()).matches()
+        return (versionStr =~ getVersionRegexPattern()).matches()
     }
 
-    String getVersionGitRegexExp() {
-
-        String exp
+    synchronized boolean matchesVersion(String aVersion) {
 
         if (isRcTag())
-            exp = getGitMatchRcVersion()
+            return (aVersion =~ getRcVersionRegexPattern()).matches()
         else
-            exp = getGitMatchVersionExp()
-
-        return exp
-    }
-
-    boolean matchesVersion(String aVersion) {
-
-        if (isRcTag())
-            return (aVersion =~ getRcRegexExp()).matches()
-        else
-            return (aVersion =~ getVersionRegexExp()).matches()
-    }
-
-    String getTagFromExp(String aExp) {
-
-        Matcher tagMatcher = (aExp =~ getVersionRegexExp())
-
-        if (tagMatcher)
-            return tagMatcher.group(2)
-        else
-            throw new Exception("Unable to get Tag from expression: '${aExp}'.")
+            return (aVersion =~ getVersionRegexPattern()).matches()
     }
 
 
     protected abstract void parse()
 
-    protected abstract String purge()
-
     protected abstract boolean checkIfHasMajorBreak(Version aVer1, Version aVer2)
+
+    abstract String getVersionMatchPattern()
 
     abstract boolean match(String aVersion)
 
-    abstract String getGitMatchVersionExp()
+    abstract String getVersionRegexPattern()
 
-    abstract String getGitMatchRcVersion()
-
-    abstract def getVersionRegexExp()
-
-    abstract def getRcRegexExp()
+    abstract String getRcVersionRegexPattern()
 }
