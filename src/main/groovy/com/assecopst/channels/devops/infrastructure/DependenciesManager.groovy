@@ -102,18 +102,20 @@ class DependenciesManager {
 
     private void resolveMultiVersionsDependencies() {
 
-        readDependencies.each {
-            String projectRef = it.key
-            Set<String> pReadDependencies = (Set<String>) it.value
+        readDependencies.each { projectRef, d ->
 
-            if (pReadDependencies.size() == 1)
+            Set<String> dependencies = (Set) d
+
+            if (dependencies.size() == 1)
                 return
 
-            String biggestVersion = Version.getBiggestVersion(pReadDependencies)
+            String biggestVersion = Version.getBiggestVersion(dependencies)
 
-            pReadDependencies.each { version ->
+            Iterator<List<String>> versionsIterator = dependencies.iterator()
+            while (versionsIterator.hasNext()) {
+                String version = versionsIterator.next()
                 if (version != biggestVersion)
-                    ((Set) readDependencies[projectRef]).remove(version)
+                    versionsIterator.remove()
             }
         }
     }
