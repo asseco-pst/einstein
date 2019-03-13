@@ -31,11 +31,9 @@ class VersionSeekerMinion extends Worker {
         Console.info("Project '$project.name:$project.version' - Parsing dependency record '$dependencyRecord'")
 
         DependencyParser dependencyParser = getDependencyParser(dependencyRecord)
-
-        Einstein.getDescribedDependencies().add("Project '$project.name:$project.version' requires Project $dependencyParser.projectName:$dependencyParser.versionWrapper.versionStr")
-
         String dependencyProjectName = dependencyParser.getProjectName()
         String dependencyVersion
+
         try {
             dependencyVersion = (dependencyParser.getVersionWrapper().isRcTag()) ? dependencyParser.getReadVersion() : getSiblingVersion(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyParser.getVersionWrapper())
         } catch (e) {
@@ -49,7 +47,6 @@ class VersionSeekerMinion extends Worker {
             Project dependantProject = Project.factory(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyVersion)
             project.getDependencies().add(dependantProject)
 
-//            Einstein.getDpManager().addDependency(dependencyProjectName, dependencyVersion)
             Einstein.getProjectsManager().calcDependencies(dependantProject, this)
         }
     }

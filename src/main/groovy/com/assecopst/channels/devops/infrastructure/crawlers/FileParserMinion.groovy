@@ -23,7 +23,7 @@ class FileParserMinion extends Crawler {
 
         if (project.hasRequirementsFile()) {
             if (Einstein.properties.isDebugModeOn())
-                storeFile() // store file for debug purposes
+                storeFile()
             parseRequirements()
         } else {
             Console.warn("Project '$project.name:$project.version' doesn't have a requirements file...")
