@@ -70,7 +70,7 @@ class DependenciesManager {
                 dependencies.addAll(project.getDependencies())
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
-                finalDependencies.put(acceptedDependency.name, acceptedDependency.version.toString())
+                finalDependencies.put(acceptedDependency.id, acceptedDependency.version.toString())
             }
         }
     }
@@ -109,7 +109,7 @@ class DependenciesManager {
 
             String biggestVersion = Version.getBiggestVersion(dependencies)
 
-            Iterator<List<Version>> versionsIterator = dependencies.iterator()
+            Iterator<Version> versionsIterator = dependencies.iterator()
             while (versionsIterator.hasNext()) {
                 String version = versionsIterator.next()
                 if (version != biggestVersion)
