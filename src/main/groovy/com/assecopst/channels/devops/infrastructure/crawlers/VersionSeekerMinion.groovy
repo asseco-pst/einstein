@@ -17,7 +17,7 @@ class VersionSeekerMinion extends Worker {
 
         project = aProject
         dependencyRecord = aDependencyLine
-        setId("$project.name:$project.version<>$dependencyRecord")
+        setId("$project.name:${project.version.toString()}<>$dependencyRecord")
     }
 
     @Override
@@ -28,7 +28,7 @@ class VersionSeekerMinion extends Worker {
 
     private void parseDependency() {
 
-        Console.info("Project '$project.name:$project.version' - Parsing dependency record '$dependencyRecord'")
+        Console.info("Project '$project.ref' - Parsing dependency record '$dependencyRecord'")
 
         DependencyParser dependencyParser = getDependencyParser(dependencyRecord)
         String dependencyProjectName = dependencyParser.getProjectName()
@@ -42,7 +42,7 @@ class VersionSeekerMinion extends Worker {
         }
 
         if (dependencyVersion) {
-            Console.info("Project '$project.name:$project.version' - Dependency identified: $dependencyProjectName:$dependencyVersion")
+            Console.info("Project '$project.ref' - Dependency identified: $dependencyProjectName:$dependencyVersion")
 
             Project dependantProject = Project.factory(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyVersion)
             project.getDependencies().add(dependantProject)
@@ -73,6 +73,6 @@ class VersionSeekerMinion extends Worker {
         if (!matchingTags)
             throw new Exception("Unable to get sibling version for $aProjectName:${aVersion.getVersionStr()}")
 
-        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(matchingTags)
+        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(Version.factory(matchingTags))
     }
 }

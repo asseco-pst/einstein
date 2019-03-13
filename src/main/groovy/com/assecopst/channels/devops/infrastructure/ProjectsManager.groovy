@@ -19,13 +19,13 @@ class ProjectsManager {
             return
         addCrawledProject(aProject)
 
-        Console.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.name:$aProject.version")
+        Console.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.ref")
         MinionsFactory.create(MinionsFactory.Type.CRAWLER, aProject, aObserver)
     }
 
     private boolean isAlreadyCrawled(Project aProject) {
 
-        String ref = getProjectRef(aProject)
+        String ref = aProject.ref
         if (crawledProjects.contains(ref)) {
             Console.debug("Project '${ref}' was already crawled...")
             return true
@@ -36,10 +36,6 @@ class ProjectsManager {
     }
 
     private void addCrawledProject(Project aProject) {
-        crawledProjects << getProjectRef(aProject)
-    }
-
-    private String getProjectRef(Project aProject) {
-        return "$aProject.name:$aProject.version"
+        crawledProjects << aProject.ref
     }
 }

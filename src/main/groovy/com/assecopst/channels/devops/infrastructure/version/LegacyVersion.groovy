@@ -11,6 +11,38 @@ class LegacyVersion extends Version {
     }
 
     @Override
+    int compareTo(Version aVersion) {
+
+        if (!(aVersion instanceof LegacyVersion))
+            throw new IllegalArgumentException("Unable to compare versions from multiple specifications...")
+
+        LegacyVersion version = (LegacyVersion) aVersion
+
+        if (nyd > version.nyd)
+            return 1
+        if (version.nyd > nyd)
+            return -1
+        // at this point, nyd fields from both versions are equal. Lets check the major fields
+        if (major > aVersion.major)
+            return 1
+        if (aVersion.major > major)
+            return -1
+        // at this point, major fields from both versions are equal. Lets check the minor fields
+        if (minor > aVersion.minor)
+            return 1
+        if (aVersion.minor > minor)
+            return -1
+        // at this point, minor fields from both versions are equal. Lets check the patch fields
+        if (patch > aVersion.patch)
+            return 1
+        if (aVersion.patch > patch)
+            return -1
+        // at this point, nyd, major, minor and patch fields from both versions are all equal. Return 0
+        return 0
+
+    }
+
+    @Override
     protected void parse() {
 
         nyd = formatNumber(tokenizedVersion[0])

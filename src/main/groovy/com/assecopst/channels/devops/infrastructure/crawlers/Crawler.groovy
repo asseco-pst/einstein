@@ -15,7 +15,7 @@ abstract class Crawler extends Worker {
 
         project = aProject
         setWorkspace()
-        setId("$project.name:$project.version")
+        setId("$project.name:${project.version.toString()}")
     }
 
     void setWorkspace() {

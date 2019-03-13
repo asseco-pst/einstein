@@ -11,6 +11,32 @@ class SemanticVersion extends Version {
 
 
     @Override
+    int compareTo(Version aVersion) {
+
+        if (!(aVersion instanceof SemanticVersion))
+            throw new IllegalArgumentException("Unable to compare versions from multiple specifications...")
+
+        SemanticVersion version = (SemanticVersion) aVersion
+
+        if (major > version.major)
+            return 1
+        if (version.major > major)
+            return -1
+        // at this point, major fields from both versions are equal. Lets check the minor fields
+        if (minor > version.minor)
+            return 1
+        if (version.minor > minor)
+            return -1
+        // at this point, minor fields from both versions are equal. Lets check the patch fields
+        if (patch > version.patch)
+            return 1
+        if (version.patch > patch)
+            return -1
+        // at this point, major, minor and patch fields from both versions are all equal. Return 0
+        return 0
+    }
+
+    @Override
     protected void parse() {
 
         major = formatNumber(tokenizedVersion[0])

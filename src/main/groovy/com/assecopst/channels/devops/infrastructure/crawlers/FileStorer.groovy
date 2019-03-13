@@ -28,7 +28,7 @@ class FileStorer extends Thread {
 
     private void storeFile() {
 
-        String filename = "${Project.REQUIREMENTS_FILE}-${project.getVersion()}-${project.versionCommitSha}"
+        String filename = "${Project.REQUIREMENTS_FILE}-${project.getVersion().toString()}-${project.versionCommitSha}"
         Console.print("Storing ${filename} of Project ${project.name}")
 
         try {

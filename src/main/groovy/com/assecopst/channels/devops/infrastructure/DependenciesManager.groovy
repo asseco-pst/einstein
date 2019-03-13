@@ -42,7 +42,7 @@ class DependenciesManager {
     private void addDependency(Project aProject) {
 
         if (!readDependencies[aProject.getId()])
-            readDependencies[aProject.getId()] = new HashSet<String>()
+            readDependencies[aProject.getId()] = new HashSet<Version>()
         readDependencies[aProject.getId()] << aProject.version
     }
 
@@ -70,7 +70,7 @@ class DependenciesManager {
                 dependencies.addAll(project.getDependencies())
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
-                finalDependencies.put(acceptedDependency.name, acceptedDependency.version)
+                finalDependencies.put(acceptedDependency.name, acceptedDependency.version.toString())
             }
         }
     }
@@ -79,7 +79,7 @@ class DependenciesManager {
 
         readDependencies.each {
             String projectName = it.key
-            Set<String> dependentVersions = (Set<String>) it.value
+            Set<Version> dependentVersions = (Set<Version>) it.value
 
             if (dependentVersions.size() <= 1)
                 return
@@ -93,10 +93,9 @@ class DependenciesManager {
         }
     }
 
-    private boolean hasNonCompatibleVersions(Set<String> aVersions) {
+    private boolean hasNonCompatibleVersions(Set<Version> aVersions) {
 
-        List<Version> versions = Version.factory(aVersions)
-        return (Version.hasMultipleVersionSpecifications(versions) || Version.hasNonBackwardCompatibleVersions(versions))
+        return (Version.hasMultipleVersionSpecifications(aVersions) || Version.hasNonBackwardCompatibleVersions(aVersions))
     }
 
 
@@ -104,14 +103,13 @@ class DependenciesManager {
 
         readDependencies.each { projectRef, d ->
 
-            Set<String> dependencies = (Set) d
-
+            Set<Version> dependencies = (Set<Version>) d
             if (dependencies.size() == 1)
                 return
 
             String biggestVersion = Version.getBiggestVersion(dependencies)
 
-            Iterator<List<String>> versionsIterator = dependencies.iterator()
+            Iterator<List<Version>> versionsIterator = dependencies.iterator()
             while (versionsIterator.hasNext()) {
                 String version = versionsIterator.next()
                 if (version != biggestVersion)

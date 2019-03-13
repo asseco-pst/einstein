@@ -4,7 +4,7 @@ import com.assecopst.channels.devops.infrastructure.utils.Console
 
 import java.util.regex.Matcher
 
-abstract class Version {
+abstract class Version implements Comparable<Version> {
 
     int major, minor, patch
 
@@ -32,6 +32,11 @@ abstract class Version {
 
         tokenizeVersion()
         parse()
+    }
+
+    @Override
+    String toString() {
+        return versionStr
     }
 
     protected String purge() {
@@ -124,7 +129,7 @@ abstract class Version {
 
     }
 
-    synchronized static boolean hasMultipleVersionSpecifications(List<Version> aVersions) {
+    synchronized static boolean hasMultipleVersionSpecifications(Set<Version> aVersions) {
 
         boolean hasMultSpecs = false
 
@@ -141,25 +146,39 @@ abstract class Version {
         return hasMultSpecs
     }
 
-    synchronized static boolean hasNonBackwardCompatibleVersions(List<Version> aVersions) {
+    synchronized static boolean hasNonBackwardCompatibleVersions(Set<Version> aVersions) {
         return (hasMajorBreak(aVersions) || containsRCVersionAndStableVersion(aVersions))
     }
 
     /**
      *
-     * @param aVersions - this parameter represents a Collectio. It can be a List<String> or a Set<String>
+     * @param aVersions - this parameter represents a Collection. It can be a List<String> or a Set<String>
      * @return the biggest version on the given Collection
      */
-    synchronized static String getBiggestVersion(def aVersions) {
+    synchronized static <T extends Collection> String getBiggestVersion(T aVersions) {
 
-        // cast parameter so one can apply the reverse() method over it
-        List<String> versions = (aVersions instanceof List) ? aVersions.clone() : new ArrayList<String>(aVersions as Collection)
-
-        // convert versions - from the given 'aVersions' - to integers and get/calculate the biggest version on the list
-        int biggestIntegerVersion = versions.stream().collect({ version -> version.tokenize(".").join("").toInteger() }).sort().reverse()[0]
+//        // cast parameter so one can apply the reverse() method over it
+//        List<String> versions = (aVersions instanceof List) ? aVersions.clone() : new ArrayList<String>(aVersions as Collection)
+//
+//        // convert versions - from the given 'aVersions' - to integers and get/calculate the biggest version on the list
+//        int biggestIntegerVersion = versions.stream().collect({ version -> version.tokenize(".").join("").toInteger() }).sort().reverse()[0]
 
         // now that we have the 'biggestIntegerVersion', get the "string version" of it
-        return versions.stream().filter({ version -> version.tokenize(".").join("").toInteger() == biggestIntegerVersion }).collect()[0]
+
+        List<Version> versionsToCompare = []
+        aVersions.each { v ->
+            try {
+                Version version = (Version) v
+                versionsToCompare << version
+            } catch (Exception e) {
+                Console.err("Error calculating the biggest version. Parameters accepted: Collection<? extends Version>")
+                throw new IllegalArgumentException(e)
+            }
+        }
+
+        Collections.sort(versionsToCompare)
+
+        return versionsToCompare.last()
     }
 
     protected String getVersionPrefixPattern() {
@@ -171,7 +190,7 @@ abstract class Version {
         return "-rc\\.?([0-9]+)?"
     }
 
-    private static boolean hasMajorBreak(List<Version> aVersions) {
+    private static boolean hasMajorBreak(Set<Version> aVersions) {
 
         boolean hasMajorBreak = false
         Version lastStatedVersion
@@ -188,7 +207,7 @@ abstract class Version {
         return hasMajorBreak
     }
 
-    private static boolean containsRCVersionAndStableVersion(List<Version> aVersions) {
+    private static boolean containsRCVersionAndStableVersion(Set<Version> aVersions) {
 
         boolean hasStableVersions = false
         boolean hasRCVersions = false

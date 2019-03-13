@@ -2,13 +2,14 @@ package com.assecopst.channels.devops.infrastructure
 
 import com.assecopst.channels.devops.http.RepoExplorerFactory
 import com.assecopst.channels.devops.infrastructure.utils.Console
+import com.assecopst.channels.devops.infrastructure.version.Version
 
 class Project {
 
     static final String REQUIREMENTS_FILE = "requirements.txt"
 
     String name
-    String version
+    Version version
     String namespace
     String id // identifies the Project by: namespace and name
     String ref // identifies the Project by: namespace, name and version
@@ -73,7 +74,7 @@ class Project {
         }
 
         Builder setVersion(String aVersion) {
-            project.version = aVersion
+            project.version = Version.factory(aVersion)
             return this
         }
 
@@ -81,10 +82,10 @@ class Project {
 
             project.setRepoSshUrl(RepoExplorerFactory.get().getRepoSshUrl(project.namespace, project.name))
             project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
-            project.versionCommitSha = RepoExplorerFactory.get().getTagHash(project.version, project.namespace, project.name)
+            project.versionCommitSha = RepoExplorerFactory.get().getTagHash(project.version.toString(), project.namespace, project.name)
 
             project.setId("$project.namespace/$project.name")
-            project.setRef("$project.namespace/$project.name:$project.version")
+            project.setRef("$project.namespace/$project.name:${project.version.toString()}")
             project.loadRequirementsFileContent()
 
             return project
