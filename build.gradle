@@ -1,10 +1,6 @@
 group 'com.pst.asseco.channels.devops'
 version "1.0.0-SNAPSHOT"
 
-ext {
-    version = "vX.x.x"
-}
-
 buildscript {
     repositories {
         jcenter()
@@ -40,9 +36,9 @@ uploadArchives {
             repository(url: url) {
                 authentication(userName: nexusUsername, password: nexusPassword)
             }
-            pom.version = "1.0.0-SNAPSHOT" // project.version
+            pom.version = project.version
             pom.artifactId = project.name
-            pom.groupId = "com.exictos.devops" // project.group
+            pom.groupId = project.group
         }
     }
 }
@@ -62,14 +58,6 @@ jar {
     }
 }
 
-task setProjectVersion {
-
-    String pVersion = "git describe origin/master --match=\"v*\"".execute().text.trim()
-
-    if (pVersion)
-        project.ext.set "version", pVersion
-}
-
 shadowJar {
     baseName = "${rootProject.name}-${project.ext.version}"
 }
@@ -79,6 +67,6 @@ createExe {
     mainClassName = 'com.assecopst.channels.devops.Main'
     headerType = "console"
     icon = "${projectDir}/assets/einstein.ico"
-    jar = "${rootDir}/build/libs/${rootProject.name}-${project.ext.version}.jar"
-    outputDir = "${rootProject.name}-${project.ext.version}"
+    jar = "${rootDir}/build/libs/${rootProject.name}-${project.version}.jar"
+    outputDir = "${rootProject.name}-${project.version}"
 }
