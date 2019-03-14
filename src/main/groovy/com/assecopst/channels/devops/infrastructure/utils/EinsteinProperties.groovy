@@ -30,4 +30,8 @@ class EinsteinProperties {
     boolean isDebugModeOn() {
         return (properties.debug.toString().toBoolean())
     }
+
+    String getWorkspaceRootFolder() {
+        return properties.workspaceFolder.toString()
+    }
 }

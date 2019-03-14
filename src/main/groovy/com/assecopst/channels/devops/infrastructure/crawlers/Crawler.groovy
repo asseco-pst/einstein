@@ -1,7 +1,10 @@
 package com.assecopst.channels.devops.infrastructure.crawlers
 
-
+import com.assecopst.channels.devops.infrastructure.Einstein
 import com.assecopst.channels.devops.infrastructure.Project
+
+import java.nio.file.Path
+import java.nio.file.Paths
 
 abstract class Crawler extends Worker {
 
@@ -20,7 +23,8 @@ abstract class Crawler extends Worker {
 
     void setWorkspace() {
 
-        workspaceFolder = new File(WORKSPACE_FOLDER)
+        Path workspaceFolderPath = Paths.get([Einstein.getWorkspaceFolder(), WORKSPACE_FOLDER].join("/"))
+        workspaceFolder = new File(workspaceFolderPath.toString())
 
         if (!workspaceFolder.exists())
             workspaceFolder.mkdirs()

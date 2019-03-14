@@ -6,6 +6,9 @@ import com.assecopst.channels.devops.infrastructure.metrics.Metrics
 import com.assecopst.channels.devops.infrastructure.utils.Console
 import com.assecopst.channels.devops.infrastructure.utils.EinsteinProperties
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 abstract class Einstein {
 
     static CliParser cli
@@ -40,6 +43,18 @@ abstract class Einstein {
             scannedDependencies << aProject
     }
 
+    static Path getWorkspaceFolder() {
+
+        Path workspaceFolderPath = Paths.get([getUserHome(), properties.getWorkspaceRootFolder()].join("/"))
+
+        File folder = new File(workspaceFolderPath.toString())
+        if(!folder.exists())
+            folder.mkdirs()
+
+        return workspaceFolderPath
+
+    }
+
     static void calcDependencies(List<ProjectDao> aProjectsData) {
 
         Console.debug("Start tracking timer...")
@@ -70,5 +85,18 @@ abstract class Einstein {
         }
 
         return projects
+    }
+
+    private static String getUserHome() {
+
+        String userHome = System.getenv("HOME")
+
+        if(!userHome)
+            userHome = System.getenv("USERPROFILE")
+
+        if(!userHome)
+            throw new Exception("Unable to get value of User Home environment variable")
+
+        return userHome
     }
 }
