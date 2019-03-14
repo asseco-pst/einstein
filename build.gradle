@@ -1,4 +1,5 @@
-group 'com.assecopst.channels.devops'
+group 'com.pst.asseco.channels.devops'
+version "1.0.0-SNAPSHOT"
 
 ext {
     version = "vX.x.x"
@@ -15,14 +16,37 @@ buildscript {
 }
 
 apply plugin: 'groovy'
+apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'edu.sc.seis.launch4j'
 
 
 repositories {
-    mavenCentral()
+    maven{
+        url "${nexusUrl}/repository/dcs-maven/"
+        credentials{
+            username = nexusUsername
+            password = nexusPassword
+        }
+    }
 }
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            def url = "${nexusUrl}/repository/dcs-maven-snapshots"
+
+            repository(url: url) {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            pom.version = "1.0.0-SNAPSHOT" // project.version
+            pom.artifactId = project.name
+            pom.groupId = "com.exictos.devops" // project.group
+        }
+    }
+}
+
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.5.6'
