@@ -59,7 +59,7 @@ jar {
 }
 
 shadowJar {
-    baseName = "${rootProject.name}-${project.ext.version}"
+    baseName = "${rootProject.name}-${project.version}"
 }
 
 createExe {
