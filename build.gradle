@@ -20,7 +20,9 @@ apply plugin: 'edu.sc.seis.launch4j'
 
 repositories {
     maven{
-        url "${nexusUrl}/repository/dcs-maven/"
+        String artifactType = (version.toString().contains("SNAPSHOT")) ? "snapshots" : "releases"
+        url "${nexusUrl}/repository/dcs-maven/$artifactType"
+
         credentials{
             username = nexusUsername
             password = nexusPassword
@@ -59,14 +61,14 @@ jar {
 }
 
 shadowJar {
-    baseName = "${rootProject.name}-${project.version}"
+    baseName = "${rootProject.name}"
 }
 
 createExe {
 
-    mainClassName = 'com.assecopst.channels.devops.Main'
+    mainClassName = project.group + '.Main'
     headerType = "console"
     icon = "${projectDir}/assets/einstein.ico"
     jar = "${rootDir}/build/libs/${rootProject.name}-${project.version}.jar"
-    outputDir = "${rootProject.name}-${project.version}"
+    outfile = "${rootProject.name}-${project.version}.exe"
 }
