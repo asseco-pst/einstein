@@ -53,7 +53,8 @@ shadowJar {
 createExe {
 
     mainClassName = 'com.assecopst.channels.devops.Main'
+    headerType = "console"
     icon = "${projectDir}/assets/einstein.ico"
-    jar = "../libs/${rootProject.name}-${project.ext.version}.jar"
-    outfile = "${rootProject.name}-${project.ext.version}.exe"
+    jar = "${rootDir}/build/libs/${rootProject.name}-${project.ext.version}.jar"
+    outputDir = "${rootProject.name}-${project.ext.version}"
 }
