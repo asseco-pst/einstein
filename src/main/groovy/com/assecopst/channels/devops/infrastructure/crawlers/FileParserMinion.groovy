@@ -22,7 +22,7 @@ class FileParserMinion extends Crawler {
         Console.print("Project '$project.ref' - Checking dependencies...")
 
         if (project.hasRequirementsFile()) {
-            if (Einstein.properties.isDebugModeOn())
+            if (Einstein.isDebugModeOn())
                 storeFile()
             parseRequirements()
         } else {
