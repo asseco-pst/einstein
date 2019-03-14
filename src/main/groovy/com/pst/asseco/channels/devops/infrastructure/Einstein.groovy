@@ -77,6 +77,10 @@ abstract class Einstein {
                 " calculating required dependencies")
     }
 
+    static Map getCollectedDependencies() {
+        return dpManager.getFinalDependencies()
+    }
+
     private static List<Project> loadProjects(List<ProjectDao> aProjectsData) {
 
         List<Project> projects = []
