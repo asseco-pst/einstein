@@ -43,7 +43,19 @@ class DependenciesManager {
 
         if (!readDependencies[aProject.getId()])
             readDependencies[aProject.getId()] = new HashSet<Version>()
+
+        if(isDependencyAlreadySaved(aProject.version.versionStr, ((Set<Version>) readDependencies[aProject.getId()])))
+            return
+
         readDependencies[aProject.getId()] << aProject.version
+    }
+
+    private boolean isDependencyAlreadySaved(String aVersion, Set<Version> aVersions) {
+
+        if(!aVersions)
+            return false
+
+        return aVersions.stream().filter({ v -> v.versionStr == aVersion}).collect()
     }
 
     private void saveProjectByIndex(Project aProject) {
