@@ -32,7 +32,8 @@ class SemanticVersion extends Version {
             return 1
         if (version.patch > patch)
             return -1
-        // at this point, major, minor and patch fields from both versions are all equal. Return 0
+        // at this point, major, minor and patch fields from both versions are all equal.
+        // Both versions are equal
         return 0
     }
 
