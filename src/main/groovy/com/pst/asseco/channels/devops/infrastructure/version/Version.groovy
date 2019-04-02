@@ -147,7 +147,7 @@ abstract class Version implements Comparable<Version> {
     }
 
     synchronized static boolean hasNonBackwardCompatibleVersions(Set<Version> aVersions) {
-        return (hasMajorBreak(aVersions) || containsRCVersionAndStableVersion(aVersions))
+        return hasMajorBreak(aVersions)
     }
 
     /**
@@ -199,7 +199,7 @@ abstract class Version implements Comparable<Version> {
         return hasMajorBreak
     }
 
-    private static boolean containsRCVersionAndStableVersion(Set<Version> aVersions) {
+    static boolean containsRCVersionAndStableVersion(Set<Version> aVersions) {
 
         boolean hasStableVersions = false
         boolean hasRCVersions = false
@@ -270,7 +270,7 @@ abstract class Version implements Comparable<Version> {
         majors << aVer1.getMajor()
         majors << aVer2.getMajor()
 
-        majors = majors.reverse()
+        majors = majors.sort({-it})
 
         return ((majors[0] - majors[1]) >= 1)
     }
