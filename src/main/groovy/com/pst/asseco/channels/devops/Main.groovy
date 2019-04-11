@@ -52,6 +52,7 @@ class Main {
     static private void saveResultsIntoFile(String aFilePath) {
 
         try {
+            Console.info("Saving dependencies into file ${aFilePath}")
             new File(aFilePath).write(new JsonBuilder(Einstein.getCollectedDependencies()).toPrettyString())
         } catch (e) {
             Console.err("Unable to save results into output file '${aFilePath}'. Cause: ${e}")
