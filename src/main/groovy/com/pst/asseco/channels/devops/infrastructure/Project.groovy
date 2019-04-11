@@ -43,6 +43,10 @@ class Project {
         return project
     }
 
+    void addDependency(Project aProject) {
+        dependencies.add(aProject)
+    }
+
     void loadRequirementsFileContent() {
 
         try {
