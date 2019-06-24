@@ -1,0 +1,7 @@
+out/
+threads-workspace/
+build/
+.gradle/
+.idea/
+**/*.iml
+Playground.groovy
