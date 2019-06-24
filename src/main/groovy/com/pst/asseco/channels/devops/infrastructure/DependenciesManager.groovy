@@ -110,23 +110,27 @@ class DependenciesManager {
         return (Version.hasMultipleVersionSpecifications(aVersions) || Version.hasNonBackwardCompatibleVersions(aVersions))
     }
 
-
+    
     private void resolveMultiVersionsDependencies() {
 
         readDependencies.each { projectRef, d ->
-
             Set<Version> dependencies = (Set<Version>) d
             if (dependencies.size() == 1)
                 return
 
-            String biggestVersion = Version.getBiggestVersion(dependencies)
+            keepBiggestVersion(dependencies)
+        }
+    }
 
-            Iterator<Version> versionsIterator = dependencies.iterator()
-            while (versionsIterator.hasNext()) {
-                String version = versionsIterator.next()
-                if (version != biggestVersion)
-                    versionsIterator.remove()
-            }
+    void keepBiggestVersion(Set<Version> aVersions) {
+
+        String biggestVersion = Version.getBiggestVersion(aVersions)
+        Iterator<Version> versionsIterator = aVersions.iterator()
+
+        while (versionsIterator.hasNext()) {
+            Version currVersion = versionsIterator.next()
+            if (currVersion.versionStr != biggestVersion)
+                versionsIterator.remove()
         }
     }
 

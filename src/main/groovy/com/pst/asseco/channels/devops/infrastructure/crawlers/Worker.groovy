@@ -46,7 +46,7 @@ abstract class Worker extends Thread implements Observer, Observable {
         if (!observers)
             return
 
-        Console.debug("Worker $_id is notifying its followers that its job is done!")
+//        Console.debug("Worker $_id is notifying its followers that its job is done!")
         observers.each { o ->
             o.update()
         }
@@ -59,7 +59,7 @@ abstract class Worker extends Thread implements Observer, Observable {
 
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
         currentNbrOfSubscribedMinions += aVal
-        Console.debug("Worker '$_id' is following $currentNbrOfSubscribedMinions minions...")
+//        Console.debug("Worker '$_id' is following $currentNbrOfSubscribedMinions minions...")
     }
 
     protected void wait4SubscribedMinions() {
@@ -67,7 +67,7 @@ abstract class Worker extends Thread implements Observer, Observable {
         if (!currentNbrOfSubscribedMinions)
             return
 
-        Console.debug("Worker $_id is waiting for $currentNbrOfSubscribedMinions minions...!")
+//        Console.debug("Worker $_id is waiting for $currentNbrOfSubscribedMinions minions...!")
         while (currentNbrOfSubscribedMinions) {
             // wait for minions to finish their jobs...
             print "" // do not remove. Otherwise, for some (unknown) reason, the script "runs forever"...
