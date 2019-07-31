@@ -7,7 +7,7 @@ import com.pst.asseco.channels.devops.infrastructure.version.Version
 
 class Project {
 
-    static final String REQUIREMENTS_FILE = "requirements.txt"
+    static final String REQUIREMENTS_FILE = "requirements.yml"
 
     String name
     Version version
