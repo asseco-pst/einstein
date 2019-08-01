@@ -1,8 +1,7 @@
 package com.pst.asseco.channels.devops.infrastructure
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.http.RepoExplorerFactory
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.infrastructure.version.Version
 import org.yaml.snakeyaml.Yaml
 

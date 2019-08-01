@@ -1,9 +1,8 @@
 package com.pst.asseco.channels.devops.infrastructure.crawlers
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.infrastructure.Einstein
 import com.pst.asseco.channels.devops.infrastructure.Project
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 
 class FileParserMinion extends Crawler {
 
