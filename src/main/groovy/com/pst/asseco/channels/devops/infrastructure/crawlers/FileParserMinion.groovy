@@ -32,13 +32,8 @@ class FileParserMinion extends Crawler {
     }
 
     private void parseRequirements() {
-
-        project.getRequirementsFileContent().eachLine { dependencyLine ->
-            String line = dependencyLine.trim()
-            if (!line)
-                return
-
-            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, line)
+        project.readRequirements().each { requirement ->
+            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, requirement.toString())
         }
     }
 }
