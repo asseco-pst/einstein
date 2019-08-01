@@ -5,6 +5,7 @@ import com.pst.asseco.channels.devops.infrastructure.Einstein
 import com.pst.asseco.channels.devops.infrastructure.cli.CliParser
 import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import groovy.json.JsonBuilder
+import groovyjarjarcommonscli.MissingArgumentException
 
 class Main {
 
@@ -44,9 +45,11 @@ class Main {
 
     static private void checkGitlabEnvVariables() {
 
-        if(!System.getenv(GITLAB_URL) || !System.getenv(GITLAB_TOKEN))
-            throw new IllegalArgumentException("Environment variables '$GITLAB_URL' and/or '$GITLAB_TOKEN' are undefined." +
-                    "Please set them before trying to run Einstein again...")
+        if(!System.getenv(GITLAB_URL))
+            throw new IllegalArgumentException("Environment variable '$GITLAB_URL' is undefined.")
+        if(!System.getenv(GITLAB_TOKEN))
+            throw new IllegalArgumentException("Environment variable '$GITLAB_TOKEN' is undefined.")
+
     }
 
     static private void saveResultsIntoFile(String aFilePath) {
