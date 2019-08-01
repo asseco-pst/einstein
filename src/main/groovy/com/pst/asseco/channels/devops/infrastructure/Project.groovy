@@ -1,13 +1,13 @@
 package com.pst.asseco.channels.devops.infrastructure
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.http.RepoExplorerFactory
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.infrastructure.version.Version
+import org.yaml.snakeyaml.Yaml
 
 class Project {
 
-    static final String REQUIREMENTS_FILE = "requirements.txt"
+    static final String REQUIREMENTS_FILE = "requirements.yaml"
 
     String name
     Version version
@@ -52,8 +52,28 @@ class Project {
         try {
             requirementsFileContent = RepoExplorerFactory.get().getFileContents(REQUIREMENTS_FILE, versionCommitSha, namespace, name)
         } catch (e) {
-            Console.warn("Project '$name' does not have $REQUIREMENTS_FILE file...")
+            Console.warn("Could not load contents of $REQUIREMENTS_FILE from project $name. Cause: $e")
         }
+    }
+
+    List<Requirement> readRequirements(){
+        Yaml yamlParser = new Yaml()
+        Map<String, Object> parsed = yamlParser.load(requirementsFileContent)
+        List<Requirement> requirements = []
+
+        parsed.each{ namespace, project ->
+            println namespace
+            List<Map> m = (List<Map>) project
+            m.each { it ->
+                requirements.add(new Requirement(
+                        namespace: namespace,
+                        name: it.keySet().first().toString(),
+                        version: it.values().first().toString())
+                )
+            }
+        }
+
+        return requirements
     }
 
     boolean hasRequirementsFile() {

@@ -1,8 +1,7 @@
 package com.pst.asseco.channels.devops.infrastructure.crawlers
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.Main
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 
 abstract class Worker extends Thread implements Observer, Observable {
 

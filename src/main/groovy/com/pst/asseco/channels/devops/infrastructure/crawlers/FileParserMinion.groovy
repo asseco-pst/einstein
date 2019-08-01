@@ -1,9 +1,8 @@
 package com.pst.asseco.channels.devops.infrastructure.crawlers
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.infrastructure.Einstein
 import com.pst.asseco.channels.devops.infrastructure.Project
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 
 class FileParserMinion extends Crawler {
 
@@ -32,13 +31,8 @@ class FileParserMinion extends Crawler {
     }
 
     private void parseRequirements() {
-
-        project.getRequirementsFileContent().eachLine { dependencyLine ->
-            String line = dependencyLine.trim()
-            if (!line)
-                return
-
-            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, line)
+        project.readRequirements().each { requirement ->
+            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, requirement.toString())
         }
     }
 }

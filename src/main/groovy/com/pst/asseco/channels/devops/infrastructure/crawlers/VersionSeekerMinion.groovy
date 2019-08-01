@@ -1,11 +1,10 @@
 package com.pst.asseco.channels.devops.infrastructure.crawlers
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.http.RepoExplorerFactory
 import com.pst.asseco.channels.devops.infrastructure.DependencyParser
 import com.pst.asseco.channels.devops.infrastructure.Einstein
 import com.pst.asseco.channels.devops.infrastructure.Project
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.infrastructure.version.Version
 
 class VersionSeekerMinion extends Worker {
