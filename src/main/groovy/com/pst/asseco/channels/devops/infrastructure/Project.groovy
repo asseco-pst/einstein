@@ -68,7 +68,6 @@ class Project {
         List<Requirement> requirements = []
 
         parsed.each{ namespace, project ->
-            println namespace
             List<Map> m = (List<Map>) project
             m.each { it ->
                 requirements.add(new Requirement(
