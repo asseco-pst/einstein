@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Support for Semver version ranges (see [this](https://devhints.io/semver))
+
 ### Changed
 - ``requirements.txt`` file to YAML structure
 
