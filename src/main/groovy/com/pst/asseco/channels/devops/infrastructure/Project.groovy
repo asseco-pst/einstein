@@ -56,6 +56,12 @@ class Project {
         }
     }
 
+    /**
+     * Parses the contents of the requirements.yaml file and builds a list of
+     * Requirement objects.
+     *
+     * @return list of project runtime requirements
+     */
     List<Requirement> readRequirements(){
         Yaml yamlParser = new Yaml()
         Map<String, Object> parsed = yamlParser.load(requirementsFileContent)
