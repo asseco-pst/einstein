@@ -68,7 +68,7 @@ class Project {
                 requirements.add(new Requirement(
                         namespace: namespace,
                         name: it.keySet().first().toString(),
-                        version: it.values().first().toString())
+                        range: it.values().first().toString())
                 )
             }
         }

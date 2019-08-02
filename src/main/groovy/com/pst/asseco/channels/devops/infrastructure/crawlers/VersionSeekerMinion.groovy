@@ -1,78 +1,72 @@
 package com.pst.asseco.channels.devops.infrastructure.crawlers
 
 import com.pst.asseco.channels.devops.http.RepoExplorerFactory
-import com.pst.asseco.channels.devops.infrastructure.DependencyParser
 import com.pst.asseco.channels.devops.infrastructure.Einstein
 import com.pst.asseco.channels.devops.infrastructure.Project
+import com.pst.asseco.channels.devops.infrastructure.Requirement
 import com.pst.asseco.channels.devops.infrastructure.utils.Console
-import com.pst.asseco.channels.devops.infrastructure.version.Version
+import com.vdurmont.semver4j.Semver
 
 class VersionSeekerMinion extends Worker {
 
     private final Project project
-    private final String dependencyRecord
+    private final Requirement requirement
 
-    VersionSeekerMinion(Project aProject, String aDependencyLine) {
+    VersionSeekerMinion(Project aProject, Requirement requirement) {
         super()
-
         project = aProject
-        dependencyRecord = aDependencyLine
-        setId("$project.name:${project.version.toString()}<>$dependencyRecord")
+        this.requirement = requirement
+        setId("$project.name:${project.version.toString()}<>${this.requirement}")
     }
 
     @Override
     protected void work() {
-
-        parseDependency()
+        seekVersion()
     }
 
-    private void parseDependency() {
+    private void seekVersion() {
 
-        Console.info("Project '$project.ref' - Parsing dependency record '$dependencyRecord'")
+        Console.info("Project '$project.ref' - Parsing dependency record '$requirement'")
 
-        DependencyParser dependencyParser = getDependencyParser(dependencyRecord)
-        String dependencyProjectName = dependencyParser.getProjectName()
         String dependencyVersion
-
         try {
-            dependencyVersion = (dependencyParser.getVersionWrapper().isRcTag()) ? dependencyParser.getReadVersion() : getSiblingVersion(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyParser.getVersionWrapper())
+            dependencyVersion = (requirement.isReleaseCandidate()) ? requirement.getRange() : findSatisfyingVersion(requirement)
         } catch (e) {
-            Console.err("Unable to get sibling version for dependency record '${dependencyRecord}' of Project '${project.name}'. Cause: ${e}")
+            Console.err("Unable to get sibling version for dependency record '${requirement}' of Project '${project.name}'. Cause: ${e}")
             throw e
         }
 
         if (dependencyVersion) {
-            Console.info("Project '$project.ref' - Dependency identified: $dependencyProjectName:$dependencyVersion")
+            Console.info("Project '$project.ref' - Dependency identified: ${requirement.toString()}")
 
-            Project dependantProject = Project.factory(dependencyParser.getProjectNamespace(), dependencyProjectName, dependencyVersion)
+            Project dependantProject = Project.factory(requirement.getNamespace(), requirement.getName(), dependencyVersion)
             project.addDependency(dependantProject)
 
             Einstein.getProjectsManager().calcDependencies(dependantProject, this)
         }
     }
 
-    private DependencyParser getDependencyParser(String aDependencyRecord) {
+    /**
+     * Finds a tag in the required project that satisfies the requirement range
+     *
+     * @param requirement
+     * @return the version value
+     */
+    private static String findSatisfyingVersion(Requirement requirement) {
 
-        DependencyParser recordParser
+        List<String> tags = RepoExplorerFactory.get().listTags(
+                requirement.getNamespace(),
+                requirement.getName(),
+                { tag ->
+                    Semver version = new Semver(tag.getName(), Semver.SemverType.NPM)
+                    version.satisfies(requirement.getRange())
+                })
 
-        try {
-            recordParser = new DependencyParser(aDependencyRecord)
-        } catch (e) {
-            Console.err("Unable to parse line '${aDependencyRecord}' from '${Project.REQUIREMENTS_FILE}' file of Project '${project.name}'. Cause: ${e}")
-            throw e
+        Semver satisfies = tags.collect { new Semver(it, Semver.SemverType.NPM) }.max{ a, b ->
+            a <=> b ?: a.isLowerThan(b)
         }
 
-        return recordParser
-    }
+        return satisfies.getValue()
 
-    private String getSiblingVersion(String aProjectNamespace, String aProjectName, Version aVersion) {
-
-        List<String> matchingTags = RepoExplorerFactory.get().listTags(aProjectNamespace, aProjectName,
-                { tag -> aVersion.matchesVersion(tag.getName()) })
-
-        if (!matchingTags)
-            throw new Exception("Unable to get sibling version for $aProjectName:${aVersion.getVersionStr()}")
-
-        return (matchingTags.size() == 1) ? matchingTags[0] : Version.getBiggestVersion(Version.factory(matchingTags))
     }
 }

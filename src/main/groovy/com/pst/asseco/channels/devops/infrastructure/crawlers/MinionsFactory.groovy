@@ -2,6 +2,7 @@ package com.pst.asseco.channels.devops.infrastructure.crawlers
 
 
 import com.pst.asseco.channels.devops.infrastructure.Project
+import com.pst.asseco.channels.devops.infrastructure.Requirement
 
 abstract class MinionsFactory {
 
@@ -11,7 +12,7 @@ abstract class MinionsFactory {
     }
 
 
-    static void create(Type aType, Project aProject, Worker aObserver, String aDependencyLine = null) {
+    static void create(Type aType, Project aProject, Worker aObserver, Requirement requirement = null) {
 
         Worker minion
 
@@ -20,7 +21,7 @@ abstract class MinionsFactory {
                 minion = new FileParserMinion(aProject)
                 break
             case Type.VERSION_SEEKER:
-                minion = new VersionSeekerMinion(aProject, aDependencyLine)
+                minion = new VersionSeekerMinion(aProject, requirement)
                 break
         }
 
