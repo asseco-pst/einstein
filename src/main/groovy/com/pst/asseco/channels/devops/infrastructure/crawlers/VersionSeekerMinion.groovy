@@ -47,7 +47,11 @@ class VersionSeekerMinion extends Worker {
     }
 
     /**
-     * Finds a tag in the required project that satisfies the requirement range
+     * Finds a tag in the required project that satisfies the requirement range.
+     *
+     * It does so by executing the following steps:
+     *      * gets all tags from the project that satisfy the requirement range
+     *      * returns the highest version that satisfies the range
      *
      * @param requirement
      * @return the version value
