@@ -1,5 +1,6 @@
 ## Einstein
 
+[![CircleCI](https://circleci.com/gh/asseco-pst/einstein/tree/develop.svg?style=svg)](https://circleci.com/gh/asseco-pst/einstein/tree/develop)
 
 ### Getting Started
 
