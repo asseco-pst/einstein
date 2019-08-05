@@ -1,8 +1,7 @@
 package com.pst.asseco.channels.devops.infrastructure.crawlers
 
-
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import com.pst.asseco.channels.devops.infrastructure.Project
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
 
 /**
  * This thread is responsible to store, on a given location,
