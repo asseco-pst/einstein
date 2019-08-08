@@ -5,7 +5,7 @@ import com.pst.asseco.channels.devops.infrastructure.utils.Console
 
 /**
  * This thread is responsible to store, on a given location,
- * the 'requirements.txt' file of a given Project
+ * the requirements file of a given Project
  *
  * @throws Exception in case it's not able to save the required file
  */
