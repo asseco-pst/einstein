@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- ``requirements.txt`` file to YAML structure
+- ``requirements.txt`` file to `einstein.yaml` adopting a YAML structure
 
 ## [1.0.0] - 2019-06-24
 - Calculate dependencies between projects of a same Product
