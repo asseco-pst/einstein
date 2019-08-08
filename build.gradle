@@ -27,6 +27,8 @@ dependencies {
     compile group: 'org.gitlab4j', name: 'gitlab4j-api', version: '4.9.17'
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.24'
+    // https://mvnrepository.com/artifact/com.vdurmont/semver4j
+    compile group: 'com.vdurmont', name: 'semver4j', version: '2.2.0'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 

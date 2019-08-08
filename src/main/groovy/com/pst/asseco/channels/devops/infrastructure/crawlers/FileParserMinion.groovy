@@ -32,7 +32,7 @@ class FileParserMinion extends Crawler {
 
     private void parseRequirements() {
         project.readRequirements().each { requirement ->
-            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, requirement.toString())
+            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, requirement)
         }
     }
 }
