@@ -7,7 +7,7 @@ import org.yaml.snakeyaml.Yaml
 
 class Project {
 
-    static final String REQUIREMENTS_FILE = "requirements.yaml"
+    static final String REQUIREMENTS_FILE = "einstein.yaml"
 
     String name
     Version version
