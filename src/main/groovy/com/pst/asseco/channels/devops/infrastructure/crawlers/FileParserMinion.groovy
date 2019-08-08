@@ -26,7 +26,7 @@ class FileParserMinion extends Crawler {
                 storeFile()
             parseRequirements()
         } else {
-            Console.warn("Project '$project.ref' doesn't have a requirements file...")
+            Console.warn("Project '$project.ref' doesn't have a ${Project.REQUIREMENTS_FILE} file...")
         }
     }
 
