@@ -72,26 +72,6 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
     }
 
-    /**
-     *  Returns a project's Http URL given its namespace (ie. group) and its project name
-     *
-     * @param the namespace of the project (ie. group)
-     * @param the name of the project
-     * @return the HTTP URL to the project repository
-     */
-    @Override
-    String getHttpUrlToRepo(String namespace, String projectName) {
-
-        try {
-            Project project = findProject(namespace, projectName)
-            return project.getHttpUrlToRepo()
-        } catch (Exception e) {
-            Console.err("Could not get Http URL to Repo for project $namespace/$projectName. Cause: $e")
-            throw e
-        }
-
-    }
-
     String getRepoWebUrl(String namespace, String projectName) {
         try {
             Project project = findProject(namespace, projectName)

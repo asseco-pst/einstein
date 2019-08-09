@@ -22,8 +22,6 @@ abstract class RepositoryExplorer {
 
     abstract String getRepoWebUrl(String namespace, String projectName)
 
-    abstract String getHttpUrlToRepo(String namespace, String projectName)
-
     abstract String getFileContents(String filePath, String ref, String namespace, String projectName)
 
     abstract String getTagHash(String tagName, String namespace, String projectName)
