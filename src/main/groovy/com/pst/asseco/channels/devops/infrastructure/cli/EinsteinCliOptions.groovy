@@ -10,7 +10,7 @@ class EinsteinCliOptions {
     @Option(shortName = 'h', description = 'display usage')
     Boolean help
 
-    @Option(shortName = 'verbose', description = 'Show additional information along the dependencies calculation process')
+    @Option(shortName = 'verbose', description = 'Provide additional details')
     boolean verbose
 
     // --projects or -p
