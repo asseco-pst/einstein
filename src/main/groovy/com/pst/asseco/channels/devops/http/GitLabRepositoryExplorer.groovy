@@ -16,8 +16,15 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
     GitLabApi api
 
-    GitLabRepositoryExplorer(String aRepoUrl, String aToken) {
-        super(aRepoUrl, aToken)
+
+    @Override
+    protected void setRepoURLEnvVar() {
+        repoURLEnvVar = "GITLAB_URL"
+    }
+
+    @Override
+    protected void setTokenEnvVar() {
+        tokenEnvVar = "GITLAB_TOKEN"
     }
 
     @Override

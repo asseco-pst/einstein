@@ -1,4 +1,7 @@
 package com.pst.asseco.channels.devops.http
+
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
+
 /**
  * This class wraps up the Repository Explorer instance, assuring that the same instance is used through all
  * the application
@@ -11,14 +14,28 @@ abstract class RepoExplorerFactory {
 
     private static RepositoryExplorer instance
 
-    static RepositoryExplorer create(Type aRepoType, String aRepoUrl, String aToken) {
+    /**
+     * Creates a Gitlab Api explorer
+     *
+     * Currently, only Gitlab is supported. In the future,
+     * by supporting more Repos, the Repository Explorer tool must be configured
+     * by the user through an environment variable (i.e REPO_TOOL) and must be dynamically loaded on this method.
+     *
+     * @return Gitlab Api instance
+     */
+    static RepositoryExplorer create() {
+        Console.debug("Instantiating Gitlab Api...")
+        return create(Type.GITLAB)
+    }
+
+    static RepositoryExplorer create(Type aRepoType) {
 
         switch (aRepoType) {
             case Type.GITLAB:
-                instance = new GitLabRepositoryExplorer(aRepoUrl, aToken)
+                instance = new GitLabRepositoryExplorer()
                 break
 //            case Type.GITHUB:
-//                instance = new GitHubRepositoryExplorer(aRepoUrl, aToken)
+//                instance = new GitHubRepositoryExplorer()
 //                break
         }
 
