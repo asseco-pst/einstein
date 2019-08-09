@@ -5,7 +5,7 @@ import com.pst.asseco.channels.devops.infrastructure.version.Version
 
 class DependenciesManager {
 
-    Map finalDependencies = [:]
+    Map calcDependencies = [:]
 
     private Map projectsByIndex = [:]
     private Map readDependencies = [:]
@@ -82,7 +82,7 @@ class DependenciesManager {
                 dependencies.addAll(project.getDependencies())
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
-                finalDependencies.put(acceptedDependency.id, acceptedDependency.version.toString())
+                calcDependencies.put(acceptedDependency.id, acceptedDependency.version.toString())
             }
         }
     }
@@ -96,7 +96,7 @@ class DependenciesManager {
             if (dependentVersions.size() <= 1)
                 return
 
-            Console.warn("Identified multiple versions for Project ${projectName}. Are they compatible? Let's check...")
+            Console.warn("Checking if the multiple versions found for Project ${projectName} are semantically compatible...")
 
             if (hasNonCompatibleVersions(dependentVersions)) {
                 Console.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
@@ -150,7 +150,7 @@ class DependenciesManager {
 
     private void printRawDependencies() {
 
-        Console.info("Check raw dependencies:\n")
+        Console.info("Raw dependencies list:\n")
         projectsByIndex.each { p ->
             String projectRef = p.key
             Project project = (Project) p.value
@@ -164,7 +164,7 @@ class DependenciesManager {
             }
         }
         Console.print("\n")
-        Console.info("Check required dependencies by Project:")
+        Console.info("Calculated dependencies per Project:")
         Console.print("$readDependencies\n")
     }
 }

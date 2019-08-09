@@ -1,15 +1,11 @@
 package com.pst.asseco.channels.devops
 
-import com.pst.asseco.channels.devops.http.RepoExplorerFactory
 import com.pst.asseco.channels.devops.infrastructure.Einstein
 import com.pst.asseco.channels.devops.infrastructure.cli.CliParser
 import com.pst.asseco.channels.devops.infrastructure.utils.Console
 import groovy.json.JsonBuilder
 
 class Main {
-
-    static final String GITLAB_URL = "GITLAB_URL"
-    static final String GITLAB_TOKEN = "GITLAB_TOKEN"
 
     static CliParser cliParser
 
@@ -26,9 +22,7 @@ class Main {
         }
 
         try {
-            // set the repository to look for
-            checkGitlabEnvVariables()
-            RepoExplorerFactory.create(RepoExplorerFactory.Type.GITLAB, System.getenv(GITLAB_URL), System.getenv(GITLAB_TOKEN))
+
             Einstein.calcDependencies(cliParser.einsteinOptions.projects)
 
             String outputFilePath = cliParser.einsteinOptions.saveToFile
@@ -42,20 +36,11 @@ class Main {
         Console.print("Finished!")
     }
 
-    static private void checkGitlabEnvVariables() {
-
-        if(!System.getenv(GITLAB_URL))
-            throw new IllegalArgumentException("Environment variable '$GITLAB_URL' is undefined.")
-        if(!System.getenv(GITLAB_TOKEN))
-            throw new IllegalArgumentException("Environment variable '$GITLAB_TOKEN' is undefined.")
-
-    }
-
     static private void saveResultsIntoFile(String aFilePath) {
 
         try {
             Console.info("Saving dependencies into file ${aFilePath}")
-            new File(aFilePath).write(new JsonBuilder(Einstein.getCollectedDependencies()).toPrettyString())
+            new File(aFilePath).write(new JsonBuilder(Einstein.getCalculatedDependencies()).toPrettyString())
         } catch (e) {
             Console.err("Unable to save results into output file '${aFilePath}'. Cause: ${e}")
             System.exit(1)
