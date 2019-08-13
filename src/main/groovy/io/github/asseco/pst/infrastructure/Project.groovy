@@ -4,6 +4,10 @@ import com.vdurmont.semver4j.Requirement
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
 
+import io.github.asseco.pst.http.RepoExplorerFactory
+import io.github.asseco.pst.infrastructure.exceptions.VersionException
+import io.github.asseco.pst.infrastructure.utils.Console
+import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.yaml.snakeyaml.Yaml
 
 class Project {

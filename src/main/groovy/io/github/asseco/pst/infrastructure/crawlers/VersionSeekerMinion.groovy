@@ -1,11 +1,10 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.Project
-import io.github.asseco.pst.infrastructure.utils.Console
-import com.pst.asseco.channels.devops.infrastructure.utils.SemanticVersion
 import io.github.asseco.pst.infrastructure.Requirement
+import io.github.asseco.pst.infrastructure.utils.Console
+import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 
 class VersionSeekerMinion extends Worker {
 

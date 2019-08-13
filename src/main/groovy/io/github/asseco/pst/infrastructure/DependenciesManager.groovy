@@ -1,6 +1,7 @@
 package io.github.asseco.pst.infrastructure
 
 import io.github.asseco.pst.infrastructure.utils.Console
+import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 
 class DependenciesManager {
 
