@@ -1,5 +1,5 @@
-group 'com.pst.asseco.channels.devops'
-version "1.0.0-rc"
+group 'io.github.asseco-pst'
+version "1.1.0-SNAPSHOT"
 
 buildscript {
     repositories {
@@ -8,14 +8,16 @@ buildscript {
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
         classpath 'edu.sc.seis.gradle:launch4j:2.4.4'
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
     }
 }
 
 apply plugin: 'groovy'
-apply plugin: 'maven'
+apply plugin: 'signing'
 apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'edu.sc.seis.launch4j'
+apply plugin: 'com.bmuschko.nexus'
 
 repositories {
     mavenCentral()
@@ -48,4 +50,33 @@ createExe {
     icon = "${projectDir}/assets/einstein.ico"
     jar = "${rootDir}/build/libs/${rootProject.name}-${project.version}.jar"
     outfile = "${rootProject.name}-${project.version}.exe"
+}
+
+modifyPom {
+    project {
+        name 'einstein'
+        description 'A runtime dependency manager'
+        url 'https://github.com/asseco-pst/einstein'
+        inceptionYear '2019'
+
+        scm {
+            url 'https://github.com/asseco-pst/einstein'
+            connection 'scm:https://github.com/asseco-pst/einstein.git'
+            developerConnection 'scm:git://github.com/asseco-pst/einstein.git'
+        }
+
+        developers {
+            developer {
+                id 'assecopst'
+                name 'Asseco PST'
+                email 'servicos.dcs@pst.asseco.com'
+            }
+        }
+    }
+}
+
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
 }
