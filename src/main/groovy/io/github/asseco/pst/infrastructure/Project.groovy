@@ -1,9 +1,5 @@
 package io.github.asseco.pst.infrastructure
 
-import com.vdurmont.semver4j.Requirement
-import io.github.asseco.pst.http.RepoExplorerFactory
-import io.github.asseco.pst.infrastructure.exceptions.VersionException
-
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
 import io.github.asseco.pst.infrastructure.utils.Console
