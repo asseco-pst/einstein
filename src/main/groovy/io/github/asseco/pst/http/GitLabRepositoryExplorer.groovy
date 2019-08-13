@@ -17,8 +17,15 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
     GitLabApi api
 
-    GitLabRepositoryExplorer(String aRepoUrl, String aToken) {
-        super(aRepoUrl, aToken)
+
+    @Override
+    protected void setRepoURLEnvVar() {
+        repoURLEnvVar = "GITLAB_URL"
+    }
+
+    @Override
+    protected void setTokenEnvVar() {
+        tokenEnvVar = "GITLAB_TOKEN"
     }
 
     @Override
@@ -68,26 +75,6 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             return project.getSshUrlToRepo()
         } catch (Exception e) {
             Console.err("Could not get SSH URL to Repo for project $namespace/$projectName. Cause: $e")
-            throw e
-        }
-
-    }
-
-    /**
-     *  Returns a project's Http URL given its namespace (ie. group) and its project name
-     *
-     * @param the namespace of the project (ie. group)
-     * @param the name of the project
-     * @return the HTTP URL to the project repository
-     */
-    @Override
-    String getHttpUrlToRepo(String namespace, String projectName) {
-
-        try {
-            Project project = findProject(namespace, projectName)
-            return project.getHttpUrlToRepo()
-        } catch (Exception e) {
-            Console.err("Could not get Http URL to Repo for project $namespace/$projectName. Cause: $e")
             throw e
         }
 

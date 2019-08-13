@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure
 
-
+import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.metrics.Metrics
@@ -58,28 +58,27 @@ abstract class Einstein {
 
     static void calcDependencies(List<ProjectDao> aProjectsData) {
 
-        Console.debug("Start tracking timer...")
+        RepoExplorerFactory.create()
+
         metrics.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
         ProjectsCrawler pCrawler = new ProjectsCrawler(loadProjects(aProjectsData))
         pCrawler.start()
         pCrawler.join()
 
-        Console.debug("Stop tracking timer...")
         metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
         dpManager.resolveVersions(scannedDependencies)
 
-        Console.info("Check cleaned dependencies:")
-        Console.print(dpManager.getFinalDependencies())
+        Console.info("Calculated dependencies:")
+        Console.print(dpManager.getCalcDependencies())
 
         Console.info("Einstein took " +
-                metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString() +
-                " calculating required dependencies")
+                metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
     }
 
-    static Map getCollectedDependencies() {
-        return dpManager.getFinalDependencies()
+    static Map getCalculatedDependencies() {
+        return dpManager.getCalcDependencies()
     }
 
     private static List<Project> loadProjects(List<ProjectDao> aProjectsData) {

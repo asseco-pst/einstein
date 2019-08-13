@@ -6,14 +6,40 @@ import java.util.function.Predicate
 
 abstract class RepositoryExplorer {
 
-    String repoUrl
-    String token
 
-    protected RepositoryExplorer(String aRepoUrl, String aToken) {
-        repoUrl = aRepoUrl
-        token = aToken
+    protected String repoURLEnvVar
+    protected String tokenEnvVar
+
+    protected String repoUrl
+    protected String token
+
+    protected RepositoryExplorer() {
+
+        setRepoURLEnvVar()
+        setTokenEnvVar()
+
+        loadRepoUrl()
+        loadAccessToken()
 
         connect()
+    }
+
+    protected abstract void setRepoURLEnvVar()
+    protected abstract void setTokenEnvVar()
+
+    protected void loadRepoUrl() {
+
+        repoUrl = System.getenv(repoURLEnvVar)
+        if(!repoUrl)
+            throw new IllegalArgumentException("Environment variable '$repoURLEnvVar' is undefined.")
+
+    }
+
+    protected void loadAccessToken() {
+
+        token = System.getenv(tokenEnvVar)
+        if(!token)
+            throw new IllegalArgumentException("Environment variable '$tokenEnvVar' is undefined.")
     }
 
     abstract void connect()
@@ -21,8 +47,6 @@ abstract class RepositoryExplorer {
     abstract String getRepoSshUrl(String namespace, String projectName)
 
     abstract String getRepoWebUrl(String namespace, String projectName)
-
-    abstract String getHttpUrlToRepo(String namespace, String projectName)
 
     abstract String getFileContents(String filePath, String ref, String namespace, String projectName)
 

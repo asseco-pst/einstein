@@ -1,5 +1,7 @@
 package io.github.asseco.pst.infrastructure.metrics
 
+import com.pst.asseco.channels.devops.infrastructure.utils.Console
+
 class Metrics {
 
     enum METRIC {
@@ -14,6 +16,7 @@ class Metrics {
 
     void startTimeTracking(METRIC aMETRIC) {
 
+        Console.debug("Start tracking timer for metric $aMETRIC...")
         Timer timer = new Timer()
         timers[aMETRIC] = timer
 
@@ -23,6 +26,8 @@ class Metrics {
     void stopTimeTracking(METRIC aMetric) {
 
         checkIfExistsTimer(aMetric)
+
+        Console.debug("Stop tracking timer for metric $aMetric...")
         ((Timer) timers[aMetric]).stop()
     }
 
