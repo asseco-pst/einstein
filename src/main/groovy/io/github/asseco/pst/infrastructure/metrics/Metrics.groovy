@@ -1,6 +1,7 @@
 package io.github.asseco.pst.infrastructure.metrics
 
-import com.pst.asseco.channels.devops.infrastructure.utils.Console
+import io.github.asseco.pst.infrastructure.utils.Console
+
 
 class Metrics {
 
