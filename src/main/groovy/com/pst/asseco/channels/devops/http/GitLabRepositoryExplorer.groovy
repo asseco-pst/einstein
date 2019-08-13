@@ -32,6 +32,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     @Override
     void connect() {
 
+        Console.info("Connecting to the Gitlab Api...")
         try {
             api = new GitLabApi(repoUrl, token)
             api.setIgnoreCertificateErrors(true)
