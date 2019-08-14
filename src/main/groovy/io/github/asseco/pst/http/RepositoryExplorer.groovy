@@ -54,6 +54,4 @@ abstract class RepositoryExplorer {
 
     abstract List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate)
 
-    abstract String getDevelopBranchLatestCommitSha(String namespace, String projectName)
-
 }

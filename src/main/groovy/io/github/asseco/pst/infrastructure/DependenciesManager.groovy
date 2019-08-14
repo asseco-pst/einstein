@@ -1,7 +1,8 @@
 package io.github.asseco.pst.infrastructure
 
+
 import io.github.asseco.pst.infrastructure.utils.Console
-import io.github.asseco.pst.infrastructure.utils.SemanticVersion
+import io.github.asseco.pst.infrastructure.version.Version
 
 class DependenciesManager {
 
@@ -42,20 +43,20 @@ class DependenciesManager {
     private void addDependency(Project aProject) {
 
         if (!readDependencies[aProject.getId()])
-            readDependencies[aProject.getId()] = new HashSet<SemanticVersion>()
+            readDependencies[aProject.getId()] = new HashSet<Version>()
 
-        if(isDependencyAlreadySaved(aProject.version.toString(), ((Set<SemanticVersion>) readDependencies[aProject.getId()])))
+        if(isDependencyAlreadySaved(aProject.version.versionStr, ((Set<Version>) readDependencies[aProject.getId()])))
             return
 
         readDependencies[aProject.getId()] << aProject.version
     }
 
-    private boolean isDependencyAlreadySaved(String aVersion, Set<SemanticVersion> aVersions) {
+    private boolean isDependencyAlreadySaved(String aVersion, Set<Version> aVersions) {
 
         if(!aVersions)
             return false
 
-        return aVersions.stream().filter({ v -> v.toString() == aVersion}).collect()
+        return aVersions.stream().filter({ v -> v.versionStr == aVersion}).collect()
     }
 
     private void saveProjectByIndex(Project aProject) {
@@ -91,24 +92,30 @@ class DependenciesManager {
 
         readDependencies.each {
             String projectName = it.key
-            Set<SemanticVersion> dependentVersions = (Set<SemanticVersion>) it.value
+            Set<Version> dependentVersions = (Set<Version>) it.value
 
             if (dependentVersions.size() <= 1)
                 return
 
             Console.warn("Checking if the multiple versions found for Project ${projectName} are semantically compatible...")
 
-            if (SemanticVersion.hasNonCompatibleVersions(dependentVersions)) {
+            if (hasNonCompatibleVersions(dependentVersions)) {
                 Console.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
                 throw new Exception("Non compatible versions found!")
             }
         }
     }
+
+    private boolean hasNonCompatibleVersions(Set<Version> aVersions) {
+
+        return (Version.hasMultipleVersionSpecifications(aVersions) || Version.hasNonBackwardCompatibleVersions(aVersions))
+    }
+
     
     private void resolveMultiVersionsDependencies() {
 
         readDependencies.each { projectRef, d ->
-            Set<SemanticVersion> dependencies = (Set<SemanticVersion>) d
+            Set<Version> dependencies = (Set<Version>) d
             if (dependencies.size() == 1)
                 return
 
@@ -116,14 +123,14 @@ class DependenciesManager {
         }
     }
 
-    private void keepBiggestVersion(Set<SemanticVersion> aVersions) {
+    void keepBiggestVersion(Set<Version> aVersions) {
 
-        String biggestVersion = SemanticVersion.getBiggestVersion(aVersions)
+        String biggestVersion = Version.getBiggestVersion(aVersions)
+        Iterator<Version> versionsIterator = aVersions.iterator()
 
-        Iterator<SemanticVersion> versionsIterator = aVersions.iterator()
         while (versionsIterator.hasNext()) {
-            SemanticVersion currVersion = versionsIterator.next()
-            if (currVersion.toString() != biggestVersion)
+            Version currVersion = versionsIterator.next()
+            if (currVersion.versionStr != biggestVersion)
                 versionsIterator.remove()
         }
     }
