@@ -8,14 +8,14 @@ Import using Maven or Gradle:
 
 ```xml
 <dependency>
-    <groupId>com.pst.asseco.channels.devops</groupId>
+    <groupId>io.github.asseco-pst</groupId>
     <artifactId>einstein</artifactId>
     <version>...</version>
 </dependency>
 ```
 
 ```groovy
-compile group: 'com.pst.asseco.channels.devops', name: 'einstein', version: '...'
+compile group: 'io.github.asseco-pst', name: 'einstein', version: '...'
 ```
 
 ### Build from source
