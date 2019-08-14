@@ -45,10 +45,6 @@ jar {
     }
 }
 
-shadowJar {
-    baseName = "${rootProject.name}"
-}
-
 createExe {
     mainClassName = 'io.github.asseco.pst.Main'
     headerType = "console"
