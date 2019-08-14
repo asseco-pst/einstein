@@ -66,6 +66,14 @@ modifyPom {
             developerConnection 'scm:git://github.com/asseco-pst/einstein.git'
         }
 
+        licenses {
+            license {
+                name 'MIT License'
+                url 'https://opensource.org/licenses/MIT'
+                distribution 'repo'
+            }
+        }
+
         developers {
             developer {
                 id 'assecopst'
