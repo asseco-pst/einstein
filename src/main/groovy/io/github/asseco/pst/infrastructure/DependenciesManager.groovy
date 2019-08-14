@@ -5,7 +5,7 @@ import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 
 class DependenciesManager {
 
-    Map calcDependencies = [:]
+    Map<String, String> calcDependencies = [:]
 
     private Map projectsByIndex = [:]
     private Map readDependencies = [:]

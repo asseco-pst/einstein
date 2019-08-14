@@ -1,5 +1,6 @@
 package io.github.asseco.pst.infrastructure
 
+import groovy.json.JsonBuilder
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
@@ -56,6 +57,10 @@ abstract class Einstein {
 
     }
 
+    static void calcDependencies(ProjectDao aProject) {
+        calcDependencies([aProject])
+    }
+
     static void calcDependencies(List<ProjectDao> aProjectsData) {
 
         RepoExplorerFactory.create()
@@ -79,7 +84,7 @@ abstract class Einstein {
                 metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
     }
 
-    static Map getCalculatedDependencies() {
+    static Map<String, String> getCalculatedDependencies() {
         return dpManager.getCalcDependencies()
     }
 
