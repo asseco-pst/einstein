@@ -70,8 +70,10 @@ abstract class Einstein {
 
         dpManager.resolveVersions(scannedDependencies)
 
-        Console.info("Calculated dependencies:")
-        Console.print(dpManager.getCalcDependencies())
+        Console.print("\n\n")
+        Console.info("Detected dependencies:")
+        Console.printMap(dpManager.getCalcDependencies())
+        Console.print("\n\n")
 
         Console.info("Einstein took " +
                 metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
