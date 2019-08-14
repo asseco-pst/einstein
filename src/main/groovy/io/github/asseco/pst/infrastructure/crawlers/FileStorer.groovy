@@ -28,7 +28,7 @@ class FileStorer extends Thread {
 
     private void storeFile() {
 
-        String filename = "${Project.REQUIREMENTS_FILE}-${project.getVersion().toString()}-${project.versionCommitSha}"
+        String filename = "${Project.EINSTEIN_FILENAME}-${project.getVersion().toString()}-${project.versionCommitSha}"
         Console.print("Storing ${filename} of Project ${project.name}")
 
         try {
@@ -36,7 +36,7 @@ class FileStorer extends Thread {
             projectFolder.mkdir()
 
             File requirements = new File(projectFolder, filename)
-            requirements.write(project.requirementsFileContent)
+            requirements.write(project.einsteinFileContent)
 
             Console.print("File '${filename}' from '${project.name}' Project successfully stored into ${requirements.getPath()}")
         } catch (e) {

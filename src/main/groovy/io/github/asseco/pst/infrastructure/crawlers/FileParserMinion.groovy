@@ -19,14 +19,14 @@ class FileParserMinion extends Crawler {
 
     private void checkProjectDependencies() {
 
-        Console.print("Project '$project.ref' - Checking dependencies...")
+        Console.print("\nChecking dependencies of Project '$project.ref':")
 
         if (project.hasRequirementsFile()) {
             if (Einstein.isDebugModeOn())
                 storeFile()
             parseRequirements()
         } else {
-            Console.warn("Project '$project.ref' doesn't have a ${Project.REQUIREMENTS_FILE} file...")
+            Console.warn("Project '$project.ref' doesn't have a ${Project.EINSTEIN_FILENAME} file...")
         }
     }
 
