@@ -45,7 +45,7 @@ shadowJar {
 }
 
 createExe {
-    mainClassName = project.group + '.Main'
+    mainClassName = 'io.github.asseco.pst.Main'
     headerType = "console"
     icon = "${projectDir}/assets/einstein.ico"
     jar = "${rootDir}/build/libs/${rootProject.name}-${project.version}.jar"
