@@ -24,9 +24,13 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.6', ext: 'pom'
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy
+    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.8'
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
+    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.8'
     // https://mvnrepository.com/artifact/org.gitlab4j/gitlab4j-api
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-cli-picocli
+    compile group: 'org.codehaus.groovy', name: 'groovy-cli-picocli', version: '2.5.8'
     compile group: 'org.gitlab4j', name: 'gitlab4j-api', version: '4.9.17'
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.24'
