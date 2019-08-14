@@ -1,25 +1,24 @@
 package io.github.asseco.pst.infrastructure
 
 import io.github.asseco.pst.http.RepoExplorerFactory
-import io.github.asseco.pst.infrastructure.exceptions.VersionException
 import io.github.asseco.pst.infrastructure.utils.Console
-import io.github.asseco.pst.infrastructure.utils.SemanticVersion
+import io.github.asseco.pst.infrastructure.version.Version
 import org.yaml.snakeyaml.Yaml
 
 class Project {
 
-    static final String EINSTEIN_FILENAME = "einstein.yaml"
+    static final String REQUIREMENTS_FILE = "einstein.yaml"
 
     String name
-    SemanticVersion version
+    Version version
     String namespace
-    String id // identifies the Project by: projectNamespace and projectName
-    String ref // identifies the Project by: projectNamespace, projectName and version
+    String id // identifies the Project by: namespace and name
+    String ref // identifies the Project by: namespace, name and version
     String repoSshUrl
     String repoHttpsUrl
     String versionCommitSha
     List<Project> dependencies
-    String einsteinFileContent
+    String requirementsFileContent
 
     private Project() {
         dependencies = []
@@ -31,41 +30,29 @@ class Project {
 
         try {
             project =
-                    new Builder()
+                    new Project.Builder()
                             .setNamespace(aNamespace)
                             .setName(aName)
                             .setVersion(aVersion)
                             .build()
         } catch (e) {
-            Console.err("Unable to instantiate Project '$aNamespace/$aName}' for version '${aVersion}'")
+            Console.err("Unable to instantiate Project with name '${aName}' and version '${aVersion}'")
             throw e
         }
 
         return project
     }
 
-    private void setVersionSha() {
-        if(version.isSnapshot()) {
-            try {
-                versionCommitSha = RepoExplorerFactory.get().getDevelopBranchLatestCommitSha(namespace, name)
-            } catch (Exception aEx) {
-                throw new VersionException("Project $namespace/$name does not contains a SNAPSHOT version", aEx)
-            }
-        }
-        else
-            versionCommitSha = RepoExplorerFactory.get().getTagHash(version.toString(), namespace, name)
-    }
-
     void addDependency(Project aProject) {
         dependencies.add(aProject)
     }
 
-    void loadEinsteinFileContent() {
+    void loadRequirementsFileContent() {
 
         try {
-            einsteinFileContent = RepoExplorerFactory.get().getFileContents(EINSTEIN_FILENAME, versionCommitSha, namespace, name)
+            requirementsFileContent = RepoExplorerFactory.get().getFileContents(REQUIREMENTS_FILE, versionCommitSha, namespace, name)
         } catch (e) {
-            Console.warn("Could not load contents of $EINSTEIN_FILENAME from project $name. Cause: $e")
+            Console.warn("Could not load contents of $REQUIREMENTS_FILE from project $name. Cause: $e")
         }
     }
 
@@ -76,22 +63,17 @@ class Project {
      * @return list of project runtime requirements
      */
     List<Requirement> readRequirements(){
-
         Yaml yamlParser = new Yaml()
-        Map<String, Object> parsed = yamlParser.load(einsteinFileContent)
+        Map<String, Object> parsed = yamlParser.load(requirementsFileContent)
         List<Requirement> requirements = []
 
         parsed.each{ namespace, project ->
-
             List<Map> m = (List<Map>) project
-
             m.each { it ->
-                requirements.add(
-                        new Requirement(
-                            projectNamespace: namespace.trim(),
-                            projectName: it.keySet().first().toString().trim(),
-                            versionRange: it.values().first().toString().trim()
-                        )
+                requirements.add(new Requirement(
+                        namespace: namespace,
+                        name: it.keySet().first().toString(),
+                        range: it.values().first().toString())
                 )
             }
         }
@@ -100,7 +82,7 @@ class Project {
     }
 
     boolean hasRequirementsFile() {
-        return einsteinFileContent
+        return requirementsFileContent
     }
 
     static class Builder {
@@ -122,7 +104,7 @@ class Project {
         }
 
         Builder setVersion(String aVersion) {
-            project.version = SemanticVersion.create(aVersion)
+            project.version = Version.factory(aVersion)
             return this
         }
 
@@ -130,10 +112,11 @@ class Project {
 
             project.setRepoSshUrl(RepoExplorerFactory.get().getRepoSshUrl(project.namespace, project.name))
             project.setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
-            project.setVersionSha()
+            project.versionCommitSha = RepoExplorerFactory.get().getTagHash(project.version.toString(), project.namespace, project.name)
+
             project.setId("$project.namespace/$project.name")
             project.setRef("$project.namespace/$project.name:${project.version.toString()}")
-            project.loadEinsteinFileContent()
+            project.loadRequirementsFileContent()
 
             return project
         }

@@ -1,28 +1,38 @@
 package io.github.asseco.pst.infrastructure
 
+import io.github.asseco.pst.infrastructure.utils.VersionUtils
 
 /**
- * This <strong>class represents a single entry</strong> on the einstein.yaml file.
- * ie.:<br>
+ * This class represents a single entry on the requirements.yaml file.
+ * ie.:
  *
- * <code>
- * [projectNamespace]:          # i.e, middleware <br>
- *     - [projectName]:  [range]   # i.e, project-a: ^1.0              <---- this is an entry <br>
- *     - [projectName]:  [range]   # i.e: project-b: 1.0.0-SNAPSHOT    <---- this is another entry<br>
- * </code>
- *<br>
- *  Ranges are defined according Semver 2.0.0 specification
- *  @see <a href="https://devhints.io/semver">Semver accepted Ranges</a>
- *
+ * namespace:
+ *  - projectA: range1  <---- this is an entry
+ *  - projectB: range2
  */
 class Requirement {
 
-    String projectNamespace
-    String projectName
-    String versionRange
+    /**
+     * The project namespace/group
+     */
+    String namespace
+
+    /**
+     * The project name
+     */
+    String name
+
+    /**
+     * The requirement range according to SemVer 2.0.0
+     */
+    String range
+
+    boolean isReleaseCandidate(){
+        VersionUtils.isReleaseCandidate(range)
+    }
 
     @Override
     String toString() {
-        return "$projectNamespace/$projectName:$versionRange"
+        return "$namespace/$name$range"
     }
 }

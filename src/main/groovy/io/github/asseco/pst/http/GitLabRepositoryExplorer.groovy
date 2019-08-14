@@ -2,10 +2,7 @@ package io.github.asseco.pst.http
 
 
 import io.github.asseco.pst.infrastructure.utils.Console
-
-
-import io.github.asseco.pst.infrastructure.utils.Console
-import io.github.asseco.pst.infrastructure.utils.SemanticVersion
+import io.github.asseco.pst.infrastructure.version.Version
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
@@ -17,8 +14,6 @@ import java.util.stream.Stream
  *  This class makes use of GitLab's REST API to get information about repos
  */
 class GitLabRepositoryExplorer extends RepositoryExplorer {
-
-    private final String DEVELOP_BRANCH = "develop"
 
     GitLabApi api
 
@@ -36,7 +31,6 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     @Override
     void connect() {
 
-        Console.info("Connecting to the Gitlab Api...")
         try {
             api = new GitLabApi(repoUrl, token)
             api.setIgnoreCertificateErrors(true)
@@ -47,10 +41,10 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     }
 
     /**
-     * Returns a Project identified by a projectNamespace and a project projectName
+     * Returns a Project identified by a namespace and a project name
      *
-     * @param the projectNamespace of the project (ie. its group)
-     * @param the projectName of the project
+     * @param the namespace of the project (ie. its group)
+     * @param the name of the project
      * @return the Project
      */
     Project findProject(String namespace, String projectName) {
@@ -67,10 +61,10 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     }
 
     /**
-     *  Returns a project's SSH URL given its projectNamespace (ie. group) and its project projectName
+     *  Returns a project's SSH URL given its namespace (ie. group) and its project name
      *
-     * @param the projectNamespace of the project (ie. group)
-     * @param the projectName of the project
+     * @param the namespace of the project (ie. group)
+     * @param the name of the project
      * @return the SSH URL to the project repository
      */
     @Override
@@ -100,9 +94,9 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      *  Get the contents of a file in filePath, with version ref.
      *
      * @param filePath
-     * @param ref projectName of a branch, commit, tag, etc.
-     * @param namespace the projectNamespace of the project (ie. group)
-     * @param projectName the projectName of the project
+     * @param ref name of a branch, commit, tag, etc.
+     * @param namespace the namespace of the project (ie. group)
+     * @param projectName the name of the project
      * @return the contents of the file
      */
     @Override
@@ -111,35 +105,17 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             Project project = findProject(namespace, projectName)
             return api.getRepositoryFileApi().getFile(project, filePath, ref, true).getDecodedContentAsString()
         } catch (Exception e) {
+            Console.err("Could not get file $filePath from project $namespace/$projectName. Cause: $e")
             throw e
         }
     }
 
     /**
-     * Get the hash of the latest commit on the 'develop' branch
-     *
-     * @param namespace the projectNamespace of the projecy
-     * @param projectName the projectName of the project
-     * @return the SHA-1 hash of the identified commit
-     * @throws Exception if the Project does not contains a 'develop' named branch
-     */
-    @Override
-    String getDevelopBranchLatestCommitSha(String namespace, String projectName) {
-
-        Project project = findProject(namespace, projectName)
-
-        if(api.getRepositoryApi().getBranch(project, DEVELOP_BRANCH))
-            return api.getCommitsApi().getCommit(project, "develop").getId()
-
-        throw new RuntimeException("Project '$namespace/$projectName' does not contains a '$DEVELOP_BRANCH' named branch")
-    }
-
-    /**
      *  Gets a tag's hash (ie. commit ID) given a project
      *
-     * @param tagName the tag projectName (eg. v1.4.6)
-     * @param namespace the projectNamespace of the project (ie. group)
-     * @param projectName the projectName of the project
+     * @param tagName the tag name (eg. v1.4.6)
+     * @param namespace the namespace of the project (ie. group)
+     * @param projectName the name of the project
      * @return the SHA-1 hash of the tag
      */
     @Override
@@ -163,21 +139,26 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      *  Returns a list of tags existing in the projects repo.
      *  If provided a regular expression, this method will return only tags that match with the pattern.
      *
-     * @param namespace the projectNamespace of the project (ie. group)
-     * @param projectName the projectName of the project
+     * @param namespace the namespace of the project (ie. group)
+     * @param projectName the name of the project
      * @param regex a pattern to filter the tags
      * @return a list of tags
      */
     @Override
-    List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate) {
+    List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate = null) {
         try {
             Project project = findProject(namespace, projectName)
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
 
-            return tags
-                    .filter(predicate)
-                    .collect({ tag -> SemanticVersion.create(tag.getName()).toString() })
+            if (predicate != null) {
+                return tags
+                        .filter(predicate)
+                        .collect({ tag -> Version.extractVersionFrom(tag.getName()) })
+            } else {
+                return tags
+                        .collect({ tag -> Version.extractVersionFrom(tag.getName()) })
+            }
 
         } catch (Exception e) {
             Console.err("Could not get tags for project $projectName. Cause: $e")
