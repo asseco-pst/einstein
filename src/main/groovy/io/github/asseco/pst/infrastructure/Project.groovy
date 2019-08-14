@@ -6,6 +6,8 @@ import io.github.asseco.pst.infrastructure.utils.Console
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.yaml.snakeyaml.Yaml
 
+
+
 class Project {
 
     static final String EINSTEIN_FILENAME = "einstein.yaml"
