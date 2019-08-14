@@ -83,6 +83,8 @@ modifyPom {
                 id 'assecopst'
                 name 'Asseco PST'
                 email 'servicos.dcs@pst.asseco.com'
+                organization 'Asseco PST'
+                organizationUrl 'https://www.pst.asseco.com'
             }
         }
     }
