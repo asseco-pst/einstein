@@ -1,9 +1,5 @@
 package io.github.asseco.pst.http
 
-
-import io.github.asseco.pst.infrastructure.utils.Console
-
-
 import io.github.asseco.pst.infrastructure.utils.Console
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.gitlab4j.api.GitLabApi

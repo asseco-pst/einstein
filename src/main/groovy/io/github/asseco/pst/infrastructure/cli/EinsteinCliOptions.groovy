@@ -1,8 +1,7 @@
 package io.github.asseco.pst.infrastructure.cli
 
-
-import io.github.asseco.pst.infrastructure.ProjectDao
 import groovy.cli.Option
+import io.github.asseco.pst.infrastructure.ProjectDao
 
 class EinsteinCliOptions {
 
@@ -10,7 +9,7 @@ class EinsteinCliOptions {
     @Option(shortName = 'h', description = 'display usage')
     Boolean help
 
-    @Option(shortName = 'verbose', description = 'Provide additional details')
+    @Option(shortName = 'v', description = 'Provide additional details')
     boolean verbose
 
     // --projects or -p
