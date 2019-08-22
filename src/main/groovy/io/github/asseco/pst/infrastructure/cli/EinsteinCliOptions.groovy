@@ -1,8 +1,7 @@
 package io.github.asseco.pst.infrastructure.cli
 
-
-import io.github.asseco.pst.infrastructure.ProjectDao
 import groovy.cli.Option
+import io.github.asseco.pst.infrastructure.ProjectDao
 
 class EinsteinCliOptions {
 

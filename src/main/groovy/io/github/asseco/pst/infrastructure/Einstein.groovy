@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure
 
-import groovy.json.JsonBuilder
+
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
