@@ -1,5 +1,6 @@
 ## Einstein
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5e8309132ae84ba9bdfd8464536dc549)](https://app.codacy.com/app/asseco-pst/einstein?utm_source=github.com&utm_medium=referral&utm_content=asseco-pst/einstein&utm_campaign=Badge_Grade_Settings)
 [![CircleCI](https://circleci.com/gh/asseco-pst/einstein/tree/develop.svg?style=svg)](https://circleci.com/gh/asseco-pst/einstein/tree/develop)
 
 ### Getting Started
