@@ -31,6 +31,17 @@ gradlew build
 
 ## Usage
 
+### Environment setup
+Einstein communicates with your repository management system (at the moment only supports GitLab). In order to authenticate
+Einstein uses environment variables.
+
+The following variables should be set on the environment where Einstein is running:
+
+|Variable|Description|Example|
+|--------|-----------|-------|
+|`GITLAB_URL`|The URL to your GitLab instance|http://gitlab.mycompany.com/|
+|`GITLAB_TOKEN`|A personal access token||
+
 ### As a CLI (since vx.x.x)
 
 ```console
@@ -39,7 +50,13 @@ C:\> java -jar einstein.jar -help (ATUALIZAR)
 
 ### As a Groovy Lib
 
-ATUALIZAR
+Calculates the runtime dependencies for project mycompany/server in version 2.3.0:
+```groovy
+RepoExplorerFactory.create(RepoExplorerFactory.Type.GITLAB, "http://gitlab.mycompany.com", "xFM4rFpdsocmoDa=")
+ 
+Einstein.calcDependencies([ProjectDAO.fromFullName("mycompany/server:2.3.0")])
+Map dependencies = Einstein.getDpManager().getFinalDependencies()
+```
 
 ### Semver Ranges
 
