@@ -1,6 +1,7 @@
 ## Einstein
 
 [![CircleCI](https://circleci.com/gh/asseco-pst/einstein/tree/develop.svg?style=svg)](https://circleci.com/gh/asseco-pst/einstein/tree/develop)
+[![CodeFactor](https://www.codefactor.io/repository/github/asseco-pst/einstein/badge)](https://www.codefactor.io/repository/github/asseco-pst/einstein)
 
 ### Getting Started
 
