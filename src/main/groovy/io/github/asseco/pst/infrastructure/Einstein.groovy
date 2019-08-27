@@ -20,7 +20,6 @@ abstract class Einstein {
     static EinsteinProperties properties = new EinsteinProperties()
     static ProjectsManager projectsManager = new ProjectsManager()
     static synchronized List<Project> scannedDependencies = []
-    
 
     static CliParser getCli() {
 

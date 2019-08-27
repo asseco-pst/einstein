@@ -103,12 +103,8 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      */
     @Override
     String getFileContents(String filePath, String ref, String namespace, String projectName) {
-        try {
-            Project project = findProject(namespace, projectName)
-            return api.getRepositoryFileApi().getFile(project, filePath, ref, true).getDecodedContentAsString()
-        } catch (Exception e) {
-            throw e
-        }
+        Project project = findProject(namespace, projectName)
+        return api.getRepositoryFileApi().getFile(project, filePath, ref, true).getDecodedContentAsString()
     }
 
     /**

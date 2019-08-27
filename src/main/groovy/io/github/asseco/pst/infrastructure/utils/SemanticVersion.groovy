@@ -155,15 +155,13 @@ class SemanticVersion extends Semver {
     private int compareWithSnapshot(SemanticVersion aVersion) {
 
         int result = comparePrefixTo(aVersion)
-        if(result == 0) {
+
+        if(result == 0){
             if(this.isSnapshot())
                 return -1
-            else
-                return 1
+            return 1
         }
-        else
-            return result
-
+        return result
     }
 
     /**
