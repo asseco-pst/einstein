@@ -25,9 +25,7 @@ class SemanticVersion extends Semver {
         SemanticVersion version
 
         try {
-
             version = new SemanticVersion(aVersion, SemverType.NPM)
-
         } catch (RuntimeException aException) {
             throw new VersionException("Unable to instantiate Semver version '$aVersion'", aException)
         }
@@ -115,6 +113,21 @@ class SemanticVersion extends Semver {
         }
 
         return satisfies.getValue()
+    }
+
+    /**
+     * Checks if a given string version respects the Semver syntax
+     *
+     * @param aVersion
+     * @return false if it's not a valid Semantic version
+     */
+    synchronized static boolean isValid(String aVersion) {
+        try {
+            create(aVersion)
+            return true
+        } catch (e) {
+            return false
+        }
     }
 
     /**

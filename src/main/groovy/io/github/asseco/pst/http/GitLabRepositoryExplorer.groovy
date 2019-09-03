@@ -166,10 +166,13 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             Project project = findProject(namespace, projectName)
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
-
             return tags
+                    .filter({ tag ->
+                        SemanticVersion.isValid(tag.getName())
+                    })
                     .filter(predicate)
                     .collect({ tag -> SemanticVersion.create(tag.getName()).toString() })
+
 
         } catch (Exception e) {
             Console.err("Could not get tags for project $projectName. Cause: $e")
