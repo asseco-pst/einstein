@@ -6,11 +6,18 @@ class ProjectDao {
     String namespace
     String version
 
-    static ProjectDao fromFullName(String fullName){
-        String namespace = fullName.split("/").first()
-        String name = fullName.split("/")[1].split(":").first()
-        String version = fullName.split(":").last()
-        return new ProjectDao(namespace: namespace, name: name, version: version)
+    ProjectDao(String aName, String aNamespace, String aVersion) {
+        this.name = aName
+        this.namespace = aNamespace
+        this.version = aVersion
     }
 
+    static ProjectDao fromFullName(String aFullName) {
+
+        String namespace = aFullName.split("/").first()
+        String name = aFullName.split("/")[1].split(":").first()
+        String version = aFullName.split(":").last()
+
+        return new ProjectDao(name, namespace, version)
+    }
 }
