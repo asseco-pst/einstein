@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.App
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.utils.Console
 
@@ -14,7 +14,7 @@ class FileParserMinion extends Crawler {
     @Override
     void work() {
         checkProjectDependencies()
-        Einstein.addScannedProject(project)
+        App.einstein().addScannedProject(project)
     }
 
     private void checkProjectDependencies() {
@@ -22,7 +22,7 @@ class FileParserMinion extends Crawler {
         Console.print("\nChecking dependencies of Project '$project.ref':")
 
         if (project.hasRequirementsFile()) {
-            if (Einstein.isDebugModeOn())
+            if (App.einstein().isDebugModeOn())
                 storeFile()
             parseRequirements()
         } else {
