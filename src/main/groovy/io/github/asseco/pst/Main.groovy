@@ -1,7 +1,7 @@
 package io.github.asseco.pst
 
 import groovy.json.JsonBuilder
-import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.App
 import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.utils.Console
 
@@ -11,7 +11,7 @@ class Main {
 
     static void main(String[] args) {
 
-        cliParser = Einstein.getCli()
+        cliParser = App.einstein().getCli()
 
         try {
             cliParser.parse(args)
@@ -23,7 +23,7 @@ class Main {
 
         try {
 
-            Einstein.calcDependencies(cliParser.einsteinOptions.projects)
+            App.einstein().calcDependencies(cliParser.einsteinOptions.projects)
             String outputFilePath = cliParser.einsteinOptions.saveToFile
             if (outputFilePath)
                 saveResultsIntoFile(outputFilePath)
@@ -39,7 +39,7 @@ class Main {
 
         try {
             Console.info("Saving dependencies into file ${aFilePath}")
-            new File(aFilePath).write(new JsonBuilder(Einstein.getCalculatedDependencies()).toPrettyString())
+            new File(aFilePath).write(new JsonBuilder(App.einstein().getCalculatedDependencies()).toPrettyString())
         } catch (e) {
             Console.err("Unable to save results into output file '${aFilePath}'. Cause: ${e}")
             System.exit(1)

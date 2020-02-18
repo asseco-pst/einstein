@@ -112,6 +112,9 @@ class SemanticVersion extends Semver {
             (a <=> b)
         }
 
+        if(!satisfies)
+            throw new VersionException("Unable to get satisfying version for declared dependency: ${aRequirement.getProjectNamespace()}/${aRequirement.getProjectName()}: ${aRequirement.getVersionRange()}")
+
         return satisfies.getValue()
     }
 

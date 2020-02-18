@@ -11,25 +11,32 @@ import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import java.nio.file.Path
 import java.nio.file.Paths
 
-abstract class Einstein {
+//@Singleton
+class Einstein {
 
-    static CliParser cli
+    CliParser cli
 
-    static Metrics metrics = new Metrics()
-    static DependenciesManager dpManager = new DependenciesManager()
-    static EinsteinProperties properties = new EinsteinProperties()
-    static ProjectsManager projectsManager = new ProjectsManager()
-    static synchronized List<Project> scannedDependencies = []
+    DependenciesManager dpManager
+    ProjectsManager projectsManager
+    synchronized List<Project> scannedDependencies
+    Metrics metrics
+    EinsteinProperties properties
 
-    static CliParser getCli() {
+    Einstein() {
+        scannedDependencies = []
+        metrics =  new Metrics()
+        dpManager = new DependenciesManager()
+        properties =  new EinsteinProperties()
+        projectsManager = new ProjectsManager()
+    }
 
+    CliParser getCli() {
         if (!cli)
             cli = new CliParser()
         return cli
     }
 
-    static boolean isDebugModeOn() {
-
+    boolean isDebugModeOn() {
         if (cli) {
             if (cli.einsteinOptions.verbose)
                 return true
@@ -38,13 +45,12 @@ abstract class Einstein {
         return properties.isDebugModeOn()
     }
 
-    static void addScannedProject(Project aProject) {
-
+    void addScannedProject(Project aProject) {
         if (!scannedDependencies.contains(aProject))
             scannedDependencies << aProject
     }
 
-    static Path getWorkspaceFolder() {
+    Path getWorkspaceFolder() {
 
         Path workspaceFolderPath = Paths.get([getUserHome(), properties.getWorkspaceRootFolder()].join("/"))
 
@@ -53,18 +59,16 @@ abstract class Einstein {
             folder.mkdirs()
 
         return workspaceFolderPath
-
     }
 
-    static void calcDependencies(ProjectDao aProject) {
+    void calcDependencies(ProjectDao aProject) {
         calcDependencies([aProject])
     }
 
-    static void calcDependencies(List<ProjectDao> aProjectsData) {
-
-        RepoExplorerFactory.create()
-
+    void calcDependencies(List<ProjectDao> aProjectsData) {
+        
         metrics.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
+        RepoExplorerFactory.create()
 
         ProjectsCrawler pCrawler = new ProjectsCrawler(loadProjects(aProjectsData))
         pCrawler.start()
@@ -83,11 +87,11 @@ abstract class Einstein {
                 metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
     }
 
-    static Map<String, String> getCalculatedDependencies() {
+    Map<String, String> getCalculatedDependencies() {
         return dpManager.getCalcDependencies()
     }
 
-    private static List<Project> loadProjects(List<ProjectDao> aProjectsData) {
+    private List<Project> loadProjects(List<ProjectDao> aProjectsData) {
 
         List<Project> projects = []
         aProjectsData.each {
@@ -97,7 +101,7 @@ abstract class Einstein {
         return projects
     }
 
-    private static String getUserHome() {
+    private String getUserHome() {
 
         String userHome = System.getenv("HOME")
 

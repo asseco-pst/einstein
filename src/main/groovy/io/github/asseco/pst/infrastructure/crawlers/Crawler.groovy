@@ -1,7 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-
-import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.App
 import io.github.asseco.pst.infrastructure.Project
 
 import java.nio.file.Path
@@ -24,7 +23,7 @@ abstract class Crawler extends Worker {
 
     void setWorkspace() {
 
-        Path workspaceFolderPath = Paths.get([Einstein.getWorkspaceFolder(), WORKSPACE_FOLDER].join("/"))
+        Path workspaceFolderPath = Paths.get([App.einstein().getWorkspaceFolder(), WORKSPACE_FOLDER].join("/"))
         workspaceFolder = new File(workspaceFolderPath.toString())
 
         if (!workspaceFolder.exists())

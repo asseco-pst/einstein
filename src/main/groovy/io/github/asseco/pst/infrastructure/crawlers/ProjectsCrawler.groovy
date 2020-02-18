@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.App
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.utils.Console
 
@@ -23,10 +23,10 @@ class ProjectsCrawler extends Worker {
 
         projects.each { project ->
 
-            Einstein.addScannedProject(project)
+            App.einstein().addScannedProject(project)
 
             Console.debug("Calculating dependencies of Project '$project.name'")
-            Einstein.getProjectsManager().calcDependencies(project, this)
+            App.einstein().getProjectsManager().calcDependencies(project, this)
         }
     }
 }

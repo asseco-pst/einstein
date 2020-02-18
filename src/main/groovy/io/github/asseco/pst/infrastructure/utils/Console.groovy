@@ -1,7 +1,7 @@
 package io.github.asseco.pst.infrastructure.utils
 
 import groovy.json.JsonBuilder
-import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.App
 
 class Console {
 
@@ -26,7 +26,7 @@ class Console {
     }
 
     static void debug(String aMsg) {
-        if (Einstein.isDebugModeOn())
+        if (App.einstein().isDebugModeOn())
             println "${time()} - [DEBUG] $aMsg"
     }
 
