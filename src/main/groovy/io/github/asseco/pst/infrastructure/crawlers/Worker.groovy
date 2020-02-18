@@ -57,7 +57,8 @@ abstract class Worker extends Thread implements Observer, Observable {
     }
 
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
-        currentNbrOfSubscribedMinions += aVal
+        if(currentNbrOfSubscribedMinions > 0)
+            currentNbrOfSubscribedMinions += aVal
 //        Console.debug("Worker '$_id' is following $currentNbrOfSubscribedMinions minions...")
     }
 
