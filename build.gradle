@@ -15,7 +15,7 @@ buildscript {
 apply plugin: 'groovy'
 apply plugin: 'signing'
 apply plugin: 'java'
-apply plugin: 'application'
+//apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'edu.sc.seis.launch4j'
 apply plugin: 'com.bmuschko.nexus'
@@ -40,9 +40,9 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-application {
-    mainClassName = 'io.github.asseco.pst.Main'
-}
+// application {
+//     mainClassName = 'io.github.asseco.pst.Main'
+// }
 
 jar {
     manifest {
