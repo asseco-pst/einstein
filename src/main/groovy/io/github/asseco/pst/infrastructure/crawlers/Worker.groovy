@@ -1,43 +1,47 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.Main
-import io.github.asseco.pst.infrastructure.utils.Console
-
-abstract class Worker extends Thread implements Observer, Observable {
+abstract class Worker implements Runnable, Observer, Observable {
 
     protected String _id
 
-    protected List<Observer> observers
+    List<Worker> observers
     protected synchronized int currentNbrOfSubscribedMinions
+    protected EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 
     Worker() {
-
         observers = []
         currentNbrOfSubscribedMinions = 0
+//        setUncaughtExceptionHandler(new EThreadUncaughtException(this))
     }
+
+    protected abstract void work()
 
     protected void setId(String aId) {
         _id = aId
     }
 
-    protected abstract void work()
-
     @Override
     void run() {
 
-        try {
+//        try {
+
             work()
             wait4SubscribedMinions()
             _notify()
-        } catch (Exception e) {
-            Console.debug("An error occured on Thread '$_id'")
-            Main.interrupt(e)
-        }
+
+//            checkUncaughtExceptions()
+
+//        } catch (Exception e) {
+//            Console.debug("An error occurred on Thread '$_id'")
+//            checkUncaughtExceptions()
+//        }
     }
 
     @Override
     void attach(Observer aObserver) {
-        observers << aObserver
+        Worker w = (Worker) aObserver
+        observers << w
+        w.updateCurrentNbrOfSubscribedMinions(1)
     }
 
     @Override
@@ -56,10 +60,23 @@ abstract class Worker extends Thread implements Observer, Observable {
         updateCurrentNbrOfSubscribedMinions(-1)
     }
 
+    void setUncaughtExceptionsHandler(EThreadUncaughtExceptionHandler aUncaughtExceptionsHandler) {
+        uncaughtExceptionHandler = aUncaughtExceptionsHandler
+    }
+
+    private void checkUncaughtExceptions() {
+
+        if(uncaughtExceptionHandler) {
+            if(uncaughtExceptionHandler.hasUncaughtExceptions)
+                throw new RuntimeException(uncaughtExceptionHandler.threadTrowable)
+        }
+    }
+
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
-        if(currentNbrOfSubscribedMinions > 0)
+        if(currentNbrOfSubscribedMinions + aVal >= 0)
             currentNbrOfSubscribedMinions += aVal
-//        Console.debug("Worker '$_id' is following $currentNbrOfSubscribedMinions minions...")
+        else
+            currentNbrOfSubscribedMinions = 0
     }
 
     protected void wait4SubscribedMinions() {
@@ -72,5 +89,7 @@ abstract class Worker extends Thread implements Observer, Observable {
             // wait for minions to finish their jobs...
             print "" // do not remove. Otherwise, for some (unknown) reason, the script "runs forever"...
         }
+
+        checkUncaughtExceptions()
     }
 }

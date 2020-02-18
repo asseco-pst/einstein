@@ -1,8 +1,8 @@
 package io.github.asseco.pst.infrastructure
 
-
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.cli.CliParser
+import io.github.asseco.pst.infrastructure.crawlers.EThreadUncaughtExceptionHandler
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.metrics.Metrics
 import io.github.asseco.pst.infrastructure.utils.Console
@@ -11,7 +11,6 @@ import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import java.nio.file.Path
 import java.nio.file.Paths
 
-//@Singleton
 class Einstein {
 
     CliParser cli
@@ -66,25 +65,36 @@ class Einstein {
     }
 
     void calcDependencies(List<ProjectDao> aProjectsData) {
-        
-        metrics.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
-        RepoExplorerFactory.create()
 
-        ProjectsCrawler pCrawler = new ProjectsCrawler(loadProjects(aProjectsData))
-        pCrawler.start()
-        pCrawler.join()
+        try {
 
-        metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
+            metrics.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
+            RepoExplorerFactory.create()
 
-        dpManager.resolveVersions(scannedDependencies)
+            ProjectsCrawler pCrawler = new ProjectsCrawler(loadProjects(aProjectsData))
+            Thread t = new Thread(pCrawler)
+            EThreadUncaughtExceptionHandler handler = new EThreadUncaughtExceptionHandler(pCrawler)
+            t.setUncaughtExceptionHandler(handler)
+            t.start()
+            t.join()
 
-        Console.print("\n\n")
-        Console.info("Detected dependencies:")
-        Console.printMap(dpManager.getCalcDependencies())
-        Console.print("\n\n")
+            if(handler.hasUncaughtExceptions)
+                throw handler.threadTrowable
 
-        Console.info("Einstein took " +
-                metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
+            metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
+
+            dpManager.resolveVersions(scannedDependencies)
+
+            Console.print("\n\n")
+            Console.info("Detected dependencies:")
+            Console.printMap(dpManager.getCalcDependencies())
+            Console.print("\n\n")
+
+            Console.info("Einstein took " +
+                    metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
+        } catch (Exception e) {
+            throw e
+        }
     }
 
     Map<String, String> getCalculatedDependencies() {

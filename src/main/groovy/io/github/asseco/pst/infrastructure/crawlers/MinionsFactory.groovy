@@ -26,8 +26,9 @@ abstract class MinionsFactory {
         }
 
         minion.attach(aObserver)
-        aObserver.updateCurrentNbrOfSubscribedMinions(1)
 
-        minion.start()
+        Thread t = new Thread(minion)
+        t.setUncaughtExceptionHandler(new EThreadUncaughtExceptionHandler(aObserver))
+        t.start()
     }
 }
