@@ -5,7 +5,7 @@ import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.Worker
 import io.github.asseco.pst.infrastructure.utils.Console
 
-class DepsHandler {
+class DependenciesHandler {
 
     synchronized List<Project> scannedDeps
 
@@ -16,7 +16,7 @@ class DepsHandler {
 
     List<Project> projects
 
-    DepsHandler(List<Project> aProjects) {
+    DependenciesHandler(List<Project> aProjects) {
         projects = aProjects
 
         scannedDeps = []
@@ -65,6 +65,7 @@ class DepsHandler {
         if (!scannedDeps.contains(aProject))
             scannedDeps << aProject
     }
+    
     Map<String, String> getParsedDependencies() {
 
         housekeeper.resolve(scannedDeps)

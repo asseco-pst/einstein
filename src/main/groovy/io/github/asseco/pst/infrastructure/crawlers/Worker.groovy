@@ -1,13 +1,13 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.DepsHandler
+import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 
 abstract class Worker implements Runnable, Observer, Observable {
 
     protected String _id
-    protected DepsHandler depsHandler
+    protected DependenciesHandler depsHandler
 
     List<Worker> observers
     protected synchronized int currentNbrOfSubscribedMinions
@@ -24,7 +24,7 @@ abstract class Worker implements Runnable, Observer, Observable {
         _id = aId
     }
 
-    void setDependenciesHandler(DepsHandler aDepsHandler) {
+    void setDependenciesHandler(DependenciesHandler aDepsHandler) {
         depsHandler = aDepsHandler
     }
 
@@ -59,7 +59,7 @@ abstract class Worker implements Runnable, Observer, Observable {
     }
 
     @Override
-    void update() {
+    synchronized void update() {
         updateCurrentNbrOfSubscribedMinions(-1)
     }
 

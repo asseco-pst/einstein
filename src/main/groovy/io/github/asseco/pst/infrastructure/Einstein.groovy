@@ -57,7 +57,7 @@ class Einstein {
 
             Metrics.instance.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
-            DepsHandler depsHandler = new DepsHandler(loadProjects(aProjectsData))
+            DependenciesHandler depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
             ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
             Thread t = new Thread(pCrawler)

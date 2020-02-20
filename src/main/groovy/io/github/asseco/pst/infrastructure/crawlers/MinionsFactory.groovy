@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.DepsHandler
+import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
 
@@ -32,7 +32,7 @@ abstract class MinionsFactory {
         }
     }
 
-    static void create(Type aType, Project aProject, Worker aObserver, DepsHandler aDepsHandler, Requirement requirement = null) {
+    static void create(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement requirement = null) {
 
         Worker minion
 
