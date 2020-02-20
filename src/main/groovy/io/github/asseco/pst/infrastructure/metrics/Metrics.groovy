@@ -2,18 +2,18 @@ package io.github.asseco.pst.infrastructure.metrics
 
 import io.github.asseco.pst.infrastructure.utils.Console
 
-
+@Singleton
 class Metrics {
 
     enum METRIC {
         DEPENDENCIES_CALCULATION_DURATION
     }
 
-    Map<METRIC, Object> timers
+    Map<METRIC, Object> timers = [:]
 
-    Metrics() {
-        timers = [:]
-    }
+//    Metrics() {
+//        timers = [:]
+//    }
 
     void startTimeTracking(METRIC aMETRIC) {
 
@@ -32,7 +32,13 @@ class Metrics {
         ((Timer) timers[aMetric]).stop()
     }
 
-    def getTimeDuration(METRIC aMetric) {
+    int getTimelapse(METRIC aMetric) {
+
+        checkIfExistsTimer(aMetric)
+        return ((Timer) timers[aMetric]).timelapse()
+    }
+
+    int getTimeDuration(METRIC aMetric) {
 
         checkIfExistsTimer(aMetric)
         return ((Timer) timers[aMetric]).duration()

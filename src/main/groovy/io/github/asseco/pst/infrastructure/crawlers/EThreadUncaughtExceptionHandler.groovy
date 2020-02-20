@@ -5,11 +5,11 @@ class EThreadUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
     boolean hasUncaughtExceptions
     Throwable threadTrowable
 
-    private Worker worker
+    private Worker observer
 
-    EThreadUncaughtExceptionHandler(Worker aWorker) {
-        worker = aWorker
-        worker.setUncaughtExceptionsHandler(this)
+    EThreadUncaughtExceptionHandler(Worker aObserver) {
+        observer = aObserver
+        observer.setUncaughtExceptionsHandler(this)
         hasUncaughtExceptions = false
     }
 
@@ -19,6 +19,6 @@ class EThreadUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         hasUncaughtExceptions = true
         threadTrowable = throwable
 
-        worker.update()
+        observer.update()
     }
 }

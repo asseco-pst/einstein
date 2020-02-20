@@ -1,8 +1,13 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
+import io.github.asseco.pst.infrastructure.DepsHandler
+import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
+
 abstract class Worker implements Runnable, Observer, Observable {
 
     protected String _id
+    protected DepsHandler depsHandler
 
     List<Worker> observers
     protected synchronized int currentNbrOfSubscribedMinions
@@ -11,7 +16,6 @@ abstract class Worker implements Runnable, Observer, Observable {
     Worker() {
         observers = []
         currentNbrOfSubscribedMinions = 0
-//        setUncaughtExceptionHandler(new EThreadUncaughtException(this))
     }
 
     protected abstract void work()
@@ -20,21 +24,21 @@ abstract class Worker implements Runnable, Observer, Observable {
         _id = aId
     }
 
+    void setDependenciesHandler(DepsHandler aDepsHandler) {
+        depsHandler = aDepsHandler
+    }
+
     @Override
     void run() {
 
-//        try {
-
-            work()
-            wait4SubscribedMinions()
-            _notify()
-
-//            checkUncaughtExceptions()
-
-//        } catch (Exception e) {
-//            Console.debug("An error occurred on Thread '$_id'")
-//            checkUncaughtExceptions()
-//        }
+//            try {
+                work()
+                wait4SubscribedMinions()
+                checkUncaughtExceptions()
+                _notify()
+//            } catch (Exception e) {
+//                throw e
+//            }
     }
 
     @Override
@@ -49,7 +53,6 @@ abstract class Worker implements Runnable, Observer, Observable {
         if (!observers)
             return
 
-//        Console.debug("Worker $_id is notifying its followers that its job is done!")
         observers.each { o ->
             o.update()
         }
@@ -73,9 +76,9 @@ abstract class Worker implements Runnable, Observer, Observable {
     }
 
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
-        if(currentNbrOfSubscribedMinions + aVal >= 0)
-            currentNbrOfSubscribedMinions += aVal
-        else
+
+        currentNbrOfSubscribedMinions += aVal
+        if(currentNbrOfSubscribedMinions < 0)
             currentNbrOfSubscribedMinions = 0
     }
 
@@ -84,12 +87,10 @@ abstract class Worker implements Runnable, Observer, Observable {
         if (!currentNbrOfSubscribedMinions)
             return
 
-//        Console.debug("Worker $_id is waiting for $currentNbrOfSubscribedMinions minions...!")
-        while (currentNbrOfSubscribedMinions) {
-            // wait for minions to finish their jobs...
-            print "" // do not remove. Otherwise, for some (unknown) reason, the script "runs forever"...
+        while (currentNbrOfSubscribedMinions > 0) {
+            // wait for minions to finish their jobs... until timeout
+            if(Einstein.instance.timeout())
+                throw new EinsteinTimeoutException()
         }
-
-        checkUncaughtExceptions()
     }
 }
