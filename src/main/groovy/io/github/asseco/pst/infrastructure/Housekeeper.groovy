@@ -111,7 +111,7 @@ class Housekeeper {
             }
         }
     }
-    
+
     private void resolveAmbiguousDependencies() {
 
         readDependencies.each { projectRef, d ->
