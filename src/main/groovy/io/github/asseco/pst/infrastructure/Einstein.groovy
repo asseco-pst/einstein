@@ -3,6 +3,7 @@ package io.github.asseco.pst.infrastructure
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.crawlers.EThreadUncaughtExceptionHandler
+import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.metrics.Metrics
 import io.github.asseco.pst.infrastructure.utils.Console
@@ -11,23 +12,10 @@ import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import java.nio.file.Path
 import java.nio.file.Paths
 
+@Singleton
 class Einstein {
 
     CliParser cli
-
-    DependenciesManager dpManager
-    ProjectsManager projectsManager
-    synchronized List<Project> scannedDependencies
-    Metrics metrics
-    EinsteinProperties properties
-
-    Einstein() {
-        scannedDependencies = []
-        metrics =  new Metrics()
-        dpManager = new DependenciesManager()
-        properties =  new EinsteinProperties()
-        projectsManager = new ProjectsManager()
-    }
 
     CliParser getCli() {
         if (!cli)
@@ -41,17 +29,12 @@ class Einstein {
                 return true
         }
 
-        return properties.isDebugModeOn()
-    }
-
-    void addScannedProject(Project aProject) {
-        if (!scannedDependencies.contains(aProject))
-            scannedDependencies << aProject
+        return EinsteinProperties.instance().isDebugModeOn()
     }
 
     Path getWorkspaceFolder() {
 
-        Path workspaceFolderPath = Paths.get([getUserHome(), properties.getWorkspaceRootFolder()].join("/"))
+        Path workspaceFolderPath = Paths.get([getUserHome(), EinsteinProperties.instance().getWorkspaceRootFolder()].join("/"))
 
         File folder = new File(workspaceFolderPath.toString())
         if(!folder.exists())
@@ -60,18 +43,23 @@ class Einstein {
         return workspaceFolderPath
     }
 
-    void calcDependencies(ProjectDao aProject) {
-        calcDependencies([aProject])
+    Map<String, String> calcDependencies(ProjectDao aProject) {
+        return calcDependencies([aProject])
     }
 
-    void calcDependencies(List<ProjectDao> aProjectsData) {
+    Map<String, String> calcDependencies(List<ProjectDao> aProjectsData) {
+
+        Map<String, String> parsedDeps
 
         try {
 
-            metrics.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
             RepoExplorerFactory.create()
 
-            ProjectsCrawler pCrawler = new ProjectsCrawler(loadProjects(aProjectsData))
+            Metrics.instance.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
+
+            DepsHandler depsHandler = new DepsHandler(loadProjects(aProjectsData))
+
+            ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
             Thread t = new Thread(pCrawler)
             EThreadUncaughtExceptionHandler handler = new EThreadUncaughtExceptionHandler(pCrawler)
             t.setUncaughtExceptionHandler(handler)
@@ -81,24 +69,23 @@ class Einstein {
             if(handler.hasUncaughtExceptions)
                 throw handler.threadTrowable
 
-            metrics.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
+            Metrics.instance.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
-            dpManager.resolveVersions(scannedDependencies)
+            parsedDeps = depsHandler.getParsedDependencies()
 
             Console.print("\n\n")
             Console.info("Detected dependencies:")
-            Console.printMap(dpManager.getCalcDependencies())
+            Console.printMap(parsedDeps)
             Console.print("\n\n")
 
             Console.info("Einstein took " +
-                    metrics.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
+                    Metrics.instance.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString())
         } catch (Exception e) {
+            MinionsFactory.killLiveThreads()
             throw e
         }
-    }
 
-    Map<String, String> getCalculatedDependencies() {
-        return dpManager.getCalcDependencies()
+        return parsedDeps
     }
 
     private List<Project> loadProjects(List<ProjectDao> aProjectsData) {
@@ -122,5 +109,9 @@ class Einstein {
             throw new Exception("Unable to get value of User Home environment variable")
 
         return userHome
+    }
+
+    boolean timeout() {
+        return (EinsteinProperties.instance().getMaxDuration() <= Metrics.instance.getTimelapse(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION))
     }
 }

@@ -1,11 +1,10 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.App
+import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.utils.Console
 
 class FileParserMinion extends Crawler {
-
 
     FileParserMinion(Project aProject) {
         super(aProject)
@@ -15,7 +14,7 @@ class FileParserMinion extends Crawler {
     void work() {
 
         checkProjectDependencies()
-        App.einstein().addScannedProject(project)
+        depsHandler.addScannedProject(project)
     }
 
     private void checkProjectDependencies() {
@@ -23,7 +22,7 @@ class FileParserMinion extends Crawler {
         Console.print("\nChecking dependencies of Project '$project.ref':")
 
         if (project.hasRequirementsFile()) {
-            if (App.einstein().isDebugModeOn())
+            if (Einstein.instance.isDebugModeOn())
                 storeFile()
             parseRequirements()
         } else {
@@ -33,7 +32,7 @@ class FileParserMinion extends Crawler {
 
     private void parseRequirements() {
         project.readRequirements().each { requirement ->
-            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, requirement)
+            MinionsFactory.create(MinionsFactory.Type.VERSION_SEEKER, project, this, depsHandler, requirement)
         }
     }
 }

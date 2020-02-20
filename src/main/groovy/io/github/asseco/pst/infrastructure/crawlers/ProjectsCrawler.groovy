@@ -1,17 +1,17 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.App
-import io.github.asseco.pst.infrastructure.Project
+
+import io.github.asseco.pst.infrastructure.DepsHandler
 import io.github.asseco.pst.infrastructure.utils.Console
 
 class ProjectsCrawler extends Worker {
 
-    List<Project> projects
+    private DepsHandler depsHandler
 
-    ProjectsCrawler(List<Project> aProjects) {
+    ProjectsCrawler(DepsHandler aDepsHandler) {
         super()
+        depsHandler = aDepsHandler
         _id = "projects.crawler"
-        projects = aProjects
     }
 
     @Override
@@ -21,12 +21,12 @@ class ProjectsCrawler extends Worker {
 
     private void calcDependencies() {
 
-        projects.each { project ->
+        depsHandler.getProjects().each { project ->
 
-            App.einstein().addScannedProject(project)
+            depsHandler.addScannedProject(project)
 
             Console.debug("Calculating dependencies of Project '$project.name'")
-            App.einstein().getProjectsManager().calcDependencies(project, this)
+            depsHandler.calcDependencies(project, this)
         }
     }
 }
