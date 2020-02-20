@@ -1,7 +1,7 @@
 package io.github.asseco.pst
 
 import groovy.json.JsonBuilder
-import io.github.asseco.pst.infrastructure.App
+import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.utils.Console
 
@@ -11,7 +11,7 @@ class Main {
 
     static void main(String[] args) {
 
-        cliParser = App.einstein().getCli()
+        cliParser = Einstein.instance.getCli()
 
         try {
             cliParser.parse(args)
@@ -23,10 +23,10 @@ class Main {
 
         try {
 
-            App.einstein().calcDependencies(cliParser.einsteinOptions.projects)
+            Map<String, String> parsedDeps = Einstein.instance.calcDependencies(cliParser.einsteinOptions.projects)
             String outputFilePath = cliParser.einsteinOptions.saveToFile
             if (outputFilePath)
-                saveResultsIntoFile(outputFilePath)
+                saveResultsIntoFile(parsedDeps, outputFilePath)
 
         } catch (e) {
             interrupt(e)
@@ -35,11 +35,11 @@ class Main {
         Console.print("Finished!")
     }
 
-    static private void saveResultsIntoFile(String aFilePath) {
+    static private void saveResultsIntoFile(Map<String, String> aParsedDeps, String aFilePath) {
 
         try {
             Console.info("Saving dependencies into file ${aFilePath}")
-            new File(aFilePath).write(new JsonBuilder(App.einstein().getCalculatedDependencies()).toPrettyString())
+            new File(aFilePath).write(new JsonBuilder(aParsedDeps).toPrettyString())
         } catch (e) {
             Console.err("Unable to save results into output file '${aFilePath}'. Cause: ${e}")
             System.exit(1)

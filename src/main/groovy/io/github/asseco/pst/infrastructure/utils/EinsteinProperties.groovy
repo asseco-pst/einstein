@@ -2,11 +2,18 @@ package io.github.asseco.pst.infrastructure.utils
 
 class EinsteinProperties {
 
+    private static EinsteinProperties instance
     private final Properties properties
 
-    EinsteinProperties() {
+    private EinsteinProperties() {
         properties = new Properties()
         loadProperties()
+    }
+
+    static EinsteinProperties instance() {
+        if(!instance)
+            instance = new EinsteinProperties()
+        return instance
     }
 
     private void loadProperties() {
@@ -26,6 +33,13 @@ class EinsteinProperties {
         }
     }
 
+    /**
+     * Represents the max number of seconds that the process can live
+     * @return
+     */
+    int getMaxDuration() {
+        return (properties.maxDuration as int)
+    }
 
     boolean isDebugModeOn() {
         return (properties.debug.toString().toBoolean())

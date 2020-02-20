@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-
+import io.github.asseco.pst.infrastructure.DepsHandler
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
 
@@ -11,8 +11,28 @@ abstract class MinionsFactory {
         VERSION_SEEKER
     }
 
+    private static List<Thread> liveThreads
 
-    static void create(Type aType, Project aProject, Worker aObserver, Requirement requirement = null) {
+    static {
+        liveThreads = []
+    }
+
+    private static Thread newThread(Worker aWorker) {
+
+        Thread t = new Thread(aWorker)
+        liveThreads << t
+
+        return t
+    }
+
+    static void killLiveThreads() {
+
+        liveThreads.each {
+            it.stop()
+        }
+    }
+
+    static void create(Type aType, Project aProject, Worker aObserver, DepsHandler aDepsHandler, Requirement requirement = null) {
 
         Worker minion
 
@@ -26,8 +46,10 @@ abstract class MinionsFactory {
         }
 
         minion.attach(aObserver)
-        aObserver.updateCurrentNbrOfSubscribedMinions(1)
+        minion.setDependenciesHandler(aDepsHandler)
 
-        minion.start()
+        Thread t = newThread(minion)
+        t.setUncaughtExceptionHandler(new EThreadUncaughtExceptionHandler(aObserver))
+        t.start()
     }
 }

@@ -1,43 +1,51 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.Main
-import io.github.asseco.pst.infrastructure.utils.Console
+import io.github.asseco.pst.infrastructure.DepsHandler
+import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 
-abstract class Worker extends Thread implements Observer, Observable {
+abstract class Worker implements Runnable, Observer, Observable {
 
     protected String _id
+    protected DepsHandler depsHandler
 
-    protected List<Observer> observers
+    List<Worker> observers
     protected synchronized int currentNbrOfSubscribedMinions
+    protected EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 
     Worker() {
-
         observers = []
         currentNbrOfSubscribedMinions = 0
     }
+
+    protected abstract void work()
 
     protected void setId(String aId) {
         _id = aId
     }
 
-    protected abstract void work()
+    void setDependenciesHandler(DepsHandler aDepsHandler) {
+        depsHandler = aDepsHandler
+    }
 
     @Override
     void run() {
 
-        try {
-            work()
-            wait4SubscribedMinions()
-            _notify()
-        } catch (Exception e) {
-            Console.debug("An error occured on Thread '$_id'")
-            Main.interrupt(e)
-        }
+//            try {
+                work()
+                wait4SubscribedMinions()
+                checkUncaughtExceptions()
+                _notify()
+//            } catch (Exception e) {
+//                throw e
+//            }
     }
 
     @Override
     void attach(Observer aObserver) {
-        observers << aObserver
+        Worker w = (Worker) aObserver
+        observers << w
+        w.updateCurrentNbrOfSubscribedMinions(1)
     }
 
     @Override
@@ -45,7 +53,6 @@ abstract class Worker extends Thread implements Observer, Observable {
         if (!observers)
             return
 
-//        Console.debug("Worker $_id is notifying its followers that its job is done!")
         observers.each { o ->
             o.update()
         }
@@ -56,10 +63,23 @@ abstract class Worker extends Thread implements Observer, Observable {
         updateCurrentNbrOfSubscribedMinions(-1)
     }
 
+    void setUncaughtExceptionsHandler(EThreadUncaughtExceptionHandler aUncaughtExceptionsHandler) {
+        uncaughtExceptionHandler = aUncaughtExceptionsHandler
+    }
+
+    private void checkUncaughtExceptions() {
+
+        if(uncaughtExceptionHandler) {
+            if(uncaughtExceptionHandler.hasUncaughtExceptions)
+                throw new RuntimeException(uncaughtExceptionHandler.threadTrowable)
+        }
+    }
+
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
-        if(currentNbrOfSubscribedMinions > 0)
-            currentNbrOfSubscribedMinions += aVal
-//        Console.debug("Worker '$_id' is following $currentNbrOfSubscribedMinions minions...")
+
+        currentNbrOfSubscribedMinions += aVal
+        if(currentNbrOfSubscribedMinions < 0)
+            currentNbrOfSubscribedMinions = 0
     }
 
     protected void wait4SubscribedMinions() {
@@ -67,10 +87,10 @@ abstract class Worker extends Thread implements Observer, Observable {
         if (!currentNbrOfSubscribedMinions)
             return
 
-//        Console.debug("Worker $_id is waiting for $currentNbrOfSubscribedMinions minions...!")
-        while (currentNbrOfSubscribedMinions) {
-            // wait for minions to finish their jobs...
-            print "" // do not remove. Otherwise, for some (unknown) reason, the script "runs forever"...
+        while (currentNbrOfSubscribedMinions > 0) {
+            // wait for minions to finish their jobs... until timeout
+            if(Einstein.instance.timeout())
+                throw new EinsteinTimeoutException()
         }
     }
 }

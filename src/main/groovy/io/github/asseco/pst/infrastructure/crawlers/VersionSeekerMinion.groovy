@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-import io.github.asseco.pst.infrastructure.App
+
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
 import io.github.asseco.pst.infrastructure.utils.Console
@@ -41,7 +41,7 @@ class VersionSeekerMinion extends Worker {
             Project dependantProject = Project.factory(requirement.getProjectNamespace(), requirement.getProjectName(), dependencyVersion)
             project.addDependency(dependantProject)
 
-            App.einstein().getProjectsManager().calcDependencies(dependantProject, this)
+            depsHandler.calcDependencies(dependantProject, this)
         }
     }
 }

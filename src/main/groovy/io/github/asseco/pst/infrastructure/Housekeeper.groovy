@@ -3,21 +3,28 @@ package io.github.asseco.pst.infrastructure
 import io.github.asseco.pst.infrastructure.utils.Console
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 
-class DependenciesManager {
+class Housekeeper {
 
-    Map<String, String> calcDependencies = [:]
+    Map<String, String> cleanDeps = [:]
 
     private Map projectsByIndex = [:]
     private Map readDependencies = [:]
 
-
-    void resolveVersions(List<Project> aScannedProjects) {
+    /**
+     * Resolve calculated dependencies according with the following policies:
+     *  - when detecting multiple versions of a same dependency/project:
+     *      - check if those dependencies' versions are semantically compatible
+     *      - if they're compatible, select the highest one
+     *
+     * @param aScannedProjects
+     */
+    void resolve(List<Project> aScannedProjects) {
 
         collectDependencies(aScannedProjects)
         printRawDependencies()
 
         checkVersionsCompatibility()
-        resolveMultiVersionsDependencies()
+        resolveAmbiguousDependencies()
 
         collectFinalDependencies()
     }
@@ -82,7 +89,7 @@ class DependenciesManager {
                 dependencies.addAll(project.getDependencies())
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
-                calcDependencies.put(acceptedDependency.id, acceptedDependency.version.toString())
+                cleanDeps.put(acceptedDependency.id, acceptedDependency.version.toString())
             }
         }
     }
@@ -105,7 +112,7 @@ class DependenciesManager {
         }
     }
     
-    private void resolveMultiVersionsDependencies() {
+    private void resolveAmbiguousDependencies() {
 
         readDependencies.each { projectRef, d ->
             Set<SemanticVersion> dependencies = (Set<SemanticVersion>) d
