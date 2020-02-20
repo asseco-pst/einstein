@@ -65,7 +65,7 @@ class DependenciesHandler {
         if (!scannedDeps.contains(aProject))
             scannedDeps << aProject
     }
-    
+
     Map<String, String> getParsedDependencies() {
 
         housekeeper.resolve(scannedDeps)
