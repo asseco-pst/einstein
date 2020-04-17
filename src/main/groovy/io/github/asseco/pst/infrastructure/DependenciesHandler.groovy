@@ -31,7 +31,7 @@ class DependenciesHandler {
         addCrawledProject(aProject)
 
         Console.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.ref")
-        MinionsFactory.create(MinionsFactory.Type.CRAWLER, aProject, aObserver, this)
+        MinionsFactory.launch(MinionsFactory.Type.CRAWLER, aProject, aObserver, this)
     }
 
     private boolean isAlreadyCrawled(Project aProject) {

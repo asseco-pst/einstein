@@ -36,8 +36,8 @@ abstract class RepoExplorerFactory {
                 instance = new GitLabRepositoryExplorer()
                 break
 //            case Type.GITHUB:
-//                instance = new GitHubRepositoryExplorer()
-//                break
+////                instance = new GitHubRepositoryExplorer()
+////                break
         }
 
         return instance

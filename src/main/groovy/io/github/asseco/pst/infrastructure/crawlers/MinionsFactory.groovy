@@ -32,7 +32,7 @@ abstract class MinionsFactory {
         }
     }
 
-    static void create(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement requirement = null) {
+    static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
 
         Worker minion
 
@@ -41,7 +41,7 @@ abstract class MinionsFactory {
                 minion = new FileParserMinion(aProject)
                 break
             case Type.VERSION_SEEKER:
-                minion = new VersionSeekerMinion(aProject, requirement)
+                minion = new VersionSeekerMinion(aProject, aRequirement)
                 break
         }
 
