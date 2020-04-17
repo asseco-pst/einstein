@@ -6,9 +6,9 @@ package io.github.asseco.pst.infrastructure
  * ie.:<br>
  *
  * <code>
- * [projectNamespace]:          # i.e, middleware <br>
- *     - [projectName]:  [range]   # i.e, project-a: ^1.0              <---- this is an entry <br>
- *     - [projectName]:  [range]   # i.e: project-b: 1.0.0-SNAPSHOT    <---- this is another entry<br>
+ * [projectNamespace]:              # i.e, middleware <br>
+ *     - [projectName]:  [range]    # i.e, project-a: ^1.0              <---- this is an entry <br>
+ *     - [projectName]:  [range]    # i.e: project-b: 1.0.0-SNAPSHOT    <---- this is another entry<br>
  * </code>
  *<br>
  *  Ranges are defined according Semver 2.0.0 specification
