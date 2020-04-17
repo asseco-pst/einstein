@@ -34,7 +34,7 @@ class Project {
                     new Builder()
                             .setNamespace(aNamespace)
                             .setName(aName)
-                            .setVersion(aVersion)
+                            .setVersion(getTagFromVersion(aNamespace, aName, aVersion))
                             .build()
         } catch (e) {
             Console.err("Unable to instantiate Project '$aNamespace/$aName}' for version '${aVersion}'")
@@ -42,6 +42,30 @@ class Project {
         }
 
         return project
+    }
+
+    /**
+     * Given a Project and a version it returns the original version tag's value
+     *
+     * @param aProjNamespace
+     * @param aProjectName
+     * @param aVersion
+     * @return the aVersion original tag's value
+     */
+    private static getTagFromVersion(String aProjNamespace, String aProjectName, String aVersion) {
+
+        List<String> fetchedVersions = RepoExplorerFactory.get().listTags(
+                aProjNamespace,
+                aProjectName,
+                { tag ->
+                    SemanticVersion.create(tag.getName()).isEqualTo(SemanticVersion.create(aVersion))
+                }
+        )
+
+        if(!fetchedVersions)
+            throw new VersionException("Unable to get Tag of version '${aVersion}' from project ${aProjNamespace}/${aProjectName}")
+
+        return fetchedVersions.first()
     }
 
     private void setVersionSha() {
