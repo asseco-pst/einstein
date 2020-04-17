@@ -171,7 +171,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
                         SemanticVersion.isValid(tag.getName())
                     })
                     .filter(predicate)
-                    .collect({ tag -> SemanticVersion.create(tag.getName()).toString() })
+                    .collect({ tag -> SemanticVersion.create(tag.getName()).getOriginalValue() })
 
 
         } catch (Exception e) {

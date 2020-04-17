@@ -89,7 +89,7 @@ class Housekeeper {
                 dependencies.addAll(project.getDependencies())
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
-                cleanDeps.put(acceptedDependency.id, acceptedDependency.version.toString())
+                cleanDeps.put(acceptedDependency.id, acceptedDependency.version.getOriginalValue())
             }
         }
     }
