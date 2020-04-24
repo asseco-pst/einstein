@@ -4,18 +4,22 @@ import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 
+import java.util.concurrent.atomic.AtomicInteger
+
 abstract class Worker implements Runnable, Observer, Observable {
 
     protected String _id
     protected DependenciesHandler depsHandler
 
     List<Worker> observers
-    protected synchronized int currentNbrOfSubscribedMinions
+//    protected synchronized int currentNbrOfSubscribedMinions
+    protected AtomicInteger currentNbrOfSubscribedMinions
     protected EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 
     Worker() {
         observers = []
-        currentNbrOfSubscribedMinions = 0
+//        currentNbrOfSubscribedMinions = 0
+        currentNbrOfSubscribedMinions = new AtomicInteger(0)
     }
 
     protected abstract void work()
@@ -77,9 +81,10 @@ abstract class Worker implements Runnable, Observer, Observable {
 
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
 
-        currentNbrOfSubscribedMinions += aVal
-        if(currentNbrOfSubscribedMinions < 0)
-            currentNbrOfSubscribedMinions = 0
+//        currentNbrOfSubscribedMinions += aVal
+        currentNbrOfSubscribedMinions.getAndAdd(aVal)
+//        if(currentNbrOfSubscribedMinions < 0)
+//            currentNbrOfSubscribedMinions = 0
     }
 
     protected void wait4SubscribedMinions() {
@@ -87,7 +92,7 @@ abstract class Worker implements Runnable, Observer, Observable {
         if (!currentNbrOfSubscribedMinions)
             return
 
-        while (currentNbrOfSubscribedMinions > 0) {
+        while (currentNbrOfSubscribedMinions.get() > 0) {
             // wait for minions to finish their jobs... until timeout
             if(Einstein.instance.timeout())
                 throw new EinsteinTimeoutException()
