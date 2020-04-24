@@ -80,7 +80,7 @@ class Project {
             versionCommitSha = RepoExplorerFactory.get().getTagHash(version.toString(), namespace, name)
     }
 
-    void addDependency(Project aProject) {
+    synchronized void addDependency(Project aProject) {
         dependencies.add(aProject)
     }
 
