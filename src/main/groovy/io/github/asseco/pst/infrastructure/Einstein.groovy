@@ -79,8 +79,7 @@ class Einstein {
             Console.print("\n\n")
 
             Console.info("Einstein took " +
-                    Metrics.instance.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION).toString()
-                        + " seconds...")
+                    Metrics.instance.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION))
         } catch (Exception e) {
             MinionsFactory.killLiveThreads()
             throw e

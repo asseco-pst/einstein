@@ -1,6 +1,7 @@
 package io.github.asseco.pst.infrastructure.metrics
 
 import groovy.time.TimeCategory
+import groovy.time.TimeDuration
 
 class Timer {
 
@@ -28,12 +29,12 @@ class Timer {
      * Get the total time duration of timer's measurement
      * @return duration in seconds
      */
-    int duration() {
+    TimeDuration duration() {
 
         if (!startTime || !endTime)
             throw new Exception("You must start/stop the Timer before trying to get its duration")
 
-        return TimeCategory.minus(endTime, startTime).getSeconds()
+        return TimeCategory.minus(endTime, startTime)
     }
 
 }

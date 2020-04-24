@@ -1,5 +1,6 @@
 package io.github.asseco.pst.infrastructure.metrics
 
+import groovy.time.TimeDuration
 import io.github.asseco.pst.infrastructure.utils.Console
 
 @Singleton
@@ -38,7 +39,7 @@ class Metrics {
         return ((Timer) timers[aMetric]).timelapse()
     }
 
-    int getTimeDuration(METRIC aMetric) {
+    TimeDuration getTimeDuration(METRIC aMetric) {
 
         checkIfExistsTimer(aMetric)
         return ((Timer) timers[aMetric]).duration()
