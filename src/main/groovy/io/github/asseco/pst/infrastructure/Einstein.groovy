@@ -1,9 +1,8 @@
 package io.github.asseco.pst.infrastructure
 
+import io.github.asseco.pst.Main
 import io.github.asseco.pst.http.RepoExplorerFactory
-import io.github.asseco.pst.infrastructure.cli.CliParser
 import io.github.asseco.pst.infrastructure.crawlers.EThreadUncaughtExceptionHandler
-import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.metrics.Metrics
 import io.github.asseco.pst.infrastructure.utils.Console
@@ -15,17 +14,12 @@ import java.nio.file.Paths
 @Singleton
 class Einstein {
 
-    CliParser cli
+    Metrics depsCalcDuration = new Metrics(Metrics.Category.DEPENDENCIES_CALCULATION_DURATION)
 
-    CliParser getCli() {
-        if (!cli)
-            cli = new CliParser()
-        return cli
-    }
+    static boolean isDebugModeOn() {
 
-    boolean isDebugModeOn() {
-        if (cli) {
-            if (cli.einsteinOptions.verbose)
+        if (Main.cliParser) {
+            if (Main.cliParser.einsteinOptions.verbose)
                 return true
         }
 
@@ -37,7 +31,7 @@ class Einstein {
         Path workspaceFolderPath = Paths.get([getUserHome(), EinsteinProperties.instance().getWorkspaceRootFolder()].join("/"))
 
         File folder = new File(workspaceFolderPath.toString())
-        if(!folder.exists())
+        if (!folder.exists())
             folder.mkdirs()
 
         return workspaceFolderPath
@@ -50,14 +44,14 @@ class Einstein {
     Map<String, String> calcDependencies(List<ProjectDao> aProjectsData) {
 
         Map<String, String> parsedDeps
+        DependenciesHandler depsHandler
 
         try {
 
+            depsCalcDuration.startTimeTracking()
+
             RepoExplorerFactory.create()
-
-            Metrics.instance.startTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
-
-            DependenciesHandler depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
+            depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
             ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
             Thread t = new Thread(pCrawler)
@@ -66,10 +60,8 @@ class Einstein {
             t.start()
             t.join()
 
-            if(handler.hasUncaughtExceptions)
+            if (handler.hasUncaughtExceptions)
                 throw handler.threadTrowable
-
-            Metrics.instance.stopTimeTracking(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION)
 
             parsedDeps = depsHandler.getParsedDependencies()
 
@@ -78,10 +70,12 @@ class Einstein {
             Console.printMap(parsedDeps)
             Console.print("\n\n")
 
-            Console.info("Einstein took " +
-                    Metrics.instance.getTimeDuration(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION))
+            depsCalcDuration.stopTimeTracking()
+            Console.info("Einstein took " + depsCalcDuration.getTimeDuration())
+
         } catch (Exception e) {
-            MinionsFactory.killLiveThreads()
+            if(depsHandler)
+                depsHandler.getThreadsManager().killLiveThreads()
             throw e
         }
 
@@ -102,16 +96,16 @@ class Einstein {
 
         String userHome = System.getenv("HOME")
 
-        if(!userHome)
+        if (!userHome)
             userHome = System.getenv("USERPROFILE")
 
-        if(!userHome)
+        if (!userHome)
             throw new Exception("Unable to get value of User Home environment variable")
 
         return userHome
     }
 
     boolean timeout() {
-        return (EinsteinProperties.instance().getMaxDuration() <= Metrics.instance.getTimelapse(Metrics.METRIC.DEPENDENCIES_CALCULATION_DURATION))
+        return (EinsteinProperties.instance().getMaxDuration() <= depsCalcDuration.getTimelapse())
     }
 }

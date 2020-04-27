@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
-
+import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
 import io.github.asseco.pst.infrastructure.utils.Console
@@ -11,8 +11,8 @@ class VersionSeekerMinion extends Worker {
     private final Project project
     private final Requirement requirement
 
-    VersionSeekerMinion(Project aProject, Requirement aRequirement) {
-        super()
+    VersionSeekerMinion(DependenciesHandler aDepsHandler, Project aProject, Requirement aRequirement) {
+        super(aDepsHandler)
         project = aProject
         requirement = aRequirement
         setId("$project.name:${project.version.toString()}<>${requirement}")

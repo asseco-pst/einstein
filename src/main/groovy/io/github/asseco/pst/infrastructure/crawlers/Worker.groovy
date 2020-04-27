@@ -11,12 +11,13 @@ abstract class Worker implements Runnable, Observer, Observable {
     protected String _id
     protected DependenciesHandler depsHandler
 
-    List<Worker> observers
+    synchronized List<Worker> observers
 //    protected synchronized int currentNbrOfSubscribedMinions
     protected AtomicInteger currentNbrOfSubscribedMinions
-    protected EThreadUncaughtExceptionHandler uncaughtExceptionHandler
+    EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 
-    Worker() {
+    Worker(DependenciesHandler aDepsHandler) {
+        depsHandler = aDepsHandler
         observers = []
 //        currentNbrOfSubscribedMinions = 0
         currentNbrOfSubscribedMinions = new AtomicInteger(0)
@@ -28,9 +29,9 @@ abstract class Worker implements Runnable, Observer, Observable {
         _id = aId
     }
 
-    void setDependenciesHandler(DependenciesHandler aDepsHandler) {
-        depsHandler = aDepsHandler
-    }
+//    void setDependenciesHandler(DependenciesHandler aDepsHandler) {
+//        depsHandler = aDepsHandler
+//    }
 
     @Override
     void run() {
@@ -63,7 +64,7 @@ abstract class Worker implements Runnable, Observer, Observable {
     }
 
     @Override
-    synchronized void update() {
+    void update() {
         updateCurrentNbrOfSubscribedMinions(-1)
     }
 

@@ -4,17 +4,16 @@ package io.github.asseco.pst.infrastructure
 import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.Worker
 import io.github.asseco.pst.infrastructure.utils.Console
+import io.github.asseco.pst.infrastructure.utils.ThreadsManager
 
 class DependenciesHandler {
 
-    synchronized List<Project> scannedDeps
+    List<Project> projects
+    List<Project> scannedDeps
+    ThreadsManager threadsManager
 
     private Housekeeper housekeeper
-    private synchronized Set<String> crawledProjects
-
-
-
-    List<Project> projects
+    private Set<String> crawledProjects
 
     DependenciesHandler(List<Project> aProjects) {
         projects = aProjects
@@ -22,6 +21,7 @@ class DependenciesHandler {
         scannedDeps = []
         crawledProjects = []
         housekeeper = new Housekeeper()
+        threadsManager = new ThreadsManager()
     }
 
     void calcDependencies(Project aProject, Worker aObserver) {
@@ -67,7 +67,6 @@ class DependenciesHandler {
     }
 
     Map<String, String> getParsedDependencies() {
-
         housekeeper.resolve(scannedDeps)
         return housekeeper.getCleanDeps()
     }

@@ -1,5 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
+import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.Project
 
@@ -13,8 +14,8 @@ abstract class Crawler extends Worker {
     protected Project project
     protected File workspaceFolder
 
-    Crawler(Project aProject) {
-        super()
+    Crawler(DependenciesHandler aDepsHandler, Project aProject) {
+        super(aDepsHandler)
 
         project = aProject
         setWorkspace()

@@ -3,12 +3,12 @@ package io.github.asseco.pst.http
 import io.github.asseco.pst.infrastructure.utils.Console
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.gitlab4j.api.GitLabApi
+import org.gitlab4j.api.models.Commit
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 
 import java.util.function.Predicate
 import java.util.stream.Stream
-
 /**
  *  This class makes use of GitLab's REST API to get information about repos
  */
@@ -120,10 +120,14 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
         Project project = findProject(namespace, projectName)
 
+        Optional<Commit> devLatestCommit = Optional.empty()
         if(api.getRepositoryApi().getBranch(project, DEVELOP_BRANCH))
-            return api.getCommitsApi().getCommit(project, "develop").getId()
+            devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, "develop"))
 
-        throw new RuntimeException("Project '$namespace/$projectName' does not contains a '$DEVELOP_BRANCH' named branch")
+        if(!devLatestCommit.isPresent())
+            throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from Project '$namespace/$projectName'")
+
+        return devLatestCommit.get().getId()
     }
 
     /**
@@ -142,6 +146,9 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
 
             Tag tag = tags.filter({ tag -> tag.getName().endsWith(tagName) }).findFirst().get()
+
+            if(!Optional.of(tag.getCommit()).isPresent())
+                throw new RuntimeException("Unable to get commit from Tag '$tag.name' of Project $namespace/$projectName")
 
             return tag.getCommit().getId()
 

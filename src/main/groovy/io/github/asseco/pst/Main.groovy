@@ -11,7 +11,7 @@ class Main {
 
     static void main(String[] args) {
 
-        cliParser = Einstein.instance.getCli()
+        cliParser = new CliParser()
 
         try {
             cliParser.parse(args)

@@ -1,13 +1,14 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
+import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.utils.Console
 
 class FileParserMinion extends Crawler {
 
-    FileParserMinion(Project aProject) {
-        super(aProject)
+    FileParserMinion(DependenciesHandler aDepsHandler, Project aProject) {
+        super(aDepsHandler, aProject)
     }
 
     @Override

@@ -52,7 +52,7 @@ class Project {
      * @param aVersion
      * @return the aVersion original tag's value
      */
-    private static getTagFromVersion(String aProjNamespace, String aProjectName, String aVersion) {
+    private static String getTagFromVersion(String aProjNamespace, String aProjectName, String aVersion) {
 
         List<String> fetchedVersions = RepoExplorerFactory.get().listTags(
                 aProjNamespace,

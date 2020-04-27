@@ -11,44 +11,44 @@ abstract class MinionsFactory {
         VERSION_SEEKER
     }
 
-    private static List<Thread> liveThreads
+//    private static List<Thread> liveThreads
+//
+//    static {
+//        liveThreads = []
+//    }
+//
+//    private static Thread newThread(Worker aWorker) {
+//
+//        Thread t = new Thread(aWorker)
+//        liveThreads << t
+//
+//        return t
+//    }
+//
+//    static void killLiveThreads() {
+//
+//        liveThreads.each {
+//            it.stop()
+//        }
+//    }
 
-    static {
-        liveThreads = []
-    }
-
-    private static Thread newThread(Worker aWorker) {
-
-        Thread t = new Thread(aWorker)
-        liveThreads << t
-
-        return t
-    }
-
-    static void killLiveThreads() {
-
-        liveThreads.each {
-            it.stop()
-        }
-    }
-
-    static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
+    synchronized static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
 
         Worker minion
 
         switch (aType) {
             case Type.CRAWLER:
-                minion = new FileParserMinion(aProject)
+                minion = new FileParserMinion(aDepsHandler, aProject)
                 break
             case Type.VERSION_SEEKER:
-                minion = new VersionSeekerMinion(aProject, aRequirement)
+                minion = new VersionSeekerMinion(aDepsHandler, aProject, aRequirement)
                 break
         }
 
         minion.attach(aObserver)
-        minion.setDependenciesHandler(aDepsHandler)
+//        minion.setDependenciesHandler(aDepsHandler)
 
-        Thread t = newThread(minion)
+        Thread t = aDepsHandler.getThreadsManager().newThread(minion)
         t.setUncaughtExceptionHandler(new EThreadUncaughtExceptionHandler(aObserver))
         t.start()
     }

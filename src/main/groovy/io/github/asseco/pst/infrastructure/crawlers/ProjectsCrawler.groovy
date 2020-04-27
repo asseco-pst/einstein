@@ -6,12 +6,9 @@ import io.github.asseco.pst.infrastructure.utils.Console
 
 class ProjectsCrawler extends Worker {
 
-    private DependenciesHandler depsHandler
-
     ProjectsCrawler(DependenciesHandler aDepsHandler) {
-        super()
-        depsHandler = aDepsHandler
-        _id = "projects.crawler"
+        super(aDepsHandler)
+        setId("projects.crawler")
     }
 
     @Override
@@ -22,9 +19,7 @@ class ProjectsCrawler extends Worker {
     private void calcDependencies() {
 
         depsHandler.getProjects().each { project ->
-
             depsHandler.addScannedProject(project)
-
             Console.debug("Calculating dependencies of Project '$project.name'")
             depsHandler.calcDependencies(project, this)
         }

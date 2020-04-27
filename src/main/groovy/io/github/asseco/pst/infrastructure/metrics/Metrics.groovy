@@ -3,50 +3,35 @@ package io.github.asseco.pst.infrastructure.metrics
 import groovy.time.TimeDuration
 import io.github.asseco.pst.infrastructure.utils.Console
 
-@Singleton
 class Metrics {
 
-    enum METRIC {
+    enum Category {
         DEPENDENCIES_CALCULATION_DURATION
     }
 
-    Map<METRIC, Object> timers = [:]
+    Timer timer
+    Category category
 
-//    Metrics() {
-//        timers = [:]
-//    }
+    Metrics(Category aCategory) {
+        timer = new Timer()
+        category = aCategory
+    }
 
-    void startTimeTracking(METRIC aMETRIC) {
-
-        Console.debug("Start tracking timer for metric $aMETRIC...")
-        Timer timer = new Timer()
-        timers[aMETRIC] = timer
-
+    void startTimeTracking() {
+        Console.debug("Start tracking timer for metric $category...")
         timer.start()
     }
 
-    void stopTimeTracking(METRIC aMetric) {
-
-        checkIfExistsTimer(aMetric)
-
-        Console.debug("Stop tracking timer for metric $aMetric...")
-        ((Timer) timers[aMetric]).stop()
+    void stopTimeTracking() {
+        Console.debug("Stop tracking timer for metric $category...")
+        timer.stop()
     }
 
-    int getTimelapse(METRIC aMetric) {
-
-        checkIfExistsTimer(aMetric)
-        return ((Timer) timers[aMetric]).timelapse()
+    int getTimelapse() {
+        return timer.timelapse()
     }
 
-    TimeDuration getTimeDuration(METRIC aMetric) {
-
-        checkIfExistsTimer(aMetric)
-        return ((Timer) timers[aMetric]).duration()
-    }
-
-    private void checkIfExistsTimer(METRIC aMetric) {
-        if (!timers.containsKey(aMetric))
-            throw new Exception("There's no timer set for Metric ${aMetric.toString()}")
+    TimeDuration getTimeDuration() {
+        return timer.duration()
     }
 }

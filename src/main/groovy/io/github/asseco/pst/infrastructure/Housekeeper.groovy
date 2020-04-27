@@ -32,6 +32,9 @@ class Housekeeper {
     private void collectDependencies(List<Project> aProjects) {
 
         aProjects.each { project ->
+
+            Console.debug("Evaluating dependencies for project ${project.ref}")
+
             saveProjectByIndex(project)
             addDependency(project)
 
@@ -40,8 +43,7 @@ class Housekeeper {
                 return
 
             dependencies.each {
-                Project dependency = (Project) it
-                addDependency(dependency)
+                addDependency(it)
             }
         }
     }
