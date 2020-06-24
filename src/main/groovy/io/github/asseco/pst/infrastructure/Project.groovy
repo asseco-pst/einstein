@@ -34,7 +34,8 @@ class Project {
                     new Builder()
                             .setNamespace(aNamespace)
                             .setName(aName)
-                            .setVersion(getTagFromVersion(aNamespace, aName, aVersion))
+//                            .setVersion(getTagFromVersion(aNamespace, aName, aVersion))
+                            .setVersion(aVersion)
                             .build()
         } catch (e) {
             Console.err("Unable to instantiate Project '$aNamespace/$aName}' for version '${aVersion}'")
