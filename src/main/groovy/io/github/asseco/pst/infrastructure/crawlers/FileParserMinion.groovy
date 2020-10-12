@@ -3,9 +3,13 @@ package io.github.asseco.pst.infrastructure.crawlers
 import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.Project
-import io.github.asseco.pst.infrastructure.utils.Console
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class FileParserMinion extends Crawler {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileParserMinion.class)
 
     FileParserMinion(DependenciesHandler aDepsHandler, Project aProject) {
         super(aDepsHandler, aProject)
@@ -20,14 +24,14 @@ class FileParserMinion extends Crawler {
 
     private void checkProjectDependencies() {
 
-        Console.print("\nChecking dependencies of Project '$project.ref':")
+        logger.info("\nChecking dependencies of Project '$project.ref':")
 
         if (project.hasRequirementsFile()) {
             if (Einstein.instance.isDebugModeOn())
                 storeFile()
             parseRequirements()
         } else {
-            Console.warn("Project '$project.ref' doesn't have a ${Project.EINSTEIN_FILENAME} file...")
+            logger.warn("Project '$project.ref' doesn't have a ${Project.EINSTEIN_FILENAME} file...")
         }
     }
 

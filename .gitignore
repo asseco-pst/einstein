@@ -6,3 +6,4 @@ build/
 **/*.iml
 Playground.groovy
 gradle.properties
+einstein.log

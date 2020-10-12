@@ -1,9 +1,13 @@
 package io.github.asseco.pst.infrastructure.utils
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class EinsteinProperties {
 
     private static EinsteinProperties instance
     private final Properties properties
+    private static final Logger logger = LoggerFactory.getLogger(EinsteinProperties.class)
 
     private EinsteinProperties() {
         properties = new Properties()
@@ -28,7 +32,7 @@ class EinsteinProperties {
             properties.load(propsInputStream)
 
         } catch (Exception e) {
-            Console.err("Unable to load properties file '$propsFilePath'. Cause: $e")
+            logger.error("Unable to load properties file '$propsFilePath'.", e)
             throw e
         }
     }

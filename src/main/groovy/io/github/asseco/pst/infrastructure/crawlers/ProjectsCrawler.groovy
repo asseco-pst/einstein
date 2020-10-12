@@ -2,10 +2,13 @@ package io.github.asseco.pst.infrastructure.crawlers
 
 
 import io.github.asseco.pst.infrastructure.DependenciesHandler
-import io.github.asseco.pst.infrastructure.utils.Console
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class ProjectsCrawler extends Worker {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProjectsCrawler.class)
     ProjectsCrawler(DependenciesHandler aDepsHandler) {
         super(aDepsHandler)
         setId("projects.crawler")
@@ -20,7 +23,7 @@ class ProjectsCrawler extends Worker {
 
         depsHandler.getProjects().each { project ->
             depsHandler.addScannedProject(project)
-            Console.debug("Calculating dependencies of Project '$project.name'")
+            logger.debug("Calculating dependencies of Project '$project.name'")
             depsHandler.calcDependencies(project, this)
         }
     }

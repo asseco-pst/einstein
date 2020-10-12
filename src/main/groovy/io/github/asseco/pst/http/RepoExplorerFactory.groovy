@@ -1,6 +1,8 @@
 package io.github.asseco.pst.http
 
-import io.github.asseco.pst.infrastructure.utils.Console
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -9,6 +11,7 @@ import io.github.asseco.pst.infrastructure.utils.Console
  */
 abstract class RepoExplorerFactory {
 
+    private static final Logger logger = LoggerFactory.getLogger(RepoExplorerFactory.class)
     enum Type {
         GITLAB
     }
@@ -25,7 +28,7 @@ abstract class RepoExplorerFactory {
      * @return Gitlab Api instance
      */
     static RepositoryExplorer create() {
-        Console.debug("Instantiating Gitlab Api...")
+        logger.debug("Instantiating Gitlab Api...")
         return create(Type.GITLAB)
     }
 
