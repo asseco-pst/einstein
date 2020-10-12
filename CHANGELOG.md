@@ -17,3 +17,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support RC tags (i.e: v1.2.3-rc\.?([0-9]+)?)
 - Save identified dependencies to an external file
 - Add a timeout step that suspends the process if ti takes more than 120 seconds processing dependencies
+- Add log4j implementation for logging
