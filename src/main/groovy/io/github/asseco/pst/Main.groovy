@@ -57,7 +57,7 @@ class Main {
          org.apache.log4j.Logger.getRootLogger().removeAllAppenders()
          ConsoleAppender console = new ConsoleAppender() //create appender
          //configure the appender
-         String PATTERN = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n"
+         String PATTERN = "%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1} - %m%n"
          console.setLayout(new PatternLayout(PATTERN))
          console.activateOptions()
          //add appender to any Logger (here is root)
