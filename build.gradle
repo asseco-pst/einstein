@@ -96,7 +96,7 @@ publishing {
                         email = 'servicos.dcs@pst.asseco.com'
                         organization = 'Asseco PST'
                         organizationUrl = 'https://www.pst.asseco.com'
-                    }c
+                    }
                 }
                 scm {
                     url = 'https://github.com/asseco-pst/einstein'
