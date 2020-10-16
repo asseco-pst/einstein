@@ -1,10 +1,13 @@
 package io.github.asseco.pst.infrastructure.metrics
 
 import groovy.time.TimeDuration
-import io.github.asseco.pst.infrastructure.utils.Console
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class Metrics {
 
+    private static final Logger logger = LoggerFactory.getLogger(Metrics.class)
     enum Category {
         DEPENDENCIES_CALCULATION_DURATION
     }
@@ -18,12 +21,12 @@ class Metrics {
     }
 
     void startTimeTracking() {
-        Console.debug("Start tracking timer for metric $category...")
+        logger.debug("Start tracking timer for metric $category...")
         timer.start()
     }
 
     void stopTimeTracking() {
-        Console.debug("Stop tracking timer for metric $category...")
+        logger.debug("Stop tracking timer for metric $category...")
         timer.stop()
     }
 

@@ -2,12 +2,15 @@ package io.github.asseco.pst.infrastructure
 
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
-import io.github.asseco.pst.infrastructure.utils.Console
+
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
 
 class Project {
 
+    private static final Logger logger = LoggerFactory.getLogger(Project.class)
     static final String EINSTEIN_FILENAME = "einstein.yaml"
 
     String name
@@ -38,7 +41,7 @@ class Project {
                             .setVersion(aVersion)
                             .build()
         } catch (e) {
-            Console.err("Unable to instantiate Project '$aNamespace/$aName}' for version '${aVersion}'")
+            logger.error("Unable to instantiate Project '$aNamespace/$aName}' for version '${aVersion}'")
             throw e
         }
 
@@ -90,7 +93,7 @@ class Project {
         try {
             einsteinFileContent = RepoExplorerFactory.get().getFileContents(EINSTEIN_FILENAME, versionCommitSha, namespace, name)
         } catch (e) {
-            Console.warn("Could not load contents of $EINSTEIN_FILENAME from project $name. Cause: $e")
+            logger.warn("Could not load contents of $EINSTEIN_FILENAME from project $name.", e)
         }
     }
 
