@@ -1,23 +1,15 @@
-group 'io.github.asseco-pst'
-version "2.1.0-SNAPSHOT"
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
-        classpath 'edu.sc.seis.gradle:launch4j:2.4.4'
-    }
+plugins {
+    id 'groovy'
+    id 'signing'
+    id 'maven-publish'
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'edu.sc.seis.launch4j' version '2.4.4'
 }
 
-apply plugin: 'groovy'
-apply plugin: 'signing'
-apply plugin: 'maven-publish'
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'edu.sc.seis.launch4j'
+group 'io.github.asseco-pst'
+version "2.2.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -25,25 +17,27 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy
-    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.8'
+    implementation 'org.codehaus.groovy:groovy:3.0.5'
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
-    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.8'
-    // https://mvnrepository.com/artifact/org.gitlab4j/gitlab4j-api
+    implementation 'org.codehaus.groovy:groovy-json:3.0.5'
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-cli-picocli
-    compile group: 'org.codehaus.groovy', name: 'groovy-cli-picocli', version: '2.5.8'
-    compile group: 'org.gitlab4j', name: 'gitlab4j-api', version: '4.9.17'
+    implementation 'org.codehaus.groovy:groovy-cli-picocli:3.0.5'
+    // https://mvnrepository.com/artifact/org.gitlab4j/gitlab4j-api
+    implementation 'org.gitlab4j:gitlab4j-api:4.15.4'
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.24'
+    implementation 'org.yaml:snakeyaml:1.27'
     // https://mvnrepository.com/artifact/com.vdurmont/semver4j
-    compile group: 'com.vdurmont', name: 'semver4j', version: '2.2.0'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
+    implementation 'com.vdurmont:semver4j:2.2.0'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    implementation 'org.slf4j:slf4j-log4j12:1.7.30'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
+    testImplementation 'junit:junit:4.12'
 }
 
- application {
-     mainClassName = 'io.github.asseco.pst.Main'
- }
+application {
+    mainClassName = 'io.github.asseco.pst.Main'
+}
 
 jar {
     manifest {
@@ -80,7 +74,7 @@ publishing {
             project.shadow.component(it)
             pom {
                 name = 'einstein'
-                description = 'A library that allows managing artifacts in a Liberty server'
+                description = 'Einstein is a dependency management application that is used to calculate project dependencies.'
                 url = 'https://github.com/asseco-pst/einstein'
                 inceptionYear = '2019'
                 licenses {
