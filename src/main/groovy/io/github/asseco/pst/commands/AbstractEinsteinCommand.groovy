@@ -11,6 +11,8 @@ import picocli.CommandLine.Mixin
 
 abstract class AbstractEinsteinCommand {
     protected static final Logger logger = LoggerFactory.getLogger(AbstractEinsteinCommand.class)
+    protected static final String GITLAB_URL = "GITLAB_URL"
+    protected static final String GITLAB_TOKEN = "GITLAB_TOKEN"
 
     @Mixin
     protected SaveToFileMixin saveToFileMixin = new SaveToFileMixin(logger)
@@ -26,15 +28,22 @@ abstract class AbstractEinsteinCommand {
      */
     protected void calculateDependencies(List<ProjectDao> projects) {
         try {
-            logger.info("Calculating dependencies for provided projects...")
+            logger.info("Checking if the necessary environment variables where setup...")
+            checkGitlabEnvVariables()
 
+            logger.info("Calculating dependencies for provided projects...")
             Map<String, String> parsedDependencies = Einstein.instance.calcDependencies(projects)
+
+            logger.info("Finishing up...")
             handleParsedDependencies(parsedDependencies)
+
         } catch (Exception exception) {
             logger.error("Could not finish the dependencies calculation. Cause: ${exception}")
+            logger.debug("Exception thrown: ", exception)
             System.exit(401)
         }
-        logger.info("Dependencies calculations finished successfully")
+
+        logger.info("Dependencies calculations finished successfully!")
     }
 
     /**
@@ -45,6 +54,12 @@ abstract class AbstractEinsteinCommand {
     protected void handleParsedDependencies(Map<String, String> aParsedDependencies) {
         if (saveToFileMixin.saveToFilePath) {
             saveToFileMixin.writeToSaveFile(aParsedDependencies)
+        }
+    }
+
+    private static void checkGitlabEnvVariables() {
+        if (!System.getenv(GITLAB_URL) || !System.getenv(GITLAB_TOKEN)) {
+            throw new IllegalArgumentException("Environment variables '$GITLAB_URL' and/or '$GITLAB_TOKEN' are undefined. Please set them before trying to run again...")
         }
     }
 }
