@@ -18,7 +18,8 @@ final class LogOutputMixin {
                 .setFilePath(aLogFilePath)
                 .setLogger(logger)
 
-        if (fileValidator.validate()) {
+        if (!fileValidator.validate()) {
+
             this.logger.error("The provided file path \"${aLogFilePath}\" is not valid!")
             System.exit(101)
         }

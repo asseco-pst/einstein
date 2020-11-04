@@ -29,7 +29,7 @@ class VersionSeekerMinion extends Worker {
         String dependencyVersion
 
         try {
-            dependencyVersion = SemanticVersion.findSatisfyingVersion(requirement)
+            dependencyVersion = SemanticVersion.findSatisfyingVersion(requirement.projectNamespace, requirement.projectName, requirement.versionRange)
         } catch (exception) {
             logger.warn("Unable to get sibling version for dependency requirement '${requirement}' of project '${project.name}'. Cause: ${exception.getMessage()}")
             logger.debug("Exception thrown:", exception)

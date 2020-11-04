@@ -1,7 +1,8 @@
 package io.github.asseco.pst.infrastructure
 
-class ProjectDao {
+import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 
+class ProjectDao {
     String name
     String namespace
     String version
@@ -9,7 +10,7 @@ class ProjectDao {
     ProjectDao(String aName, String aNamespace, String aVersion) {
         this.name = aName
         this.namespace = aNamespace
-        this.version = aVersion
+        this.version = SemanticVersion.findSatisfyingVersion(aNamespace, aName, aVersion)
     }
 
     static ProjectDao fromFullName(String aFullName) {

@@ -23,12 +23,12 @@ final class ValidateCommand extends AbstractEinsteinCommand implements Runnable 
                 .setFileExtension("yaml")
                 .setLogger(logger)
 
-        if (fileValidator.validate()) {
+        if (!fileValidator.validate()) {
             logger.error("The provided file path \"${aInputFile}\" or extension is not valid!")
             System.exit(301)
         }
 
-        this.inputFile = inputFile.toString().trim()
+        this.inputFile = aInputFile.toString().trim()
     }
 
     @Override

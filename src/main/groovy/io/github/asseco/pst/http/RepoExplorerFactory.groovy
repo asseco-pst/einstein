@@ -11,24 +11,11 @@ import org.slf4j.LoggerFactory
  */
 abstract class RepoExplorerFactory {
     private static final Logger logger = LoggerFactory.getLogger(RepoExplorerFactory.class)
+    private static Type DEFAULT_REPOSITORY_EXPLORER = Type.GITLAB
     private static RepositoryExplorer instance
 
     enum Type {
         GITLAB
-    }
-
-    /**
-     * Creates a Gitlab Api explorer
-     *
-     * Currently, only Gitlab is supported. In the future,
-     * by supporting more Repos, the Repository Explorer tool must be configured
-     * by the user through an environment variable (i.e REPO_TOOL) and must be dynamically loaded on this method.
-     *
-     * @return Gitlab Api instance
-     */
-    static RepositoryExplorer create() {
-        logger.debug("Instantiating Gitlab API connector...")
-        return create(Type.GITLAB)
     }
 
     static RepositoryExplorer create(Type aRepoType) {
@@ -50,7 +37,8 @@ abstract class RepoExplorerFactory {
      */
     static RepositoryExplorer get() {
         if (!instance){
-            throw new Exception("Cannot get the Repository Explorer. Please instantiate one first...")
+            logger.warn("Could not get a Repository Explorer. Instantiating the default one: ${DEFAULT_REPOSITORY_EXPLORER.toString()}...")
+            create(DEFAULT_REPOSITORY_EXPLORER)
         }
         return instance
     }

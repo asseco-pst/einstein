@@ -20,7 +20,7 @@ final class SaveToFileMixin {
                 .setFilePath(aSaveToFilePath)
                 .setLogger(logger)
 
-        if (fileValidator.validate()) {
+        if (!fileValidator.validate()) {
             this.logger.error("The provided file path \"${aSaveToFilePath}\" is not valid!")
             System.exit(201)
         }

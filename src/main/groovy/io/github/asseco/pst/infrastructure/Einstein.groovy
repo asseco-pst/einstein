@@ -38,8 +38,6 @@ class Einstein {
 
         try {
             depsCalcDuration.startTimeTracking()
-
-            RepoExplorerFactory.create()
             depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
             ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)

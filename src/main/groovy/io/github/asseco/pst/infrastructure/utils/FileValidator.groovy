@@ -53,10 +53,9 @@ final class FileValidator {
      * @return the file extension
      */
     String getFilePathExtension() {
-        return Optional.ofNullable(this.filePath)
-                .filter { it.contains(".") }
-                .map { it.substring(this.filePath.lastIndexOf(".") + 1) }
-                .map(Object::toString)
-                .orElse("")
+        if (this.filePath.lastIndexOf(".") > 0) {
+            return filePath.substring(filePath.lastIndexOf(".") + 1)
+        }
+        return ''
     }
 }
