@@ -1,17 +1,15 @@
 package io.github.asseco.pst.infrastructure
 
-
+import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class Housekeeper {
-
     private static final Logger logger = LoggerFactory.getLogger(Housekeeper.class)
     Map<String, String> cleanDeps = [:]
 
     private Map projectsByIndex = [:]
-    private Map readDependencies = [:]
+    private Map<String, Map<SemanticVersion, String>> readDependencies = [:]
 
     /**
      * Resolve calculated dependencies according with the following policies:
@@ -22,7 +20,6 @@ class Housekeeper {
      * @param aScannedProjects
      */
     void resolve(List<Project> aScannedProjects) {
-
         collectDependencies(aScannedProjects)
         printRawDependencies()
 
@@ -33,17 +30,16 @@ class Housekeeper {
     }
 
     private void collectDependencies(List<Project> aProjects) {
-
         aProjects.each { project ->
-
             logger.debug("Evaluating dependencies for project ${project.ref}")
 
             saveProjectByIndex(project)
             addDependency(project)
 
             List<Project> dependencies = project.getDependencies()
-            if (!dependencies)
+            if (!dependencies) {
                 return
+            }
 
             dependencies.each {
                 addDependency(it)
@@ -52,29 +48,29 @@ class Housekeeper {
     }
 
     private void addDependency(Project aProject) {
+        if (!readDependencies[aProject.getId()]) {
+            readDependencies[aProject.getId()] = new HashMap<SemanticVersion, String>()
+        }
 
-        if (!readDependencies[aProject.getId()])
-            readDependencies[aProject.getId()] = new HashSet<SemanticVersion>()
-
-        if(isDependencyAlreadySaved(aProject.version.toString(), ((Set<SemanticVersion>) readDependencies[aProject.getId()])))
+        if (isDependencyAlreadySaved(aProject.version.toString(), readDependencies[aProject.getId()])) {
             return
+        }
 
-        readDependencies[aProject.getId()] << aProject.version
+        readDependencies[aProject.getId()].put(aProject.version, aProject.parentProjectRef ?: "")
     }
 
-    private boolean isDependencyAlreadySaved(String aVersion, Set<SemanticVersion> aVersions) {
-
-        if(!aVersions)
+    private static boolean isDependencyAlreadySaved(String aVersion, Map<SemanticVersion, String> aVersions) {
+        if (!aVersions) {
             return false
-
-        return aVersions.stream().filter({ v -> v.toString() == aVersion}).collect()
+        }
+        return aVersions.entrySet().stream().filter { it.getKey().toString() == aVersion }.collect()
     }
 
     private void saveProjectByIndex(Project aProject) {
-
         String projectRef = aProject.getRef()
-        if (projectsByIndex[projectRef])
+        if (projectsByIndex[projectRef]) {
             return
+        }
 
         projectsByIndex[projectRef] = aProject
     }
@@ -84,14 +80,16 @@ class Housekeeper {
         projectsByIndex.each {
             Project project = (Project) it.value
 
-            if (!isAcceptedDependency(project))
+            if (!isAcceptedDependency(project)) {
                 return
+            }
 
             List<Project> dependencies = []
             dependencies << project
 
-            if (project.getDependencies())
+            if (project.getDependencies()) {
                 dependencies.addAll(project.getDependencies())
+            }
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
                 cleanDeps.put(acceptedDependency.id, acceptedDependency.version.getOriginalValue())
@@ -100,69 +98,79 @@ class Housekeeper {
     }
 
     private void checkVersionsCompatibility() {
-
         readDependencies.each {
             String projectName = it.key
-            Set<SemanticVersion> dependentVersions = (Set<SemanticVersion>) it.value
+            Map<SemanticVersion, String> dependentVersions = it.value
 
-            if (dependentVersions.size() <= 1)
+            if (dependentVersions.size() <= 1) {
                 return
+            }
 
-            logger.warn("Checking if the multiple versions found for Project ${projectName} are semantically compatible...")
+            logger.warn("Checking if the multiple versions found for project ${projectName} are semantically compatible...")
 
             if (SemanticVersion.hasNonCompatibleVersions(dependentVersions)) {
-                logger.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
+                logger.warn("Found non compatible versions for project '${projectName}':")
+                Set<SemanticVersion> incompatibleDeps = []
+
+                dependentVersions.each {
+                    logger.warn("Project ${it.value}' declares ${it.key}")
+                    incompatibleDeps << it.key
+                }
+
+                logger.error("Declared versions are non compatible: ${incompatibleDeps.join(" <> ")}")
                 throw new Exception("Non compatible versions found!")
             }
         }
     }
 
     private void resolveAmbiguousDependencies() {
-
-        readDependencies.each { projectRef, d ->
-            Set<SemanticVersion> dependencies = (Set<SemanticVersion>) d
-            if (dependencies.size() == 1)
+        readDependencies.each { projectRef, dependencies ->
+            if (dependencies.size() == 1) {
                 return
+            }
 
             keepBiggestVersion(dependencies)
         }
     }
 
-    private void keepBiggestVersion(Set<SemanticVersion> aVersions) {
-
+    private void keepBiggestVersion(Map<SemanticVersion, String> aVersions) {
         String biggestVersion = SemanticVersion.getBiggestVersion(aVersions)
+        Iterator<Map.Entry<SemanticVersion, String>> versionsIterator = aVersions.iterator()
 
-        Iterator<SemanticVersion> versionsIterator = aVersions.iterator()
         while (versionsIterator.hasNext()) {
-            SemanticVersion currVersion = versionsIterator.next()
-            if (currVersion.toString() != biggestVersion)
+            SemanticVersion currVersion = versionsIterator.next().key
+
+            if (currVersion.toString() != biggestVersion) {
                 versionsIterator.remove()
+            }
         }
     }
 
     private List<Project> filterAcceptedDependencies(List<Project> aDependencies) {
-
-        return aDependencies.stream().filter({ d -> isAcceptedDependency(d) }).collect()
+        return aDependencies.stream().filter { d -> isAcceptedDependency(d) }.collect()
     }
 
     private boolean isAcceptedDependency(Project aProject) {
+        if (!readDependencies[aProject.getId()]) {
+            return false
+        }
 
-        if (!readDependencies[aProject.getId()])
+        if (!(readDependencies[aProject.getId()].containsKey(aProject.version))) {
             return false
-        if (!((Set) readDependencies[aProject.getId()]).contains(aProject.version))
-            return false
+        }
+
         return true
     }
 
     private void printRawDependencies() {
-
         logger.info("Raw dependencies list:\n")
         projectsByIndex.each { p ->
             String projectRef = p.key
             Project project = (Project) p.value
 
-            if (!project.getDependencies())
+            if (!project.getDependencies()) {
                 return
+            }
 
             logger.info("$projectRef:")
             project.getDependencies().each { d ->
@@ -170,7 +178,7 @@ class Housekeeper {
             }
         }
 
-        logger.info("Calculated dependencies per Project:")
+        logger.info("Calculated dependencies per project:")
         logger.info("$readDependencies\n")
     }
 }
