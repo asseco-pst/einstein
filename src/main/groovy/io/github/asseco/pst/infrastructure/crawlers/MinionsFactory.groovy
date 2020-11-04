@@ -5,35 +5,12 @@ import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
 
 abstract class MinionsFactory {
-
     enum Type {
         CRAWLER,
         VERSION_SEEKER
     }
 
-//    private static List<Thread> liveThreads
-//
-//    static {
-//        liveThreads = []
-//    }
-//
-//    private static Thread newThread(Worker aWorker) {
-//
-//        Thread t = new Thread(aWorker)
-//        liveThreads << t
-//
-//        return t
-//    }
-//
-//    static void killLiveThreads() {
-//
-//        liveThreads.each {
-//            it.stop()
-//        }
-//    }
-
     synchronized static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
-
         Worker minion
 
         switch (aType) {
@@ -46,8 +23,6 @@ abstract class MinionsFactory {
         }
 
         minion.attach(aObserver)
-//        minion.setDependenciesHandler(aDepsHandler)
-
         Thread t = aDepsHandler.getThreadsManager().newThread(minion)
         t.setUncaughtExceptionHandler(new EThreadUncaughtExceptionHandler(aObserver))
         t.start()

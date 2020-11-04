@@ -10,13 +10,12 @@ import org.slf4j.LoggerFactory
  * the application
  */
 abstract class RepoExplorerFactory {
-
     private static final Logger logger = LoggerFactory.getLogger(RepoExplorerFactory.class)
+    private static RepositoryExplorer instance
+
     enum Type {
         GITLAB
     }
-
-    private static RepositoryExplorer instance
 
     /**
      * Creates a Gitlab Api explorer
@@ -28,19 +27,16 @@ abstract class RepoExplorerFactory {
      * @return Gitlab Api instance
      */
     static RepositoryExplorer create() {
-        logger.debug("Instantiating Gitlab Api...")
+        logger.debug("Instantiating Gitlab API connector...")
         return create(Type.GITLAB)
     }
 
     static RepositoryExplorer create(Type aRepoType) {
-
         switch (aRepoType) {
             case Type.GITLAB:
+                logger.debug("Instantiating Gitlab API connector...")
                 instance = new GitLabRepositoryExplorer()
                 break
-//            case Type.GITHUB:
-////                instance = new GitHubRepositoryExplorer()
-////                break
         }
 
         return instance
@@ -53,8 +49,9 @@ abstract class RepoExplorerFactory {
      * @return the RepositoryExplorer instance
      */
     static RepositoryExplorer get() {
-        if (!instance)
-            throw new Exception("Cannot get the Repository Explorer. Please, instantiate one first...")
+        if (!instance){
+            throw new Exception("Cannot get the Repository Explorer. Please instantiate one first...")
+        }
         return instance
     }
 }

@@ -1,13 +1,12 @@
 package io.github.asseco.pst.http
 
-
+import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Commit
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import java.util.function.Predicate
 import java.util.stream.Stream
@@ -21,7 +20,6 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
     GitLabApi api
 
-
     @Override
     protected void setRepoURLEnvVar() {
         repoURLEnvVar = "GITLAB_URL"
@@ -34,14 +32,17 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
     @Override
     void connect() {
+        logger.info("Connecting to the Gitlab API...")
 
-        logger.info("Connecting to the Gitlab Api...")
         try {
             api = new GitLabApi(repoUrl, token)
+
+            logger.debug("Ignoring SSL certificate errors...")
             api.setIgnoreCertificateErrors(true)
-        } catch (Exception e) {
-            logger.error("An error occurred during Gitlab Api instantiation", e)
-            throw e
+        } catch (Exception exception) {
+            logger.warn("An error occurred during Gitlab API instantiation. Cause: ${exception.getMessage()}")
+            logger.debug("Exception thrown:", exception)
+            throw exception
         }
     }
 
@@ -53,16 +54,16 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @return the Project
      */
     Project findProject(String namespace, String projectName) {
-
         try {
             Project project = api.getProjectApi().getProject(namespace, projectName)
+            logger.debug("Found project ${project.nameWithNamespace}")
 
             return project
-        } catch (Exception e) {
-            logger.error("Could not find project $namespace/$projectName.", e)
-            throw e
+        } catch (Exception exception) {
+            logger.warn("Could not find project ${namespace}/${projectName}. Cause: ${exception.getMessage()}")
+            logger.debug("Exception thrown:", exception)
+            throw exception
         }
-
     }
 
     /**
@@ -74,24 +75,28 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      */
     @Override
     String getRepoSshUrl(String namespace, String projectName) {
-
         try {
             Project project = findProject(namespace, projectName)
-            return project.getSshUrlToRepo()
-        } catch (Exception e) {
-            logger.error("Could not get SSH URL to Repo for project $namespace/$projectName.", e)
-            throw e
-        }
+            logger.debug("Found project ${project.nameWithNamespace}")
 
+            return project.getSshUrlToRepo()
+        } catch (Exception exception) {
+            logger.warn("Could not get SSH URL to repository for project ${namespace}/${projectName}. Cause: ${exception.getMessage()}")
+            logger.debug("Exception thrown:", exception)
+            throw exception
+        }
     }
 
     String getRepoWebUrl(String namespace, String projectName) {
         try {
             Project project = findProject(namespace, projectName)
+            logger.debug("Found project ${project.nameWithNamespace}")
+
             return project.getWebUrl()
-        } catch (Exception e) {
-            logger.error("Could not get Web URL to Repo for project $namespace/$projectName.", e)
-            throw e
+        } catch (Exception exception) {
+            logger.warn("Could not get WEB URL to repository for project ${namespace}/${projectName}. Cause: ${exception.getMessage()}")
+            logger.debug("Exception thrown:", exception)
+            throw exception
         }
     }
 
@@ -107,6 +112,8 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     @Override
     String getFileContents(String filePath, String ref, String namespace, String projectName) {
         Project project = findProject(namespace, projectName)
+        logger.debug("Found project ${project.nameWithNamespace}")
+
         return api.getRepositoryFileApi().getFile(project, filePath, ref, true).getDecodedContentAsString()
     }
 
@@ -120,16 +127,19 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      */
     @Override
     String getDevelopBranchLatestCommitSha(String namespace, String projectName) {
-
         Project project = findProject(namespace, projectName)
+        logger.debug("Found project ${project.nameWithNamespace}")
 
         Optional<Commit> devLatestCommit = Optional.empty()
-        if (api.getRepositoryApi().getBranch(project, DEVELOP_BRANCH))
+        if (api.getRepositoryApi().getBranch(project, DEVELOP_BRANCH)) {
             devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, "develop"))
+        }
 
-        if (!devLatestCommit.isPresent())
-            throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from Project '$namespace/$projectName'")
+        if (!devLatestCommit.isPresent()) {
+            throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from project '${namespace}/${projectName}'")
+        }
 
+        logger.debug("Found latest commit ${devLatestCommit.get().id} with message ${devLatestCommit.get().message}")
         return devLatestCommit.get().getId()
     }
 
@@ -145,19 +155,21 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     String getTagHash(String tagName, String namespace, String projectName) {
         try {
             Project project = findProject(namespace, projectName)
+            logger.debug("Found project ${project.nameWithNamespace}")
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
-
             Tag tag = tags.filter({ tag -> tag.getName().endsWith(tagName) }).findFirst().get()
 
-            if (!Optional.of(tag.getCommit()).isPresent())
-                throw new RuntimeException("Unable to get commit from Tag '$tag.name' of Project $namespace/$projectName")
+            if (!Optional.of(tag.getCommit()).isPresent()) {
+                throw new RuntimeException("Unable to get commit from Tag '${tag.name}' of Project ${namespace}/${projectName}")
+            }
 
+            logger.debug("Found tag ${tag.getName()}")
             return tag.getCommit().getId()
-
-        } catch (Exception e) {
-            logger.error("Could not get Tag $tagName hash.", e)
-            throw e
+        } catch (Exception exception) {
+            logger.warn("Could not get tag ${tagName} hash. Cause: ${exception.getMessage()}")
+            logger.debug("Exception thrown:", exception)
+            throw exception
         }
     }
 
@@ -174,19 +186,18 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate) {
         try {
             Project project = findProject(namespace, projectName)
+            logger.debug("Found project ${project.nameWithNamespace}")
 
             Stream<Tag> tags = api.getTagsApi().getTagsStream(project)
             return tags
-                    .filter({ tag ->
-                        SemanticVersion.isValid(tag.getName())
-                    })
+                    .filter { tag -> SemanticVersion.isValid(tag.getName()) }
                     .filter(predicate)
-                    .collect({ tag -> SemanticVersion.create(tag.getName()).getOriginalValue() })
+                    .collect { tag -> SemanticVersion.create(tag.getName()).getOriginalValue() }
 
-
-        } catch (Exception e) {
-            logger.error("Could not get tags for project $projectName.", e)
-            throw e
+        } catch (Exception exception) {
+            logger.warn("Could not get tags for project ${projectName}. Cause: ${exception.getMessage()}", exception)
+            logger.debug("Exception thrown:", exception)
+            throw exception
         }
     }
 }

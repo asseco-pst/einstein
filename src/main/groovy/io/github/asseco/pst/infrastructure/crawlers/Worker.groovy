@@ -7,19 +7,16 @@ import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 import java.util.concurrent.atomic.AtomicInteger
 
 abstract class Worker implements Runnable, Observer, Observable {
-
     protected String _id
     protected DependenciesHandler depsHandler
 
     synchronized List<Worker> observers
-//    protected synchronized int currentNbrOfSubscribedMinions
     protected AtomicInteger currentNbrOfSubscribedMinions
     EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 
     Worker(DependenciesHandler aDepsHandler) {
         depsHandler = aDepsHandler
         observers = []
-//        currentNbrOfSubscribedMinions = 0
         currentNbrOfSubscribedMinions = new AtomicInteger(0)
     }
 
@@ -29,21 +26,12 @@ abstract class Worker implements Runnable, Observer, Observable {
         _id = aId
     }
 
-//    void setDependenciesHandler(DependenciesHandler aDepsHandler) {
-//        depsHandler = aDepsHandler
-//    }
-
     @Override
     void run() {
-
-//            try {
-                work()
-                wait4SubscribedMinions()
-                checkUncaughtExceptions()
-                _notify()
-//            } catch (Exception e) {
-//                throw e
-//            }
+        work()
+        wait4SubscribedMinions()
+        checkUncaughtExceptions()
+        _notify()
     }
 
     @Override
@@ -74,29 +62,26 @@ abstract class Worker implements Runnable, Observer, Observable {
 
     private void checkUncaughtExceptions() {
 
-        if(uncaughtExceptionHandler) {
-            if(uncaughtExceptionHandler.hasUncaughtExceptions)
+        if (uncaughtExceptionHandler) {
+            if (uncaughtExceptionHandler.hasUncaughtExceptions) {
                 throw new RuntimeException(uncaughtExceptionHandler.threadTrowable)
-        }
+            }        }
     }
 
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {
-
-//        currentNbrOfSubscribedMinions += aVal
         currentNbrOfSubscribedMinions.getAndAdd(aVal)
-//        if(currentNbrOfSubscribedMinions < 0)
-//            currentNbrOfSubscribedMinions = 0
     }
 
     protected void wait4SubscribedMinions() {
-
-        if (!currentNbrOfSubscribedMinions)
+        if (!currentNbrOfSubscribedMinions) {
             return
+        }
 
         while (currentNbrOfSubscribedMinions.get() > 0) {
             // wait for minions to finish their jobs... until timeout
-            if(Einstein.instance.timeout())
+            if (Einstein.instance.timeout()) {
                 throw new EinsteinTimeoutException()
+            }
         }
     }
 }

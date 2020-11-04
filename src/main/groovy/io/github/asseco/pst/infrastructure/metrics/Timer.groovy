@@ -2,14 +2,12 @@ package io.github.asseco.pst.infrastructure.metrics
 
 import groovy.time.TimeCategory
 import groovy.time.TimeDuration
-
+import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import java.text.SimpleDateFormat
 
 class Timer {
-
     private static final Logger logger = LoggerFactory.getLogger(Timer.class)
     private Date startTime, endTime
 
@@ -17,12 +15,12 @@ class Timer {
 
     void start() {
         startTime = new Date()
-        logger.debug("Starting timer => " + new SimpleDateFormat("YYY-MM-dd HH:mm:ssZ").format(startTime))
+        logger.debug("Starting timer => ${new SimpleDateFormat("YYY-MM-dd HH:mm:ssZ").format(startTime)}")
     }
 
     void stop() {
         endTime = new Date()
-        logger.debug("Stopping timer => " + new SimpleDateFormat("YYY-MM-dd HH:mm:ssZ").format(endTime))
+        logger.debug("Stopping timer => ${new SimpleDateFormat("YYY-MM-dd HH:mm:ssZ").format(endTime)}")
     }
 
     /**
@@ -38,12 +36,11 @@ class Timer {
      * @return duration
      */
     TimeDuration duration() {
-
-        if (!startTime || !endTime)
+        if (!startTime || !endTime) {
             throw new Exception("You must start/stop the Timer in order to be able to calculate durations")
-
-        logger.debug("start time: " + startTime)
-        logger.debug("end time: " + endTime)
+        }
+        logger.debug("Start time: ${startTime}")
+        logger.debug("End time: ${endTime}")
         return TimeCategory.minus(endTime, startTime)
     }
 }
