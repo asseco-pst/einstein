@@ -36,7 +36,7 @@ dependencies {
 }
 
 application {
-    mainClassName = 'io.github.asseco.pst.Main'
+    getMainClass().set('io.github.asseco.pst.commands.BaseCommand')
 }
 
 jar {
@@ -54,6 +54,7 @@ createExe {
 }
 
 shadowJar {
+    mainClassName = 'io.github.asseco.pst.commands.BaseCommand'
     classifier = ''
 }
 

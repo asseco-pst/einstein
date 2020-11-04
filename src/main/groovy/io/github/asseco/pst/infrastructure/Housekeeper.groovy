@@ -113,13 +113,14 @@ class Housekeeper {
                 Set<SemanticVersion> incompatibleDeps = []
 
                 dependentVersions.each {
-                    logger.warn("Project ${it.value}' declares ${it.key}")
+                    logger.warn("   >> Project ${it.value}' declares ${it.key}")
                     incompatibleDeps << it.key
                 }
 
                 logger.error("Declared versions are non compatible: ${incompatibleDeps.join(" <> ")}")
                 throw new Exception("Non compatible versions found!")
             }
+            logger.info("The multiple versions found for project ${projectName} are semantically compatible...")
         }
     }
 
