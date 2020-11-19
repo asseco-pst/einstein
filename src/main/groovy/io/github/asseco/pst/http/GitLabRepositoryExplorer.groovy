@@ -110,7 +110,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     /**
      * Get the hash of the latest commit on the 'develop' branch
      *
-     * @param namespace the projectNamespace of the projecy
+     * @param namespace the projectNamespace of the project
      * @param projectName the projectName of the project
      * @return the SHA-1 hash of the identified commit
      * @throws Exception if the Project does not contains a 'develop' named branch
