@@ -5,6 +5,9 @@ import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.Requirement
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 class SemanticVersion extends Semver {
 
     static final String SNAPSHOT_SUFFIX = "-SNAPSHOT"
@@ -76,6 +79,31 @@ class SemanticVersion extends Semver {
     }
 
     /**
+     * Gets the biggest/most recent version from provided git tags list
+     *
+     * Sanitizing (@see #sanitizeVersion(String aStrTag)) is important for versions comparison reasons.
+     * According to <a href="https://semver.org/#spec-item-11">semver:spec#11.4</a> 1.0.0-rc10 is lower than 1.0.0-rc9
+     * (not desired scenario) but 1.0.0-rc.10 is bigger than 1.0.0-rc.9 (desired scenario)
+     *
+     * @param aVersions - a list of git tags
+     * @return a Semver version
+     */
+    static Semver getBiggestSanitizedVersion(List<String> aVersions) {
+
+        Map<String, Semver> sanitizedTags = new HashMap<String, Semver>()
+
+        aVersions.each {tag ->
+            sanitizedTags.put(sanitizeVersion(tag), create(tag))
+        }
+
+        Semver satisfies = sanitizedTags.keySet().collect { create(it.toString()) }.max { a, b ->
+            (a <=> b)
+        }
+
+        return sanitizedTags[satisfies.getOriginalValue()]
+    }
+
+    /**
      * Checks if the current object represents a SNAPSHOT version
      * Similar to @see SemanticVersion#isSnapshot(String aVersion)
      *
@@ -108,14 +136,12 @@ class SemanticVersion extends Semver {
                     version.satisfies(aRequirement.getVersionRange())
                 })
 
-        Semver satisfies = tags.collect { create(it) }.max{ a, b ->
-            (a <=> b)
-        }
+        if(!tags)
+            throw new VersionException("Unable to get satisfying version for declared dependency: ${aRequirement.projectNamespace}/${aRequirement.projectName}: ${aRequirement.versionRange}")
 
-        if(!satisfies)
-            throw new VersionException("Unable to get satisfying version for declared dependency: ${aRequirement.getProjectNamespace()}/${aRequirement.getProjectName()}: ${aRequirement.getVersionRange()}")
+        Semver biggestVersion = getBiggestSanitizedVersion(tags)
 
-        return satisfies.getOriginalValue()
+        return biggestVersion.getOriginalValue()
     }
 
     /**
@@ -203,5 +229,24 @@ class SemanticVersion extends Semver {
         SemanticVersion v2 = create(getPrefix(aVersion))
 
         return (v1 <=> v2)
+    }
+
+    /**
+     * It "fixes" pre-release versions that missed the dot character between the pre-release type (alpha, beta, rc, ...)
+     * and the pre-release index (1, 2, 3, ...)
+     *
+     * @param aStrTag
+     * @return "sanitized" version (i.e 1.0.0-rc1 => 1.0.0-rc.1)
+     */
+    private static String sanitizeVersion(String aStrTag) {
+
+        String version = aStrTag
+
+        Matcher matcher = Pattern.compile(/^([0-9]+\.[0-9]\.[0-9])(-([aA-zZ]+)([0-9]+.*))/).matcher(version)
+        if (matcher.matches()) {
+            version = matcher.group(1) + "-" + matcher.group(3) + "." + matcher.group(4)
+        }
+
+        return version
     }
 }
