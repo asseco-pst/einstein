@@ -1,11 +1,13 @@
 package io.github.asseco.pst.infrastructure
 
 import com.vdurmont.semver4j.Semver
-import io.github.asseco.pst.infrastructure.utils.Console
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class Housekeeper {
 
+    private static final Logger logger = LoggerFactory.getLogger(Housekeeper.class)
     Map<String, String> cleanDeps = [:]
 
     private Map projectsByIndex = [:]
@@ -34,7 +36,7 @@ class Housekeeper {
 
         aProjects.each { project ->
 
-            Console.debug("Evaluating dependencies for project ${project.ref}")
+            logger.debug("Evaluating dependencies for project ${project.ref}")
 
             saveProjectByIndex(project)
             addDependency(project)
@@ -106,10 +108,10 @@ class Housekeeper {
             if (dependentVersions.size() <= 1)
                 return
 
-            Console.warn("Checking if the multiple versions found for Project ${projectName} are semantically compatible...")
+            logger.warn("Checking if the multiple versions found for Project ${projectName} are semantically compatible...")
 
             if (SemanticVersion.hasNonCompatibleVersions(dependentVersions)) {
-                Console.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
+                logger.warn("Found non compatible versions for Project '${projectName}': ${dependentVersions.join(" <> ")}")
                 throw new Exception("Non compatible versions found!")
             }
         }
@@ -127,7 +129,6 @@ class Housekeeper {
     }
 
     private void keepBiggestVersion(Set<SemanticVersion> aVersions) {
-
 
         Semver biggestVersion =
                 SemanticVersion.getBiggestSanitizedVersion(
@@ -161,7 +162,7 @@ class Housekeeper {
 
     private void printRawDependencies() {
 
-        Console.info("Raw dependencies list:\n")
+        logger.info("Raw dependencies list:\n")
         projectsByIndex.each { p ->
             String projectRef = p.key
             Project project = (Project) p.value
@@ -169,13 +170,13 @@ class Housekeeper {
             if (!project.getDependencies())
                 return
 
-            Console.print("$projectRef:")
+            logger.info("$projectRef:")
             project.getDependencies().each { d ->
-                Console.print("   >> ${d.getRef()}")
+                logger.info("   >> ${d.getRef()}")
             }
         }
-        Console.print("\n")
-        Console.info("Calculated dependencies per Project:")
-        Console.print("$readDependencies\n")
+
+        logger.info("Calculated dependencies per Project:")
+        logger.info("$readDependencies\n")
     }
 }

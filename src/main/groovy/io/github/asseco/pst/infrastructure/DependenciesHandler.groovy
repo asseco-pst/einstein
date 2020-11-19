@@ -3,11 +3,14 @@ package io.github.asseco.pst.infrastructure
 
 import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.Worker
-import io.github.asseco.pst.infrastructure.utils.Console
+
 import io.github.asseco.pst.infrastructure.utils.ThreadsManager
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class DependenciesHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(DependenciesHandler.class)
     List<Project> projects
     List<Project> scannedDeps
     ThreadsManager threadsManager
@@ -30,7 +33,7 @@ class DependenciesHandler {
             return
         addCrawledProject(aProject)
 
-        Console.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.ref")
+        logger.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.ref")
         MinionsFactory.launch(MinionsFactory.Type.CRAWLER, aProject, aObserver, this)
     }
 
@@ -38,7 +41,7 @@ class DependenciesHandler {
 
         String ref = aProject.ref
         if (crawledProjects.contains(ref)) {
-            Console.debug("Project '${ref}' was already crawled...")
+            logger.debug("Project '${ref}' was already crawled...")
             return true
         }
         crawledProjects << ref

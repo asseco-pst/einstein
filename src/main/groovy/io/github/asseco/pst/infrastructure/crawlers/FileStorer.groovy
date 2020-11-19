@@ -1,7 +1,6 @@
 package io.github.asseco.pst.infrastructure.crawlers
 
 import io.github.asseco.pst.infrastructure.Project
-import io.github.asseco.pst.infrastructure.utils.Console
 
 /**
  * This thread is responsible to store, on a given location,

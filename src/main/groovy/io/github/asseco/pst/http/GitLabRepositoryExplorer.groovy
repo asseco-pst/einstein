@@ -1,19 +1,22 @@
 package io.github.asseco.pst.http
 
-import io.github.asseco.pst.infrastructure.utils.Console
+
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Commit
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.util.function.Predicate
 import java.util.stream.Stream
+
 /**
  *  This class makes use of GitLab's REST API to get information about repos
  */
 class GitLabRepositoryExplorer extends RepositoryExplorer {
-
+    private static final Logger logger = LoggerFactory.getLogger(GitLabRepositoryExplorer.class)
     private final String DEVELOP_BRANCH = "develop"
 
     GitLabApi api
@@ -32,12 +35,12 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
     @Override
     void connect() {
 
-        Console.info("Connecting to the Gitlab Api...")
+        logger.info("Connecting to the Gitlab Api...")
         try {
             api = new GitLabApi(repoUrl, token)
             api.setIgnoreCertificateErrors(true)
         } catch (Exception e) {
-            Console.err("An error occurred during Gitlab Api instantiation. Cause: ${e}")
+            logger.error("An error occurred during Gitlab Api instantiation", e)
             throw e
         }
     }
@@ -56,7 +59,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
             return project
         } catch (Exception e) {
-            Console.err("Could not find project $namespace/$projectName. Cause: $e")
+            logger.error("Could not find project $namespace/$projectName.", e)
             throw e
         }
 
@@ -76,7 +79,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             Project project = findProject(namespace, projectName)
             return project.getSshUrlToRepo()
         } catch (Exception e) {
-            Console.err("Could not get SSH URL to Repo for project $namespace/$projectName. Cause: $e")
+            logger.error("Could not get SSH URL to Repo for project $namespace/$projectName.", e)
             throw e
         }
 
@@ -87,7 +90,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             Project project = findProject(namespace, projectName)
             return project.getWebUrl()
         } catch (Exception e) {
-            Console.err("Could not get Web URL to Repo for project $namespace/$projectName. Cause: $e")
+            logger.error("Could not get Web URL to Repo for project $namespace/$projectName.", e)
             throw e
         }
     }
@@ -122,7 +125,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
         Optional<Commit> devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, DEVELOP_BRANCH))
 
-        if(!devLatestCommit.isPresent())
+        if (!devLatestCommit.isPresent())
             throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from Project '$namespace/$projectName'")
 
         return devLatestCommit.get().getId()
@@ -145,13 +148,13 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
             Tag tag = tags.filter({ tag -> tag.getName().endsWith(tagName) }).findFirst().get()
 
-            if(!Optional.of(tag.getCommit()).isPresent())
+            if (!Optional.of(tag.getCommit()).isPresent())
                 throw new RuntimeException("Unable to get commit from Tag '$tag.name' of Project $namespace/$projectName")
 
             return tag.getCommit().getId()
 
         } catch (Exception e) {
-            Console.err("Could not get Tag $tagName hash. Cause: $e")
+            logger.error("Could not get Tag $tagName hash.", e)
             throw e
         }
     }
@@ -180,7 +183,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
 
         } catch (Exception e) {
-            Console.err("Could not get tags for project $projectName. Cause: $e")
+            logger.error("Could not get tags for project $projectName.", e)
             throw e
         }
     }

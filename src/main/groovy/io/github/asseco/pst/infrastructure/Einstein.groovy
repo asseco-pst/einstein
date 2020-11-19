@@ -1,19 +1,22 @@
 package io.github.asseco.pst.infrastructure
 
+import groovy.json.JsonBuilder
 import io.github.asseco.pst.Main
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
 import io.github.asseco.pst.infrastructure.metrics.Metrics
-import io.github.asseco.pst.infrastructure.utils.Console
+
 import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
 @Singleton
 class Einstein {
-
+    private static final Logger logger = LoggerFactory.getLogger(Einstein.class)
     Metrics depsCalcDuration = new Metrics(Metrics.Category.DEPENDENCIES_CALCULATION_DURATION)
 
     static boolean isDebugModeOn() {
@@ -64,13 +67,10 @@ class Einstein {
 
             parsedDeps = depsHandler.getParsedDependencies()
 
-            Console.print("\n\n")
-            Console.info("Detected dependencies:")
-            Console.printMap(parsedDeps)
-            Console.print("\n\n")
+            logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
 
             depsCalcDuration.stopTimeTracking()
-            Console.info("Einstein took " + depsCalcDuration.getTimeDuration())
+            logger.info("Einstein took " + depsCalcDuration.getTimeDuration())
 
         } catch (Exception e) {
             if(depsHandler)
