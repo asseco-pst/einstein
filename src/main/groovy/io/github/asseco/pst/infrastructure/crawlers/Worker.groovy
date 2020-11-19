@@ -98,7 +98,7 @@ abstract class Worker implements Runnable, Observer, Observable {
             return
 
         while (currentNbrOfSubscribedMinions.get() > 0) {
-            // wait for minions to finish their jobs... until timeout
+            // wait for minions to finish their job... until timeout
             if(Einstein.instance.timeout())
                 throw new EinsteinTimeoutException()
         }
