@@ -102,7 +102,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @return the contents of the file
      */
     @Override
-    String getFileContents(String filePath, String ref, String namespace, String projectName) {
+    synchronized String getFileContents(String filePath, String ref, String namespace, String projectName) {
         Project project = findProject(namespace, projectName)
         return api.getRepositoryFileApi().getFile(project, filePath, ref, true).getDecodedContentAsString()
     }
@@ -116,13 +116,11 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @throws Exception if the Project does not contains a 'develop' named branch
      */
     @Override
-    String getDevelopBranchLatestCommitSha(String namespace, String projectName) {
+    synchronized String getDevelopBranchLatestCommitSha(String namespace, String projectName) {
 
         Project project = findProject(namespace, projectName)
 
-        Optional<Commit> devLatestCommit = Optional.empty()
-        if(api.getRepositoryApi().getBranch(project, DEVELOP_BRANCH))
-            devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, "develop"))
+        Optional<Commit> devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, DEVELOP_BRANCH))
 
         if(!devLatestCommit.isPresent())
             throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from Project '$namespace/$projectName'")
@@ -139,7 +137,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @return the SHA-1 hash of the tag
      */
     @Override
-    String getTagHash(String tagName, String namespace, String projectName) {
+    synchronized String getTagHash(String tagName, String namespace, String projectName) {
         try {
             Project project = findProject(namespace, projectName)
 
@@ -168,7 +166,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
      * @return a list of tags
      */
     @Override
-    List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate) {
+    synchronized List<String> listTags(String namespace, String projectName, Predicate<? super Tag> predicate) {
         try {
             Project project = findProject(namespace, projectName)
 
