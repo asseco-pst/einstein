@@ -12,27 +12,6 @@ abstract class MinionsFactory {
         VERSION_SEEKER
     }
 
-//    private static List<Thread> liveThreads
-//
-//    static {
-//        liveThreads = []
-//    }
-//
-//    private static Thread newThread(Worker aWorker) {
-//
-//        Thread t = new Thread(aWorker)
-//        liveThreads << t
-//
-//        return t
-//    }
-//
-//    static void killLiveThreads() {
-//
-//        liveThreads.each {
-//            it.stop()
-//        }
-//    }
-
     synchronized static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
 
         Worker minion
