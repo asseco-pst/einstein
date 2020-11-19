@@ -2,6 +2,7 @@ package io.github.asseco.pst.infrastructure.crawlers
 
 import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
+import io.github.asseco.pst.infrastructure.exceptions.EThreadUncaughtExceptionHandler
 import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -44,6 +45,9 @@ abstract class Worker implements Runnable, Observer, Observable {
 //            } catch (Exception e) {
 //                throw e
 //            }
+        work()
+        wait4SubscribedMinions()
+        _notify()
     }
 
     @Override

@@ -2,8 +2,8 @@ package io.github.asseco.pst.infrastructure
 
 import io.github.asseco.pst.Main
 import io.github.asseco.pst.http.RepoExplorerFactory
-import io.github.asseco.pst.infrastructure.crawlers.EThreadUncaughtExceptionHandler
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
+import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
 import io.github.asseco.pst.infrastructure.metrics.Metrics
 import io.github.asseco.pst.infrastructure.utils.Console
 import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
@@ -54,14 +54,13 @@ class Einstein {
             depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
             ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
+
             Thread t = new Thread(pCrawler)
-            EThreadUncaughtExceptionHandler handler = new EThreadUncaughtExceptionHandler(pCrawler)
-            t.setUncaughtExceptionHandler(handler)
+            t.setUncaughtExceptionHandler(UncaughtExceptionsManager.instance.factory(pCrawler))
             t.start()
             t.join()
 
-            if (handler.hasUncaughtExceptions)
-                throw handler.threadTrowable
+            UncaughtExceptionsManager.instance.checkUncaughtExceptions()
 
             parsedDeps = depsHandler.getParsedDependencies()
 
