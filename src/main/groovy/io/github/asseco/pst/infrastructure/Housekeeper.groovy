@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure
 
-
+import com.vdurmont.semver4j.Semver
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -130,12 +130,18 @@ class Housekeeper {
 
     private void keepBiggestVersion(Set<SemanticVersion> aVersions) {
 
-        String biggestVersion = SemanticVersion.getBiggestVersion(aVersions)
+        Semver biggestVersion =
+                SemanticVersion.getBiggestSanitizedVersion(
+                        aVersions.stream()
+                                .collect({
+                                    it.getOriginalValue()
+                                })
+                )
 
         Iterator<SemanticVersion> versionsIterator = aVersions.iterator()
         while (versionsIterator.hasNext()) {
             SemanticVersion currVersion = versionsIterator.next()
-            if (currVersion.toString() != biggestVersion)
+            if (currVersion.toString() != biggestVersion.getOriginalValue())
                 versionsIterator.remove()
         }
     }

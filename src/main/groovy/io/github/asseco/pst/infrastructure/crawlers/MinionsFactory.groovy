@@ -3,6 +3,7 @@ package io.github.asseco.pst.infrastructure.crawlers
 import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
+import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
 
 abstract class MinionsFactory {
 
@@ -10,27 +11,6 @@ abstract class MinionsFactory {
         CRAWLER,
         VERSION_SEEKER
     }
-
-//    private static List<Thread> liveThreads
-//
-//    static {
-//        liveThreads = []
-//    }
-//
-//    private static Thread newThread(Worker aWorker) {
-//
-//        Thread t = new Thread(aWorker)
-//        liveThreads << t
-//
-//        return t
-//    }
-//
-//    static void killLiveThreads() {
-//
-//        liveThreads.each {
-//            it.stop()
-//        }
-//    }
 
     synchronized static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
 
@@ -46,10 +26,9 @@ abstract class MinionsFactory {
         }
 
         minion.attach(aObserver)
-//        minion.setDependenciesHandler(aDepsHandler)
 
         Thread t = aDepsHandler.getThreadsManager().newThread(minion)
-        t.setUncaughtExceptionHandler(new EThreadUncaughtExceptionHandler(aObserver))
+        t.setUncaughtExceptionHandler(UncaughtExceptionsManager.instance.factory(aObserver))
         t.start()
     }
 }

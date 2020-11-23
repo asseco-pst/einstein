@@ -1,4 +1,6 @@
-package io.github.asseco.pst.infrastructure.crawlers
+package io.github.asseco.pst.infrastructure.exceptions
+
+import io.github.asseco.pst.infrastructure.crawlers.Worker
 
 class EThreadUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
