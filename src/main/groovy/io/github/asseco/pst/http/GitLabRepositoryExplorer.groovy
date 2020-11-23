@@ -1,9 +1,8 @@
 package io.github.asseco.pst.http
 
-
+import groovy.json.JsonSlurper
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.gitlab4j.api.GitLabApi
-import org.gitlab4j.api.models.Commit
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 import org.slf4j.Logger
@@ -17,7 +16,7 @@ import java.util.stream.Stream
  */
 class GitLabRepositoryExplorer extends RepositoryExplorer {
     private static final Logger logger = LoggerFactory.getLogger(GitLabRepositoryExplorer.class)
-    private final String DEVELOP_BRANCH = "develop"
+    final static String DEVELOP_BRANCH = "develop"
 
     GitLabApi api
 
@@ -110,11 +109,34 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
         return api.getRepositoryFileApi().getFile(project, filePath, ref, true).getDecodedContentAsString()
     }
 
+//    /**
+//     * Get the hash of the latest commit on the 'develop' branch
+//     * !!! WARNING !!! This method was deprecated because it takes to long to get the desired commit id from big
+//     * sized repositories
+//     *
+//     * @param namespace the projectNamespace of the project
+//     * @param projectName the projectName of the project
+//     * @return the SHA-1 hash of the identified commit
+//     * @throws Exception if the Project does not contains a 'develop' named branch
+//     */
+//    @Override
+//    synchronized String getDevelopBranchLatestCommitSha(String namespace, String projectName) {
+//
+//        Project project = findProject(namespace, projectName)
+//
+//        Optional<Commit> devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, DEVELOP_BRANCH))
+//
+//        if (!devLatestCommit.isPresent())
+//            throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from Project '$namespace/$projectName'")
+//
+//        return devLatestCommit.get().getId()
+//    }
+
     /**
      * Get the hash of the latest commit on the 'develop' branch
      *
-     * @param namespace the projectNamespace of the project
-     * @param projectName the projectName of the project
+     * @param namespace
+     * @param projectName
      * @return the SHA-1 hash of the identified commit
      * @throws Exception if the Project does not contains a 'develop' named branch
      */
@@ -123,12 +145,26 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
         Project project = findProject(namespace, projectName)
 
-        Optional<Commit> devLatestCommit = Optional.of(api.getCommitsApi().getCommit(project, DEVELOP_BRANCH))
+        String commitId
 
-        if (!devLatestCommit.isPresent())
-            throw new RuntimeException("Unable to get '$DEVELOP_BRANCH' latest commit from Project '$namespace/$projectName'")
+        try {
+            String request = "curl --header \"PRIVATE-TOKEN: $token\" \"$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=develop\""
 
-        return devLatestCommit.get().getId()
+            String response = request.execute().text
+            if (!response)
+                throw new RuntimeException("No commits were found")
+
+            commitId = new JsonSlurper().parseText(response)[0]?.id
+
+            if (!commitId)
+                throw new RuntimeException("Unable to parse commit id")
+
+        } catch (Exception exception) {
+            logger.error("Unable to get the id of the latest commit whithin '$DEVELOP_BRANCH' ref. Cause: $exception")
+            throw exception
+        }
+
+        return commitId
     }
 
     /**
