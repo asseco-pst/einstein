@@ -1,5 +1,6 @@
 package io.github.asseco.pst.infrastructure
 
+import io.github.asseco.pst.http.GitLabRepositoryExplorer
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
 import io.github.asseco.pst.infrastructure.logs.LoggerFactory
@@ -76,7 +77,8 @@ class Project {
             try {
                 versionCommitSha = RepoExplorerFactory.get().getDevelopBranchLatestCommitSha(namespace, name)
             } catch (Exception exception) {
-                throw new VersionException("Project ${namespace}/${name} does not contains a SNAPSHOT version", exception)
+                throw new VersionException("Unable to get SNAPSHOT sha commit id from Project $namespace/$name. Does " +
+                        "this project contains a '${GitLabRepositoryExplorer.DEVELOP_BRANCH}' branch?", exception)
             }
         } else {
             versionCommitSha = RepoExplorerFactory.get().getTagHash(version.toString(), namespace, name)
