@@ -48,7 +48,7 @@ class SemanticVersion extends Semver {
      * @return true if is not a range
      */
     synchronized static boolean isDeclaredVersion(String aVersion) {
-        return !Pattern.compile("[\\^x*~<>=]").matcher(aVersion).find()
+        return !Pattern.compile("[\\^x*~<>=-]").matcher(aVersion).find()
     }
 
     static String getBiggestVersion(Map<SemanticVersion, String> aVersions) {
