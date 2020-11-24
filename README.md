@@ -49,7 +49,8 @@ The following variables should be set on the environment where Einstein is runni
 
 ##### To validate a project's einstein.yaml file
 ```console
-C:\> einstein.exe validate -i einstein.yaml
+C:\> einstein.exe validate -i C:/project //if file is inside the project folder
+C:\> einstein.exe validate -i . //if file is inside the current folder
 ```
 
 ##### To calculate a project's dependencies file

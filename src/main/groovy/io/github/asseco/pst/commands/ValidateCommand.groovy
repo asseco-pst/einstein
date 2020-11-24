@@ -1,6 +1,6 @@
 package io.github.asseco.pst.commands
 
-
+import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.ProjectDao
 import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.FileValidator
@@ -15,11 +15,11 @@ final class ValidateCommand extends AbstractEinsteinCommand implements Runnable 
     private static final Logger logger = LoggerFactory.getLogger(ValidateCommand.class)
     private String inputFile
 
-    @Option(names = ["-i", "--input"], paramLabel = "<yaml_file>", required = true, description = "YAML file for which the dependencies must be validated")
+    @Option(names = ["-i", "--input"], paramLabel = "<project_folder>", required = true, description = "Project folder that contains the einstein.yaml file for which the dependencies must be validated")
     void setInputFile(String aInputFile) {
 
         FileValidator fileValidator = new FileValidator()
-                .setFilePath(aInputFile)
+                .setFilePath("${aInputFile.trim()}/${Project.EINSTEIN_FILENAME}")
                 .setFileExtension("yaml")
                 .setLogger(logger)
 
@@ -28,7 +28,7 @@ final class ValidateCommand extends AbstractEinsteinCommand implements Runnable 
             System.exit(301)
         }
 
-        this.inputFile = aInputFile.toString().trim()
+        this.inputFile = "${aInputFile.trim()}/${Project.EINSTEIN_FILENAME}".trim()
     }
 
     @Override
@@ -40,7 +40,7 @@ final class ValidateCommand extends AbstractEinsteinCommand implements Runnable 
      * Generates a list of project DAO given a valid YAML file
      *
      * @param aInputFile the path to the YAML file
-     * @return List<ProjectDao>     A list of project DAO
+     * @return List<ProjectDao>       A list of project DAO
      */
     private static List<ProjectDao> generateProjectsDao(String aInputFile) {
         try {
