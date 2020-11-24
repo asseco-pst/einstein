@@ -113,7 +113,7 @@ class Housekeeper {
                 Set<SemanticVersion> incompatibleDeps = []
 
                 dependentVersions.each {
-                    logger.warn("   >> Project ${it.value}' declares ${it.key}")
+                    logger.warn("   >> ${it.value ? "Project '${it.value}'" : "Current project"} declares version ${it.key}")
                     incompatibleDeps << it.key
                 }
 
@@ -178,8 +178,5 @@ class Housekeeper {
                 logger.info("   >> ${d.getRef()}")
             }
         }
-
-        logger.info("Calculated dependencies per project:")
-        logger.info("$readDependencies\n")
     }
 }
