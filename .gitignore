@@ -5,3 +5,6 @@ build/
 .idea/
 **/*.iml
 Playground.groovy
+gradle.properties
+*.log
+gradle.properties
