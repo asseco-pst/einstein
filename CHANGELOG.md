@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+[1.0.0] - 2020-11-25
 ### Added
-- Support Semantic Versioning (i.e: major.minor.patch)
-- Support for Semver version ranges (see [this](https://devhints.io/semver))
+- Support to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+- Support for [Semver version ranges](https://devhints.io/semver)
 - Get projects information from a Gitlab Repository
 - Added `einstein.yaml` file
 - Check compatibility between identified versions of a specific project
 - Save identified dependencies to an external file
-- Add a timeout step that suspends the process if it takes more than 120 seconds processing dependencies
-- Add log4j implementation for logging
+- Add a timeout step that suspends the process if it's taking too long
+- Log4j integration
