@@ -8,7 +8,6 @@ import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 import java.util.concurrent.atomic.AtomicInteger
 
 abstract class Worker implements Runnable, Observer, Observable {
-
     protected String _id
     protected DependenciesHandler depsHandler
 
@@ -30,7 +29,6 @@ abstract class Worker implements Runnable, Observer, Observable {
 
     @Override
     void run() {
-
         work()
         wait4SubscribedMinions()
         _notify()
@@ -67,13 +65,13 @@ abstract class Worker implements Runnable, Observer, Observable {
     }
 
     protected void wait4SubscribedMinions() {
-
-        if (!currentNbrOfSubscribedMinions)
+        if (!currentNbrOfSubscribedMinions) {
             return
+        }
 
         while (currentNbrOfSubscribedMinions.get() > 0) {
             // wait for minions to finish their job... until timeout
-            if(Einstein.instance.timeout())
+            if (Einstein.instance.timeout())
                 throw new EinsteinTimeoutException()
         }
     }

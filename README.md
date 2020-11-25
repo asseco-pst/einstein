@@ -47,8 +47,22 @@ The following variables should be set on the environment where Einstein is runni
 ### As a CLI
 #### Running the executable
 
+##### To validate a project's einstein.yaml file
 ```console
-C:\> einstein.exe -p mycompany/server:2.3.0
+C:\> einstein.exe validate -i C:/project //if file is inside the project folder
+C:\> einstein.exe validate -i . //if file is inside the current folder
+```
+
+##### To calculate a project's dependencies file
+```console
+C:\> einstein.exe calculate -p mycompany/server:2.3.0
+```
+
+All the above commands supports the following options:
+```
+ -lt or --log-to: a path to where to log the output
+ -o or --output: a path to where to save the dependency calculation
+ -v or --verbose: control verbosity. Repeat as many as necessary (-vvv)
 ```
 
 ### As a Groovy Lib

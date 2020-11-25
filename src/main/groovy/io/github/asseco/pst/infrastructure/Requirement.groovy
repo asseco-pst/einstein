@@ -16,7 +16,6 @@ package io.github.asseco.pst.infrastructure
  *
  */
 class Requirement {
-
     String projectNamespace
     String projectName
     String versionRange

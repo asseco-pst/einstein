@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Updated gradlew to 6.6.1
+- Refactored build.gradle due to compatibility with gradlew
+
 ### Added
 - Support for Semver version ranges (see [this](https://devhints.io/semver))
 - Calculate dependencies between projects of a same Product

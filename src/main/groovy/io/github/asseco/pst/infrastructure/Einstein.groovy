@@ -1,15 +1,12 @@
 package io.github.asseco.pst.infrastructure
 
 import groovy.json.JsonBuilder
-import io.github.asseco.pst.Main
-import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
+import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.metrics.Metrics
-
 import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -19,23 +16,13 @@ class Einstein {
     private static final Logger logger = LoggerFactory.getLogger(Einstein.class)
     Metrics depsCalcDuration = new Metrics(Metrics.Category.DEPENDENCIES_CALCULATION_DURATION)
 
-    static boolean isDebugModeOn() {
-
-        if (Main.cliParser) {
-            if (Main.cliParser.einsteinOptions.verbose)
-                return true
-        }
-
-        return EinsteinProperties.instance().isDebugModeOn()
-    }
-
     Path getWorkspaceFolder() {
-
         Path workspaceFolderPath = Paths.get([getUserHome(), EinsteinProperties.instance().getWorkspaceRootFolder()].join("/"))
-
         File folder = new File(workspaceFolderPath.toString())
-        if (!folder.exists())
+
+        if (!folder.exists()) {
             folder.mkdirs()
+        }
 
         return workspaceFolderPath
     }
@@ -45,15 +32,11 @@ class Einstein {
     }
 
     Map<String, String> calcDependencies(List<ProjectDao> aProjectsData) {
-
         Map<String, String> parsedDeps
         DependenciesHandler depsHandler
 
         try {
-
             depsCalcDuration.startTimeTracking()
-
-            RepoExplorerFactory.create()
             depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
             ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
@@ -64,25 +47,23 @@ class Einstein {
             t.join()
 
             UncaughtExceptionsManager.instance.checkUncaughtExceptions()
-
             parsedDeps = depsHandler.getParsedDependencies()
 
             logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
 
             depsCalcDuration.stopTimeTracking()
-            logger.info("Einstein took " + depsCalcDuration.getTimeDuration())
+            logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
 
-        } catch (Exception e) {
-            if(depsHandler)
+        } catch (Exception exception) {
+            if (depsHandler) {
                 depsHandler.getThreadsManager().killLiveThreads()
-            throw e
+            }
+            throw exception
         }
-
         return parsedDeps
     }
 
-    private List<Project> loadProjects(List<ProjectDao> aProjectsData) {
-
+    private static List<Project> loadProjects(List<ProjectDao> aProjectsData) {
         List<Project> projects = []
         aProjectsData.each {
             projects << Project.factory(it.namespace, it.name, it.version)
@@ -91,15 +72,16 @@ class Einstein {
         return projects
     }
 
-    private String getUserHome() {
-
+    private static String getUserHome() {
         String userHome = System.getenv("HOME")
 
-        if (!userHome)
+        if (!userHome) {
             userHome = System.getenv("USERPROFILE")
+        }
 
-        if (!userHome)
+        if (!userHome) {
             throw new Exception("Unable to get value of User Home environment variable")
+        }
 
         return userHome
     }

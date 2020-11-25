@@ -3,7 +3,6 @@ package io.github.asseco.pst.infrastructure.exceptions
 import io.github.asseco.pst.infrastructure.crawlers.Worker
 
 class EThreadUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-
     boolean hasUncaughtExceptions
     Throwable threadTrowable
 
@@ -17,7 +16,6 @@ class EThreadUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
     @Override
     void uncaughtException(Thread thread, Throwable throwable) {
-
         hasUncaughtExceptions = true
         threadTrowable = throwable
 

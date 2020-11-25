@@ -7,3 +7,4 @@ build/
 Playground.groovy
 gradle.properties
 *.log
+gradle.properties

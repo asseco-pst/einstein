@@ -6,14 +6,12 @@ import io.github.asseco.pst.infrastructure.Requirement
 import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
 
 abstract class MinionsFactory {
-
     enum Type {
         CRAWLER,
         VERSION_SEEKER
     }
 
     synchronized static void launch(Type aType, Project aProject, Worker aObserver, DependenciesHandler aDepsHandler, Requirement aRequirement = null) {
-
         Worker minion
 
         switch (aType) {
@@ -26,7 +24,6 @@ abstract class MinionsFactory {
         }
 
         minion.attach(aObserver)
-
         Thread t = aDepsHandler.getThreadsManager().newThread(minion)
         t.setUncaughtExceptionHandler(UncaughtExceptionsManager.instance.factory(aObserver))
         t.start()

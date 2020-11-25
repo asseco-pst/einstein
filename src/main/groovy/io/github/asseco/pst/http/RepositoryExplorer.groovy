@@ -5,8 +5,6 @@ import org.gitlab4j.api.models.Tag
 import java.util.function.Predicate
 
 abstract class RepositoryExplorer {
-
-
     protected String repoURLEnvVar
     protected String tokenEnvVar
 
@@ -14,32 +12,31 @@ abstract class RepositoryExplorer {
     protected String token
 
     protected RepositoryExplorer() {
-
         setRepoURLEnvVar()
         setTokenEnvVar()
 
         loadRepoUrl()
         loadAccessToken()
-
         connect()
     }
 
     protected abstract void setRepoURLEnvVar()
+
     protected abstract void setTokenEnvVar()
 
     protected void loadRepoUrl() {
-
         repoUrl = System.getenv(repoURLEnvVar)
-        if(!repoUrl)
+        if (!repoUrl) {
             throw new IllegalArgumentException("Environment variable '$repoURLEnvVar' is undefined.")
+        }
 
     }
 
     protected void loadAccessToken() {
-
         token = System.getenv(tokenEnvVar)
-        if(!token)
+        if (!token) {
             throw new IllegalArgumentException("Environment variable '$tokenEnvVar' is undefined.")
+        }
     }
 
     abstract void connect()

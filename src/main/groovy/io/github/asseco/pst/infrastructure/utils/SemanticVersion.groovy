@@ -2,20 +2,18 @@ package io.github.asseco.pst.infrastructure.utils
 
 import com.vdurmont.semver4j.Semver
 import io.github.asseco.pst.http.RepoExplorerFactory
-import io.github.asseco.pst.infrastructure.Requirement
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class SemanticVersion extends Semver {
 
+class SemanticVersion extends Semver {
     static final String SNAPSHOT_SUFFIX = "-SNAPSHOT"
 
     SemanticVersion(String aVersion, SemverType aType) {
         super(aVersion, aType)
     }
-
 
     /**
      * Creates a Semver version with Type = NPM
@@ -24,15 +22,13 @@ class SemanticVersion extends Semver {
      * @return a SemanticVersion (extends Semver)
      */
     synchronized static SemanticVersion create(String aVersion) {
-
         SemanticVersion version
 
         try {
-            version = new SemanticVersion(aVersion, SemverType.NPM)
+            version = new SemanticVersion(aVersion.trim(), SemverType.NPM)
         } catch (RuntimeException aException) {
-            throw new VersionException("Unable to instantiate Semver version '$aVersion'", aException)
+            throw new VersionException("Unable to instantiate Semver version '${aVersion}'", aException)
         }
-
         return version
     }
 
@@ -47,11 +43,22 @@ class SemanticVersion extends Semver {
         return hasSnapshotSuffix(aVersion)
     }
 
-    static String getBiggestVersion(Set<SemanticVersion> aVersions) {
+    /**
+     * Checks if the provided version is not a range
+     *
+     * @param aVersion
+     * @return true if is not a range
+     */
+    synchronized static boolean isDeclaredVersion(String aVersion) {
+        return !Pattern.compile("[\\^x*~<>=-]").matcher(aVersion).find()
+    }
 
-        return aVersions.stream().collect().max( { v1, v2 ->
-            v1 <=> v2
-        })
+    static String getBiggestVersion(Map<SemanticVersion, String> aVersions) {
+        return aVersions.entrySet().stream()
+                .max { v1, v2 ->
+                    v1.key <=> v2.key
+                }
+                .map { it.key }
     }
 
     /**
@@ -60,15 +67,14 @@ class SemanticVersion extends Semver {
      * @param aVersions
      * @return true if non compatible versions are found
      */
-    synchronized static boolean hasNonCompatibleVersions(Set<SemanticVersion> aVersions) {
-
+    synchronized static boolean hasNonCompatibleVersions(Map<SemanticVersion, String> aVersions) {
         SemanticVersion latestVer
         boolean foundNoncompatibleVersions = false
 
         aVersions.each {
-            SemanticVersion version = (SemanticVersion) it
+            SemanticVersion version = it.getKey()
 
-            if(latestVer) {
+            if (latestVer) {
                 if (version.diff(latestVer) == VersionDiff.MAJOR)
                     foundNoncompatibleVersions = true
             }
@@ -123,24 +129,23 @@ class SemanticVersion extends Semver {
      * @param aRequirement
      * @return the version value
      */
-    synchronized static String findSatisfyingVersion(Requirement aRequirement) {
-
-        if(isSnapshot(aRequirement.versionRange))
-            return aRequirement.versionRange
+    synchronized static String findSatisfyingVersion(String aNamespace, String aProjectName, String aVersionRange) {
+        if (isSnapshot(aVersionRange) || isDeclaredVersion(aVersionRange)) {
+            return aVersionRange
+        }
 
         List<String> tags = RepoExplorerFactory.get().listTags(
-                aRequirement.getProjectNamespace(),
-                aRequirement.getProjectName(),
+                aNamespace,
+                aProjectName,
                 { tag ->
                     SemanticVersion version = create(tag.getName())
-                    version.satisfies(aRequirement.getVersionRange())
+                    version.satisfies(aVersionRange)
                 })
 
         if(!tags)
-            throw new VersionException("Unable to get satisfying version for declared dependency: ${aRequirement.projectNamespace}/${aRequirement.projectName}: ${aRequirement.versionRange}")
+            throw new VersionException("Unable to get satisfying version for declared dependency: ${aNamespace}/${aProjectName}: ${aVersionRange}")
 
         Semver biggestVersion = getBiggestSanitizedVersion(tags)
-
         return biggestVersion.getOriginalValue()
     }
 
@@ -154,7 +159,7 @@ class SemanticVersion extends Semver {
         try {
             create(aVersion)
             return true
-        } catch (e) {
+        } catch (ignored) {
             return false
         }
     }
@@ -173,8 +178,8 @@ class SemanticVersion extends Semver {
      * Therefore, this class overrides de Semver#compareTo() method in order to respect the
      * desired precedence: <i>1.0.0-SNAPSHOT < 1.0.0-alpha < 1.0.0-beta < 1.0.0-rc < 1.0.0<p></i>
      *
-     * @see <a href="https://semver.org/#spec-item-11">Semver precedences</a>
-     * @see <a href="https://tinyurl.com/y59lvzt8">com.vdurmont.semver4j.Semver#compareTo()</a>
+     * @see <a href="https://semver.org/#spec-item-11"       >       Semver precedences</a>
+     * @see <a href="https://tinyurl.com/y59lvzt8"       >       com.vdurmont.semver4j.Semver#compareTo()</a>
      *
      * @param Semver aVersion
      * @return
@@ -185,22 +190,21 @@ class SemanticVersion extends Semver {
      */
     @Override
     int compareTo(Semver aVersion) {
-
         SemanticVersion comparingVersion = (SemanticVersion) aVersion
 
-        if(this.isSnapshot() || comparingVersion.isSnapshot())
+        if (this.isSnapshot() || comparingVersion.isSnapshot()) {
             return compareWithSnapshot(comparingVersion)
-
+        }
         return super.compareTo(aVersion)
     }
 
     private int compareWithSnapshot(SemanticVersion aVersion) {
-
         int result = comparePrefixTo(aVersion)
 
-        if(result == 0){
-            if(this.isSnapshot())
+        if (result == 0) {
+            if (this.isSnapshot()) {
                 return -1
+            }
             return 1
         }
         return result
@@ -224,7 +228,6 @@ class SemanticVersion extends Semver {
     }
 
     private int comparePrefixTo(SemanticVersion aVersion) {
-
         SemanticVersion v1 = create(getPrefix(this))
         SemanticVersion v2 = create(getPrefix(aVersion))
 

@@ -1,12 +1,10 @@
 package io.github.asseco.pst.infrastructure
 
-
 import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.Worker
-
+import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.ThreadsManager
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class DependenciesHandler {
 
@@ -20,32 +18,30 @@ class DependenciesHandler {
 
     DependenciesHandler(List<Project> aProjects) {
         projects = aProjects
-
         scannedDeps = []
+
         crawledProjects = []
         housekeeper = new Housekeeper()
         threadsManager = new ThreadsManager()
     }
 
     void calcDependencies(Project aProject, Worker aObserver) {
-
-        if (isAlreadyCrawled(aProject))
+        if (isAlreadyCrawled(aProject)) {
             return
-        addCrawledProject(aProject)
+        }
 
-        logger.debug("Launching FileParserMinion to calculate dependencies of Project $aProject.ref")
+        addCrawledProject(aProject)
+        logger.debug("Launching FileParserMinion to calculate dependencies of project ${aProject.ref}")
         MinionsFactory.launch(MinionsFactory.Type.CRAWLER, aProject, aObserver, this)
     }
 
     private boolean isAlreadyCrawled(Project aProject) {
-
         String ref = aProject.ref
         if (crawledProjects.contains(ref)) {
             logger.debug("Project '${ref}' was already crawled...")
             return true
         }
         crawledProjects << ref
-
         return false
     }
 
@@ -65,8 +61,9 @@ class DependenciesHandler {
      * @param aProject
      */
     void addScannedProject(Project aProject) {
-        if (!scannedDeps.contains(aProject))
+        if (!scannedDeps.contains(aProject)) {
             scannedDeps << aProject
+        }
     }
 
     Map<String, String> getParsedDependencies() {
