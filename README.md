@@ -3,40 +3,23 @@
 [![CircleCI](https://circleci.com/gh/asseco-pst/einstein/tree/develop.svg?style=svg)](https://circleci.com/gh/asseco-pst/einstein/tree/develop)
 [![CodeFactor](https://www.codefactor.io/repository/github/asseco-pst/einstein/badge)](https://www.codefactor.io/repository/github/asseco-pst/einstein)
 
-### Getting Started
+**einstein** is a dependency management tool that aims to simplify and automate software projects dependencies calculation.
 
-Import using Maven or Gradle:
+Software products are commonly composed of multiple projects, and those projects relate to each other at some kind of level. It's important
+to guarantee that those relationships are based on the projects' versions so one can assure that the they can evolve without compromising such
+relationships.
 
-```xml
-<dependency>
-    <groupId>io.github.asseco-pst</groupId>
-    <artifactId>einstein</artifactId>
-    <version>...</version>
-</dependency>
-```
+This said, einstein allows us:
+  1. To register project's dependencies on a single file that is placed within the project itself.
+  2. To calculate the dependencies tree of one or more projects, based on the above file
 
-```groovy
-compile group: 'io.github.asseco-pst', name: 'einstein', version: '...'
-```
+### Requirements
+During dependencies calculation, the einstein tool needs to fetch projects' extra information from a central repository.
 
-### Build from source
-1. Clone the project
-```sh
-git clone git@gitlab.dcs.exictos.com:devops/einstein.git
-```
+At its current version, einstein is prepared to communicate to any Gitlab instance, through its api, so it assumes that declared dependencies represents projects that are all
+stored in a single Gitlab instance.
 
-2. Run the following command on the root of the project:
-```sh
-gradlew build
-```
-
-## Usage
-
-#### Environment setup
-Einstein communicates with your repository management system (at the moment only supports GitLab). In order to authenticate
-Einstein uses environment variables.
-
-The following variables should be set on the environment where Einstein is running:
+In order to establish a successful connection to the Gitlab Api, it's necessary to create the following environment variables on the machine where einstein will be executed:
 
 |Variable|Description|Example|
 |--------|-----------|-------|
@@ -44,39 +27,43 @@ The following variables should be set on the environment where Einstein is runni
 |`GITLAB_TOKEN`|A personal access token||
 
 
-### As a CLI
-#### Running the executable
+### Getting Started
 
-##### To validate a project's einstein.yaml file
-```console
-C:\> einstein.exe validate -i C:/project //if file is inside the project folder
-C:\> einstein.exe validate -i . //if file is inside the current folder
+#### einstein.yaml
+In order to calculate dependencies between projects one must register them first.
+To do so, create a file, named `einstein.yaml`, within the root folder of desired projects. This file must respect the [YAML 1.2 specs](https://yaml.org/spec/1.2/spec.html)
+
+Dependencies registered on this file must uniquely identify its projects within the Gitlab instance.
+This is achieved by identifying the dependency with:
+- The Gitlab namespace of dependency's project
+- The dependency's project Gitlab name
+
+##### Example
+
+```yaml
+namespaceA:
+ - projectA: =[version]
+ - ...
+
+otherNamespace:
+ - projectB: =[version]
+ - projectC: =[version]
+ - ...
 ```
 
-##### To calculate a project's dependencies file
-```console
-C:\> einstein.exe calculate -p mycompany/server:2.3.0
+Declared versions must be specified according [semver specifications](https://semver.org/spec/v2.0.0.html#semantic-versioning-specification-semver)
+and can be specified as ranges as well.
+
+```yaml
+namespaceA:
+ - projectA: = ^1.0
+ - ...
+
+namespaceB:
+ - projectB: = ~1.0
+ - projectC: = 1.0.0
+ - ...
 ```
-
-All the above commands supports the following options:
-```
- -lt or --log-to: a path to where to log the output
- -o or --output: a path to where to save the dependency calculation
- -v or --verbose: control verbosity. Repeat as many as necessary (-vvv)
-```
-
-### As a Groovy Lib
-
-Calculates the runtime dependencies for project mycompany/server in version 2.3.0:
-```groovy
- 
-Einstein.calcDependencies(new ProjectDAO("server", "mycompany", "2.3.0"))
-// or Einstein.calcDependencies(ProjectDAO.fromFullName("mycompany/server:2.3.0"))
-
-Map dependencies = Einstein.getDpManager().getFinalDependencies()
-```
-
-### Semver Ranges
 
 The following table contains all version ranges accepted by Einstein. More information [here](https://devhints.io/semver)
 
@@ -98,29 +85,64 @@ The following table contains all version ranges accepted by Einstein. More infor
 |*|any version||
 |x|same||
 
-### Requirements file (since 2.0.0)
+#### Usage
+##### As a CLI
 
-The requirements file is a `yaml` file which contains all the runtime dependencies of the project.  
-This file must respect the [YAML 1.2 specs](https://yaml.org/spec/1.2/spec.html) and should have the following structure:
+Imagine we're validating/calculating the dependencies for a project named 'server' on namespace 'middleware', for 2.0.0 version:
 
-```yaml
-namespaceA:
- - projectA: =~1.2.3
- - projectB: =~2.3.0
-namespaceB:
- - projectC: =~3.2.3
- - projectD: =~3.5.2
+###### To validate server's einstein.yaml dependencies
+```console
+C:\> einstein validate -i [path]/server // if command is ran outside the project's root folder
+C:\> einstein validate -i . // if command is ran inside the  project's root folder
 ```
 
-A real example could be:
-```yaml
-middleware:
- - server: =~3.4.6
- - irc_ws_bb: =~4.5.3
-canais-n-presenciais:
- - backoffice: =~2.3.5
+###### To calculate server's dependencies
+```console
+C:\> einstein calculate -p middleware/server:2.0.0
 ```
 
-### More info
+All the above commands supports the following options:
+```
+ -lt or --log-to: a path to where to log the output
+ -o or --output: a path to where to save the dependency calculation
+ -v or --verbose: control verbosity. Repeat as many as necessary (-vvv)
+```
 
-Know more about this Project [here](https://confluence.pst.asseco.com/display/CHAN/Einstein)
+##### As a Groovy Lib
+
+Import using Maven:
+
+```xml
+<dependency>
+    <groupId>io.github.asseco-pst</groupId>
+    <artifactId>einstein</artifactId>
+    <version>...</version>
+</dependency>
+```
+
+Import using Gradle:
+
+```groovy
+compile group: 'io.github.asseco-pst', name: 'einstein', version: '...'
+```
+
+Then use einstein as following:
+
+```groovy
+
+Einstein.calcDependencies(new ProjectDAO("server", "middleware", "2.0.0"))
+// or Einstein.calcDependencies(ProjectDAO.fromFullName("middleware/server:2.0.0"))
+
+Map dependencies = Einstein.getDpManager().getFinalDependencies()
+```
+
+##### Build from source
+1. Clone the project
+```sh
+git clone git@gitlab.dcs.exictos.com:devops/einstein.git
+```
+
+2. Run the following command on the root of the project:
+```sh
+gradlew build
+```
