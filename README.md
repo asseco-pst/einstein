@@ -139,7 +139,7 @@ Map dependencies = Einstein.getDpManager().getFinalDependencies()
 ##### Build from source
 1. Clone the project
 ```sh
-git clone git@gitlab.dcs.exictos.com:devops/einstein.git
+git clone git@github.com:asseco-pst/einstein.git
 ```
 
 2. Run the following command on the root of the project:
