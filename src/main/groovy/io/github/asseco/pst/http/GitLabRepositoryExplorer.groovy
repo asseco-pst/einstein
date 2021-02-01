@@ -155,7 +155,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
         String commitId
 
         try {
-            String request = "curl --header \"PRIVATE-TOKEN: $token\" \"$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH\""
+            String request = "curl --insecure --header \"PRIVATE-TOKEN: $token\" \"$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH\""
             String response = request.execute().text
 
             if (!response)

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+[1.0.2] - 2020-01-02
+### Fixed
+- On Gitlab Api `curl` requests, accept insecure connections
+
 [1.0.1] - 2020-12-28
 ### Fixed
 - `shadow jar` does now excludes `logging` related artifacts dependencies.
