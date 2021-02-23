@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+[1.0.3] - 2020-02-23
+### Fixed
+- Fixed issue when running `curl` command within a linux SO
+
 [1.0.2] - 2020-01-02
 ### Fixed
 - On Gitlab Api `curl` requests, accept insecure connections
