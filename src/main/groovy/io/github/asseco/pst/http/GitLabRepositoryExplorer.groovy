@@ -155,8 +155,10 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
         String commitId
 
         try {
-            String request = "curl --insecure --header \"PRIVATE-TOKEN: $token\" \"$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH\""
-            String response = request.execute().text
+            String[] curlCmd = ["curl" , "--insecure",  "-H", "PRIVATE-TOKEN: $token", "$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH"]
+            logger.info("Executing `curl` command: ${curlCmd.toString()}")
+
+            String response = curlCmd.execute().text
 
             if (!response)
                 throw new RuntimeException("Unable to fetch commits for ref '$DEVELOP_BRANCH'")
