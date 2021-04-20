@@ -21,7 +21,7 @@ class SemanticVersion extends Semver {
      * @param aVersion
      * @return a SemanticVersion (extends Semver)
      */
-    synchronized static SemanticVersion create(String aVersion) {
+    static SemanticVersion create(String aVersion) {
         SemanticVersion version
 
         try {
@@ -39,7 +39,7 @@ class SemanticVersion extends Semver {
      * @param aVersion
      * @return true if the provided @param represents a SNAPSHOT version
      */
-    synchronized static boolean isSnapshot(String aVersion) {
+    static boolean isSnapshot(String aVersion) {
         return hasSnapshotSuffix(aVersion)
     }
 
@@ -49,7 +49,7 @@ class SemanticVersion extends Semver {
      * @param aVersion
      * @return true if is not a range
      */
-    synchronized static boolean isDeclaredVersion(String aVersion) {
+    static boolean isDeclaredVersion(String aVersion) {
         return !Pattern.compile("[\\^x*~<>=-]").matcher(aVersion).find()
     }
 
@@ -67,7 +67,7 @@ class SemanticVersion extends Semver {
      * @param aVersions
      * @return true if non compatible versions are found
      */
-    synchronized static boolean hasNonCompatibleVersions(Map<SemanticVersion, String> aVersions) {
+    static boolean hasNonCompatibleVersions(Map<SemanticVersion, String> aVersions) {
         SemanticVersion latestVer
         boolean foundNoncompatibleVersions = false
 
@@ -129,7 +129,7 @@ class SemanticVersion extends Semver {
      * @param aRequirement
      * @return the version value
      */
-    synchronized static String findSatisfyingVersion(String aNamespace, String aProjectName, String aVersionRange) {
+    static String findSatisfyingVersion(String aNamespace, String aProjectName, String aVersionRange) {
         if (isSnapshot(aVersionRange) || isDeclaredVersion(aVersionRange)) {
             return aVersionRange
         }
@@ -155,7 +155,7 @@ class SemanticVersion extends Semver {
      * @param aVersion
      * @return false if it's not a valid Semantic version
      */
-    synchronized static boolean isValid(String aVersion) {
+    static boolean isValid(String aVersion) {
         try {
             create(aVersion)
             return true

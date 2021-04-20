@@ -19,7 +19,6 @@ class DependenciesHandler {
     DependenciesHandler(List<Project> aProjects) {
         projects = aProjects
         scannedDeps = []
-
         crawledProjects = []
         housekeeper = new Housekeeper()
         threadsManager = new ThreadsManager()
@@ -35,7 +34,7 @@ class DependenciesHandler {
         MinionsFactory.launch(MinionsFactory.Type.CRAWLER, aProject, aObserver, this)
     }
 
-    private boolean isAlreadyCrawled(Project aProject) {
+    private synchronized boolean isAlreadyCrawled(Project aProject) {
         String ref = aProject.ref
         if (crawledProjects.contains(ref)) {
             logger.debug("Project '${ref}' was already crawled...")
@@ -51,7 +50,7 @@ class DependenciesHandler {
      * i.e, einstein did not yet identified the project dependencies itself.
      * @param aProject
      */
-    private void addCrawledProject(Project aProject) {
+    private synchronized void addCrawledProject(Project aProject) {
         crawledProjects << aProject.ref
     }
 
@@ -60,7 +59,7 @@ class DependenciesHandler {
      * A scanned Project means that einstein already have identified Project's dependencies
      * @param aProject
      */
-    void addScannedProject(Project aProject) {
+    synchronized void addScannedProject(Project aProject) {
         if (!scannedDeps.contains(aProject)) {
             scannedDeps << aProject
         }

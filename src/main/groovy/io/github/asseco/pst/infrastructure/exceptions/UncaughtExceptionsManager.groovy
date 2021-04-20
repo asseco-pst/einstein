@@ -7,7 +7,7 @@ class UncaughtExceptionsManager {
 
     List<EThreadUncaughtExceptionHandler> uncaughtExceptions = []
 
-    EThreadUncaughtExceptionHandler factory(Worker aObserver) {
+    synchronized EThreadUncaughtExceptionHandler factory(Worker aObserver) {
 
         EThreadUncaughtExceptionHandler uncaughtExceptionHandler = new EThreadUncaughtExceptionHandler(aObserver)
         uncaughtExceptions << uncaughtExceptionHandler
