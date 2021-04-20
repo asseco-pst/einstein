@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Fixed
+- Every time a calculation os performed, clean collection of threads' uncaught exceptions, eventually thrown on previous
+  calculations.
 - Applied some missing `syncronized` blocks and removed some others unrequired
 ### Changed
 - Increased timeout duration from 300 s to 600 seconds
