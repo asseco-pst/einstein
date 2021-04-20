@@ -28,7 +28,7 @@ class Project {
         dependencies = []
     }
 
-    static Project factory(String aNamespace, String aName, String aVersion, String aParentProjectRef = "") {
+    synchronized static Project factory(String aNamespace, String aName, String aVersion, String aParentProjectRef = "") {
         Project project
 
         try {
