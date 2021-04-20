@@ -11,7 +11,7 @@ abstract class Worker implements Runnable, Observer, Observable {
     protected String _id
     protected DependenciesHandler depsHandler
 
-    synchronized List<Worker> observers
+    protected List<Worker> observers
     protected AtomicInteger currentNbrOfSubscribedMinions
     EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 

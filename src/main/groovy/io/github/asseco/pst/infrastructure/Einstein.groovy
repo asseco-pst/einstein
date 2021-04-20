@@ -36,6 +36,7 @@ class Einstein {
         DependenciesHandler depsHandler
 
         try {
+            UncaughtExceptionsManager.instance.reset()
             depsCalcDuration.startTimeTracking()
             depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 

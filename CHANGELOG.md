@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+[1.0.4] - 2020-04-20
+### Fixed
+- Every time a calculation os performed, clean collection of threads' uncaught exceptions, eventually thrown on previous
+  calculations.
+- Applied some missing `syncronized` blocks and removed some others unrequired
+### Changed
+- Increased timeout duration from 300 s to 600 seconds
+
 [1.0.3] - 2020-02-23
 ### Fixed
 - Fixed issue when running `curl` command within a linux SO
