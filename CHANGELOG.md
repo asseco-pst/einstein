@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.0.5] - 2021-04-29
+### Fixed
+- Commented out dependency exclusion for log4j in shadow jar build. This was preventing logging to console.
 
-[1.0.4] - 2020-04-20
+[1.0.4] - 2021-04-20
 ### Fixed
 - Every time a calculation os performed, clean collection of threads' uncaught exceptions, eventually thrown on previous
   calculations.
@@ -16,11 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Increased timeout duration from 300 s to 600 seconds
 
-[1.0.3] - 2020-02-23
+[1.0.3] - 2021-02-23
 ### Fixed
 - Fixed issue when running `curl` command within a linux SO
 
-[1.0.2] - 2020-01-02
+[1.0.2] - 2021-01-02
 ### Fixed
 - On Gitlab Api `curl` requests, accept insecure connections
 
