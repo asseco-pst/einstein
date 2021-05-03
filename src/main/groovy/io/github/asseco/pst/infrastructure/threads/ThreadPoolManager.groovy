@@ -17,8 +17,8 @@ class ThreadPoolManager {
     void initializePool() {
         logger.debug("Initializing the thread pool executor!")
         threadPoolExecutor = new ObserverThreadPoolExecutor(
-                0, Integer.MAX_VALUE,
-                60L, TimeUnit.SECONDS,
+                35, Integer.MAX_VALUE,
+                120L, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>(),
                 new EThreadFactory()
         )
