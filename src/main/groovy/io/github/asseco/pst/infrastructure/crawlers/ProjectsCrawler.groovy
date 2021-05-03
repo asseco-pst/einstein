@@ -20,7 +20,6 @@ class ProjectsCrawler extends Worker {
     private void calcDependencies() {
         depsHandler.getProjects().each { project ->
             depsHandler.addScannedProject(project)
-
             logger.debug("Calculating dependencies for project '${project.name}'")
             depsHandler.calcDependencies(project, this)
         }

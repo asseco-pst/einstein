@@ -2,14 +2,18 @@ package io.github.asseco.pst.infrastructure
 
 import groovy.json.JsonBuilder
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
+import io.github.asseco.pst.infrastructure.crawlers.Worker
 import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
 import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.metrics.Metrics
+import io.github.asseco.pst.infrastructure.threads.ThreadPoolManager
+import io.github.asseco.pst.infrastructure.threads.UncaughtExceptionHandler
 import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import org.slf4j.Logger
 
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.concurrent.Future
 
 @Singleton
 class Einstein {
@@ -36,29 +40,26 @@ class Einstein {
         DependenciesHandler depsHandler
 
         try {
+            ThreadPoolManager.instance.initializePool()
             UncaughtExceptionsManager.instance.reset()
+
             depsCalcDuration.startTimeTracking()
             depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
             ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
-
-            Thread t = new Thread(pCrawler)
-            t.setUncaughtExceptionHandler(UncaughtExceptionsManager.instance.factory(pCrawler))
-            t.start()
-            t.join()
+            ThreadPoolManager.instance.submitWorker(pCrawler).get()
 
             UncaughtExceptionsManager.instance.checkUncaughtExceptions()
             parsedDeps = depsHandler.getParsedDependencies()
 
             logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
+            ThreadPoolManager.instance.shutdownPool()
 
             depsCalcDuration.stopTimeTracking()
             logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
 
         } catch (Exception exception) {
-            if (depsHandler) {
-                depsHandler.getThreadsManager().killLiveThreads()
-            }
+            ThreadPoolManager.instance.shutdownPool()
             throw exception
         }
         return parsedDeps
