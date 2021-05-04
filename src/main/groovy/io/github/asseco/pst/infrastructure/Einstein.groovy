@@ -50,13 +50,11 @@ class Einstein {
             parsedDeps = depsHandler.getParsedDependencies()
 
             logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
-            ThreadPoolManager.instance.shutdownPool()
 
             depsCalcDuration.stopTimeTracking()
             logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
 
         } catch (Exception exception) {
-            ThreadPoolManager.instance.shutdownPool()
             throw exception
         }
         return parsedDeps
@@ -87,5 +85,9 @@ class Einstein {
 
     boolean timeout() {
         return (EinsteinProperties.instance().getMaxDuration() <= depsCalcDuration.getTimelapse())
+    }
+
+    void shutdown() {
+        ThreadPoolManager.instance.shutdownPool()
     }
 }

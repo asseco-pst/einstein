@@ -35,11 +35,15 @@ abstract class AbstractEinsteinCommand {
             Map<String, String> parsedDependencies = Einstein.instance.calcDependencies(projects)
 
             logger.info("Finishing up...")
+
+            Einstein.instance.shutdown()
             handleParsedDependencies(parsedDependencies)
 
         } catch (Exception exception) {
             logger.error("Could not finish the dependencies calculation. Cause: ${exception}")
             logger.debug("Exception thrown: ", exception)
+
+            Einstein.instance.shutdown()
             System.exit(401)
         }
 

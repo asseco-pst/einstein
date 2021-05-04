@@ -15,6 +15,11 @@ class ThreadPoolManager {
     private ObserverThreadPoolExecutor threadPoolExecutor
 
     void initializePool() {
+        if (threadPoolExecutor && !threadPoolExecutor.isShutdown()) {
+            logger.debug("Thread pool executor already initialized!")
+            return
+        }
+
         logger.debug("Initializing the thread pool executor!")
         threadPoolExecutor = new ObserverThreadPoolExecutor(
                 35, Integer.MAX_VALUE,
@@ -35,6 +40,11 @@ class ThreadPoolManager {
     }
 
     void shutdownPool() {
+        if(!threadPoolExecutor || threadPoolExecutor.isShutdown()) {
+            logger.debug("Thread pool executor not initialized or already shutdown!")
+            return
+        }
+
         logger.debug("Shutting down thread pool executor!")
         threadPoolExecutor.shutdown() // Disable new tasks from being submitted
         try {
