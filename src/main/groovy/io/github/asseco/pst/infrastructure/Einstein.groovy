@@ -36,27 +36,22 @@ class Einstein {
         Map<String, String> parsedDeps
         DependenciesHandler depsHandler
 
-        try {
-            ThreadPoolManager.instance.initializePool()
-            UncaughtExceptionsManager.instance.reset()
+        ThreadPoolManager.instance.initializePool()
+        UncaughtExceptionsManager.instance.reset()
 
-            depsCalcDuration.startTimeTracking()
-            depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
+        depsCalcDuration.startTimeTracking()
+        depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
-            ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
-            ThreadPoolManager.instance.submitWorker(pCrawler).get()
+        ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
+        ThreadPoolManager.instance.submitWorker(pCrawler).get()
 
-            UncaughtExceptionsManager.instance.checkUncaughtExceptions()
-            parsedDeps = depsHandler.getParsedDependencies()
+        UncaughtExceptionsManager.instance.checkUncaughtExceptions()
+        parsedDeps = depsHandler.getParsedDependencies()
 
-            logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
+        logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
+        depsCalcDuration.stopTimeTracking()
 
-            depsCalcDuration.stopTimeTracking()
-            logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
-
-        } catch (Exception exception) {
-            throw exception
-        }
+        logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
         return parsedDeps
     }
 
