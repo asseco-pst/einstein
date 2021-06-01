@@ -6,7 +6,7 @@
 **einstein** is a dependency management tool that aims to simplify and automate software projects dependencies calculation.
 
 Software products are commonly composed of multiple projects, and those projects relate to each other at some kind of level. It's important
-to guarantee that those relationships are based on the projects' versions so one can assure that the they can evolve without compromising such
+to guarantee that those relationships are based on the projects' versions so one can assure that they can evolve without compromising such
 relationships.
 
 This said, einstein allows us:
@@ -88,15 +88,34 @@ The following table contains all version ranges accepted by Einstein. More infor
 #### Usage
 ##### As a CLI
 
-Imagine we're validating/calculating the dependencies for a project named 'server' on namespace 'middleware', for 2.0.0 version:
+1. Download the latest application binary from the [Releases section](https://github.com/asseco-pst/einstein/releases).
+(zip/tar file)
+2. Extract it and make it available within your system
+3. Execute the `einstein -h` command to be sure that `einstein` is already available.
+
+Now, imagine we're validating/calculating the dependencies for a project named 'server' with namespace 'middleware', for 2.0.0 version:
 
 ###### To validate server's einstein.yaml dependencies
+The `validate` command allows you to locally validate the dependencies of a local project by running `einstein` within the
+project's local working copy folder. `einstein` will start its execution by considering the `einstein.yaml` file located
+at the project's root folder and then, for each of the dependencies found within this file, it will check, through the 
+configured Gitlab instance's api, the dependencies of those identified projects.
+
+This way, you can check (validate) the project's dependencies even before launching a new release.
+
 ```console
 C:\> einstein validate -i [path]/server // if command is ran outside the project's root folder
 C:\> einstein validate -i . // if command is ran inside the  project's root folder
 ```
 
 ###### To calculate server's dependencies
+By using the `calculate` command, `einstein` assumes that it'll fetch all dependencies through the configured Gitlab
+instance's api, so you don't have necessarily to run this command within any project's folder... you can run it anywhere
+on your system, assuming tha `einstein` is already available on the system's path.
+
+Since you're running `einstein` outside any project's scope, on this command you have to specify the project and version
+from which you want to fetch dependencies. The project is identified by its Gitlab name and namespace.
+
 ```console
 C:\> einstein calculate -p middleware/server:2.0.0
 ```
