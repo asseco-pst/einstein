@@ -3,7 +3,6 @@ package io.github.asseco.pst.infrastructure
 import io.github.asseco.pst.infrastructure.crawlers.MinionsFactory
 import io.github.asseco.pst.infrastructure.crawlers.Worker
 import io.github.asseco.pst.infrastructure.logs.LoggerFactory
-import io.github.asseco.pst.infrastructure.utils.ThreadsManager
 import org.slf4j.Logger
 
 class DependenciesHandler {
@@ -11,7 +10,6 @@ class DependenciesHandler {
     private static final Logger logger = LoggerFactory.getLogger(DependenciesHandler.class)
     List<Project> projects
     List<Project> scannedDeps
-    ThreadsManager threadsManager
 
     private Housekeeper housekeeper
     private Set<String> crawledProjects
@@ -21,7 +19,6 @@ class DependenciesHandler {
         scannedDeps = []
         crawledProjects = []
         housekeeper = new Housekeeper()
-        threadsManager = new ThreadsManager()
     }
 
     void calcDependencies(Project aProject, Worker aObserver) {

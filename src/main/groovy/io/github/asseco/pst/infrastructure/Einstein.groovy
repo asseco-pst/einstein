@@ -5,6 +5,7 @@ import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
 import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.metrics.Metrics
+import io.github.asseco.pst.infrastructure.threads.ThreadPoolManager
 import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import org.slf4j.Logger
 
@@ -35,32 +36,22 @@ class Einstein {
         Map<String, String> parsedDeps
         DependenciesHandler depsHandler
 
-        try {
-            UncaughtExceptionsManager.instance.reset()
-            depsCalcDuration.startTimeTracking()
-            depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
+        ThreadPoolManager.instance.initializePool()
+        UncaughtExceptionsManager.instance.reset()
 
-            ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
+        depsCalcDuration.startTimeTracking()
+        depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
 
-            Thread t = new Thread(pCrawler)
-            t.setUncaughtExceptionHandler(UncaughtExceptionsManager.instance.factory(pCrawler))
-            t.start()
-            t.join()
+        ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
+        ThreadPoolManager.instance.submitWorker(pCrawler).get()
 
-            UncaughtExceptionsManager.instance.checkUncaughtExceptions()
-            parsedDeps = depsHandler.getParsedDependencies()
+        UncaughtExceptionsManager.instance.checkUncaughtExceptions()
+        parsedDeps = depsHandler.getParsedDependencies()
 
-            logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
+        logger.info("Detected dependencies:\n ${new JsonBuilder(parsedDeps).toPrettyString()}\n")
+        depsCalcDuration.stopTimeTracking()
 
-            depsCalcDuration.stopTimeTracking()
-            logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
-
-        } catch (Exception exception) {
-            if (depsHandler) {
-                depsHandler.getThreadsManager().killLiveThreads()
-            }
-            throw exception
-        }
+        logger.info("It took ${depsCalcDuration.getTimeDuration()} to calculate the dependencies.")
         return parsedDeps
     }
 
@@ -89,5 +80,9 @@ class Einstein {
 
     boolean timeout() {
         return (EinsteinProperties.instance().getMaxDuration() <= depsCalcDuration.getTimelapse())
+    }
+
+    void shutdown() {
+        ThreadPoolManager.instance.shutdownPool()
     }
 }

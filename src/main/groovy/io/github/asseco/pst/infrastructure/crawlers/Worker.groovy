@@ -2,7 +2,6 @@ package io.github.asseco.pst.infrastructure.crawlers
 
 import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Einstein
-import io.github.asseco.pst.infrastructure.exceptions.EThreadUncaughtExceptionHandler
 import io.github.asseco.pst.infrastructure.exceptions.EinsteinTimeoutException
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -13,7 +12,6 @@ abstract class Worker implements Runnable, Observer, Observable {
 
     protected List<Worker> observers
     protected AtomicInteger currentNbrOfSubscribedMinions
-    EThreadUncaughtExceptionHandler uncaughtExceptionHandler
 
     Worker(DependenciesHandler aDepsHandler) {
         depsHandler = aDepsHandler
@@ -31,7 +29,6 @@ abstract class Worker implements Runnable, Observer, Observable {
     void run() {
         work()
         wait4SubscribedMinions()
-        _notify()
     }
 
     @Override
@@ -54,10 +51,6 @@ abstract class Worker implements Runnable, Observer, Observable {
     @Override
     void update() {
         updateCurrentNbrOfSubscribedMinions(-1)
-    }
-
-    void setUncaughtExceptionsHandler(EThreadUncaughtExceptionHandler aUncaughtExceptionsHandler) {
-        uncaughtExceptionHandler = aUncaughtExceptionsHandler
     }
 
     protected updateCurrentNbrOfSubscribedMinions(int aVal) {

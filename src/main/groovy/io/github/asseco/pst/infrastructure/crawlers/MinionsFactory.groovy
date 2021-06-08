@@ -3,7 +3,7 @@ package io.github.asseco.pst.infrastructure.crawlers
 import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.Requirement
-import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
+import io.github.asseco.pst.infrastructure.threads.ThreadPoolManager
 
 abstract class MinionsFactory {
     enum Type {
@@ -24,8 +24,6 @@ abstract class MinionsFactory {
         }
 
         minion.attach(aObserver)
-        Thread t = aDepsHandler.getThreadsManager().newThread(minion)
-        t.setUncaughtExceptionHandler(UncaughtExceptionsManager.instance.factory(aObserver))
-        t.start()
+        ThreadPoolManager.instance.executeWorker(minion)
     }
 }

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.1.0] - 2021-06-08
+### Changed
+- Update `README` file
+- Updated einstein thread handling process. It now uses a custom ThreadPoolExecutor with an initial pool size of 35 threads
+
 [1.0.5] - 2021-04-29
 ### Fixed
 - Commented out dependency exclusion for log4j in shadow jar build. This was preventing logging to console.
