@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Update `README` file
+- Updated einstein thread handling process. It now uses a custom ThreadPoolExecutor with a initial pool size of 35 threads
 
 [1.0.5] - 2021-04-29
 ### Fixed
