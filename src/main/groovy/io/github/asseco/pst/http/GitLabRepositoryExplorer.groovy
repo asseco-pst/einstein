@@ -155,8 +155,10 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
         String commitId
 
         try {
+            logger.info("Trying to get the latest commit within '$DEVELOP_BRANCH' for project ${namespace}/${projectName}")
+
             String[] curlCmd = ["curl" , "--insecure",  "-H", "PRIVATE-TOKEN: $token", "$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH"]
-            logger.info("Executing `curl` command: ${curlCmd.toString()}")
+            logger.debug("Executing `curl` command: ${curlCmd.toString()}")
 
             String response = curlCmd.execute().text
 
@@ -169,7 +171,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
                 throw new RuntimeException("Unable to parse commit id")
 
         } catch (Exception exception) {
-            logger.warn("Unable to get the id of the latest commit whithin '$DEVELOP_BRANCH' ref. Cause: ${exception.getMessage()}")
+            logger.warn("Unable to get the id of the latest commit within '$DEVELOP_BRANCH' ref. Cause: ${exception.getMessage()}")
             logger.debug("Exception thrown:", exception)
             throw exception
         }

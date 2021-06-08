@@ -40,7 +40,7 @@ class Project {
                     .build()
 
         } catch (exception) {
-            logger.warn("Unable to instantiate Project '${aNamespace}/${aName}}' for version '${aVersion}'")
+            logger.warn("Unable to instantiate Project '${aNamespace}/${aName}' for version '${aVersion}'")
             logger.debug("Exception thrown:", exception)
             throw exception
         }
