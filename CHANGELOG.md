@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+[1.2.0] - 2021-06-23
+### Changed
+- Changed SemanticVersion class to fetch the equivalent tag version from Gitlab for a declared version.
 
 [1.1.0] - 2021-06-08
 ### Changed

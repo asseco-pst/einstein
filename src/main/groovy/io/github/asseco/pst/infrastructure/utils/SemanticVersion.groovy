@@ -3,7 +3,9 @@ package io.github.asseco.pst.infrastructure.utils
 import com.vdurmont.semver4j.Semver
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
+import org.gitlab4j.api.models.Tag
 
+import java.util.function.Predicate
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -98,7 +100,7 @@ class SemanticVersion extends Semver {
 
         Map<String, Semver> sanitizedTags = new HashMap<String, Semver>()
 
-        aVersions.each {tag ->
+        aVersions.each { String tag ->
             sanitizedTags.put(sanitizeVersion(tag), create(tag))
         }
 
@@ -130,19 +132,32 @@ class SemanticVersion extends Semver {
      * @return the version value
      */
     static String findSatisfyingVersion(String aNamespace, String aProjectName, String aVersionRange) {
-        if (isSnapshot(aVersionRange) || isDeclaredVersion(aVersionRange)) {
+        if (isSnapshot(aVersionRange)) {
             return aVersionRange
         }
 
-        List<String> tags = RepoExplorerFactory.get().listTags(
-                aNamespace,
-                aProjectName,
-                { tag ->
-                    SemanticVersion version = create(tag.getName())
-                    version.satisfies(aVersionRange)
-                })
+        Predicate<? super Tag> predicate = {
+            Tag tag ->
+                SemanticVersion version = create(tag.getName())
+                version.satisfies(aVersionRange)
+        }
 
-        if(!tags)
+        if (isDeclaredVersion(aVersionRange)) {
+            predicate = {
+                Tag tag ->
+                    SemanticVersion version = create(tag.getName())
+                    version.isEquivalentTo(aVersionRange)
+            }
+        }
+
+        List<String> tags = RepoExplorerFactory.get()
+                .listTags(
+                        aNamespace,
+                        aProjectName,
+                        predicate
+                )
+
+        if (!tags)
             throw new VersionException("Unable to get satisfying version for declared dependency: ${aNamespace}/${aProjectName}: ${aVersionRange}")
 
         Semver biggestVersion = getBiggestSanitizedVersion(tags)
