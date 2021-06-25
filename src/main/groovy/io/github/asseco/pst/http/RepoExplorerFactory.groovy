@@ -1,8 +1,7 @@
 package io.github.asseco.pst.http
 
-
+import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 
 /**
