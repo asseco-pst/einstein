@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.2.2] - 2021-06-25
+### Fixed
+- Fixed missing classifier that was causing the slim library to be overwritten by the fat one (needed to lose some additional weight) 
+
 [1.2.1] - 2021-06-25
 ### Changed
 - Changed the publication plugin in order to avoid sending a fat jar to maven and, in this case, send a standard java library
