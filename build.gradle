@@ -3,6 +3,7 @@ plugins {
     id 'signing'
     id 'maven-publish'
     id 'java'
+    id 'java-library'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'edu.sc.seis.launch4j' version '2.4.4'
@@ -75,9 +76,11 @@ task javadocJarGen(type: Jar, dependsOn: javadoc) {
 
 publishing {
     publications {
-        shadow(MavenPublication) {
+//        shadow(MavenPublication) {
+//            project.shadow.component(it)
+        library(MavenPublication) {
+            from components.java
             artifactId = 'einstein'
-            project.shadow.component(it)
             pom {
                 name = 'einstein'
                 description = 'Einstein is a dependency management application that is used to calculate project dependencies.'
@@ -122,5 +125,6 @@ publishing {
 }
 
 signing {
-    sign publishing.publications.shadow
+//    sign publishing.publications.shadow
+    sign publishing.publications.library
 }
