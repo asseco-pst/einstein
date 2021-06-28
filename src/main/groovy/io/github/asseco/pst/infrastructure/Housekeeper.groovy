@@ -1,9 +1,9 @@
 package io.github.asseco.pst.infrastructure
 
 import com.vdurmont.semver4j.Semver
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class Housekeeper {
     private static final Logger logger = LoggerFactory.getLogger(Housekeeper.class)
