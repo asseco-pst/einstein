@@ -2,8 +2,8 @@ package io.github.asseco.pst.infrastructure.crawlers
 
 import io.github.asseco.pst.infrastructure.DependenciesHandler
 import io.github.asseco.pst.infrastructure.Project
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class FileParserMinion extends Crawler {
     private static final Logger logger = LoggerFactory.getLogger(FileParserMinion.class)

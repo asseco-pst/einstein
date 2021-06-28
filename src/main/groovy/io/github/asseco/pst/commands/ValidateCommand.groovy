@@ -2,7 +2,7 @@ package io.github.asseco.pst.commands
 
 import io.github.asseco.pst.infrastructure.Project
 import io.github.asseco.pst.infrastructure.ProjectDao
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
+import io.github.asseco.pst.commands.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.FileValidator
 import org.slf4j.Logger
 import org.yaml.snakeyaml.Yaml

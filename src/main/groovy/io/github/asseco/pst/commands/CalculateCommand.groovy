@@ -2,7 +2,7 @@ package io.github.asseco.pst.commands
 
 
 import io.github.asseco.pst.infrastructure.ProjectDao
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
+import io.github.asseco.pst.commands.logs.LoggerFactory
 import org.slf4j.Logger
 import picocli.CommandLine.Command
 import picocli.CommandLine.HelpCommand

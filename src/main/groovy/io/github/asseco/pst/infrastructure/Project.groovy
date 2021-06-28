@@ -3,9 +3,9 @@ package io.github.asseco.pst.infrastructure
 import io.github.asseco.pst.http.GitLabRepositoryExplorer
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.yaml.snakeyaml.Yaml
 
 class Project {

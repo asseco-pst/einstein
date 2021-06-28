@@ -1,12 +1,12 @@
 package io.github.asseco.pst.http
 
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import groovy.json.JsonSlurper
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Project
 import org.gitlab4j.api.models.Tag
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.util.function.Predicate
 import java.util.stream.Stream
@@ -157,7 +157,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
         try {
             logger.info("Trying to get the latest commit within '$DEVELOP_BRANCH' for project ${namespace}/${projectName}")
 
-            String[] curlCmd = ["curl" , "--insecure",  "-H", "PRIVATE-TOKEN: $token", "$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH"]
+            String[] curlCmd = ["curl", "--insecure", "-H", "PRIVATE-TOKEN: $token", "$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH"]
             logger.debug("Executing `curl` command: ${curlCmd.toString()}")
 
             String response = curlCmd.execute().text
