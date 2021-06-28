@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+[1.3.0] - 2021-06-28
+### Changed
+- Refactored logger logic. Split logic between infrastructure and cli code. Default LoggerFactory in use is the one provided
+by SL4J. Custom LoggerFactory now only in use in the commands package. This avoids potential conflicts when using Einstein as a library
 
 [1.2.2] - 2021-06-25
 ### Fixed

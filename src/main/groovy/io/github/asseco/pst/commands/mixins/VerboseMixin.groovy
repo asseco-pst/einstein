@@ -1,7 +1,7 @@
 package io.github.asseco.pst.commands.mixins
 
 
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
+import io.github.asseco.pst.commands.logs.LoggerFactory
 import org.apache.log4j.Level
 import picocli.CommandLine.Option
 

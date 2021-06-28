@@ -3,11 +3,11 @@ package io.github.asseco.pst.infrastructure
 import groovy.json.JsonBuilder
 import io.github.asseco.pst.infrastructure.crawlers.ProjectsCrawler
 import io.github.asseco.pst.infrastructure.exceptions.UncaughtExceptionsManager
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import io.github.asseco.pst.infrastructure.metrics.Metrics
 import io.github.asseco.pst.infrastructure.threads.ThreadPoolManager
 import io.github.asseco.pst.infrastructure.utils.EinsteinProperties
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.nio.file.Path
 import java.nio.file.Paths

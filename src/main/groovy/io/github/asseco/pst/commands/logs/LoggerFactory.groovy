@@ -1,4 +1,4 @@
-package io.github.asseco.pst.infrastructure.logs
+package io.github.asseco.pst.commands.logs
 
 import org.apache.log4j.ConsoleAppender
 import org.apache.log4j.FileAppender

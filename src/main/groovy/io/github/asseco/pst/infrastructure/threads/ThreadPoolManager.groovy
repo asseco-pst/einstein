@@ -2,8 +2,8 @@ package io.github.asseco.pst.infrastructure.threads
 
 
 import io.github.asseco.pst.infrastructure.crawlers.Worker
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.util.concurrent.Future
 import java.util.concurrent.SynchronousQueue

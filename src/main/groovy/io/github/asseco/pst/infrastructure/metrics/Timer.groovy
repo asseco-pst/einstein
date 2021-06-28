@@ -2,8 +2,8 @@ package io.github.asseco.pst.infrastructure.metrics
 
 import groovy.time.TimeCategory
 import groovy.time.TimeDuration
-import io.github.asseco.pst.infrastructure.logs.LoggerFactory
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.text.SimpleDateFormat
 
