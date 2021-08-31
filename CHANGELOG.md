@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+
+[1.3.1] - 2021-08-31
+### Fixed
+- Fix project's fullname parsing in `calculate command` context so einstein can recognize projects placed within Gitlab
+subgroups.
+
 [1.3.0] - 2021-06-28
 ### Changed
 - Refactored logger logic. Split logic between infrastructure and cli code. Default LoggerFactory in use is the one provided
