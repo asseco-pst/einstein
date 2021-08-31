@@ -14,8 +14,8 @@ class ProjectDao {
     }
 
     static ProjectDao fromFullName(String aFullName) {
-        String namespace = aFullName.split("/").first()
-        String name = aFullName.split("/")[1].split(":").first()
+        String namespace = aFullName.substring(0, aFullName.lastIndexOf("/"))
+        String name = aFullName.substring(aFullName.lastIndexOf("/") + 1, aFullName.indexOf(":"))
 
         String version = aFullName.split(":").last()
         return new ProjectDao(name, namespace, version)
