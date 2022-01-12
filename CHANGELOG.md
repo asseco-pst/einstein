@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+[1.3.2] - 2022-01-12
+### Fixed
+- Fixed method that compares which version is bigger, the comparison now is done by the same method
 
+### Changed
+- Changed log4j version to a version that has the security fix that resolves the remote code execution issue
 
 [1.3.1] - 2021-08-31
 ### Fixed
