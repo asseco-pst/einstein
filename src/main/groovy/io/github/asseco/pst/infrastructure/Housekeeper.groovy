@@ -144,7 +144,7 @@ class Housekeeper {
 
         while (versionsIterator.hasNext()) {
             SemanticVersion currVersion = versionsIterator.next().key
-            if (currVersion.toString() != biggestVersion.getOriginalValue())
+            if (currVersion.getOriginalValue() != biggestVersion.getOriginalValue())
                 versionsIterator.remove()
         }
     }
