@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import java.nio.file.Paths
 
-@Singleton
 class Einstein {
     private static final Logger logger = LoggerFactory.getLogger(Einstein.class)
     Metrics depsCalcDuration = new Metrics(Metrics.Category.DEPENDENCIES_CALCULATION_DURATION)
@@ -40,7 +39,7 @@ class Einstein {
         UncaughtExceptionsManager.instance.reset()
 
         depsCalcDuration.startTimeTracking()
-        depsHandler = new DependenciesHandler(loadProjects(aProjectsData))
+        depsHandler = new DependenciesHandler(loadProjects(aProjectsData),this)
 
         ProjectsCrawler pCrawler = new ProjectsCrawler(depsHandler)
         ThreadPoolManager.instance.submitWorker(pCrawler).get()

@@ -155,7 +155,7 @@ Einstein.calcDependencies(new ProjectDAO("server", "middleware", "2.0.0"))
 Map dependencies = Einstein.getDpManager().getFinalDependencies()
 
 //In order to provide a clean shutdown, when finishing your application, also call the following:
-Einstein.instance.shutdown()
+einstein.shutdown()
 ```
 
 ##### Build from source
