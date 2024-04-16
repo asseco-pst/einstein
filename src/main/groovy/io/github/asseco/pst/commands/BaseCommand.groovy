@@ -1,7 +1,9 @@
 package io.github.asseco.pst.commands
 
-import io.github.asseco.pst.commands.logs.LoggerFactory
+
+import io.github.asseco.pst.infrastructure.configproperties.properties.PropertiesLoader
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.Help
@@ -10,11 +12,13 @@ import picocli.CommandLine.HelpCommand
 
 @Command(subcommands = [CalculateCommand.class, ValidateCommand.class, HelpCommand.class])
 class BaseCommand implements Runnable {
-    private static final Logger logger = LoggerFactory.getLogger(BaseCommand.class)
+
+    static Logger logger
 
     static void main(String[] args) {
-        LoggerFactory.setLoggerToConsole()
         int exitCode = 0
+        PropertiesLoader.getLogBackProperties(args[0])
+        logger = LoggerFactory.getLogger(BaseCommand.class)
 
         try {
             exitCode = new CommandLine(new BaseCommand())

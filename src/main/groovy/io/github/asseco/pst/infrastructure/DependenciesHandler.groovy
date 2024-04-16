@@ -13,12 +13,15 @@ class DependenciesHandler {
 
     private Housekeeper housekeeper
     private Set<String> crawledProjects
+    private Einstein einstein
 
-    DependenciesHandler(List<Project> aProjects) {
+
+    DependenciesHandler(List<Project> aProjects, Einstein aEinstein) {
         projects = aProjects
         scannedDeps = []
         crawledProjects = []
         housekeeper = new Housekeeper()
+        einstein = aEinstein
     }
 
     void calcDependencies(Project aProject, Worker aObserver) {
@@ -66,4 +69,9 @@ class DependenciesHandler {
         housekeeper.resolve(scannedDeps)
         return housekeeper.getCleanDeps()
     }
+
+     Einstein getEinstein(){
+        return einstein
+    }
+
 }

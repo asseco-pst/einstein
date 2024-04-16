@@ -1,12 +1,11 @@
 package io.github.asseco.pst.commands
 
-import io.github.asseco.pst.commands.logs.LoggerFactory
-import io.github.asseco.pst.commands.mixins.LogOutputMixin
+
 import io.github.asseco.pst.commands.mixins.SaveToFileMixin
-import io.github.asseco.pst.commands.mixins.VerboseMixin
 import io.github.asseco.pst.infrastructure.Einstein
 import io.github.asseco.pst.infrastructure.ProjectDao
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import picocli.CommandLine.Mixin
 
 abstract class AbstractEinsteinCommand {
@@ -16,10 +15,6 @@ abstract class AbstractEinsteinCommand {
 
     @Mixin
     protected SaveToFileMixin saveToFileMixin = new SaveToFileMixin(logger)
-    @Mixin
-    protected LogOutputMixin logOutputMixin = new LogOutputMixin(logger)
-    @Mixin
-    protected VerboseMixin verboseMixin
 
     /**
      * Calculates a list of dependencies for a given project
@@ -27,23 +22,24 @@ abstract class AbstractEinsteinCommand {
      * @param projects
      */
     protected void calculateDependencies(List<ProjectDao> projects) {
+        Einstein einstein = new Einstein()
         try {
             logger.info("Checking if the necessary environment variables where setup...")
             checkGitlabEnvVariables()
 
             logger.info("Calculating dependencies for provided projects...")
-            Map<String, String> parsedDependencies = Einstein.instance.calcDependencies(projects)
+            Map<String, String> parsedDependencies = einstein.calcDependencies(projects)
 
             logger.info("Finishing up...")
 
-            Einstein.instance.shutdown()
+            einstein.shutdown()
             handleParsedDependencies(parsedDependencies)
 
         } catch (Exception exception) {
             logger.error("Could not finish the dependencies calculation. Cause: ${exception}")
             logger.debug("Exception thrown: ", exception)
 
-            Einstein.instance.shutdown()
+            einstein.shutdown()
             System.exit(401)
         }
 

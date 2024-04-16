@@ -7,10 +7,24 @@ plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'edu.sc.seis.launch4j' version '2.4.4'
+    id 'org.cyclonedx.bom' version '1.7.2'
+}
+cyclonedxBom {
+    includeConfigs = ["runtimeClasspath"]
+
+    skipConfigs = ["compileClasspath", "testCompileClasspath"]
+
+    projectType = "application"
+    schemaVersion = "1.4"
+    destination = file("build/reports")
+    outputName = "CycloneDX-Sbom"
+    outputFormat = "all"
+    includeBomSerialNumber = true
+    componentVersion = "2.0.0"
 }
 
 group 'io.github.asseco-pst'
-version "1.4.0-SNAPSHOT"
+version "1.4.0"
 
 repositories {
     mavenCentral()
@@ -26,13 +40,13 @@ dependencies {
     // https://mvnrepository.com/artifact/org.gitlab4j/gitlab4j-api
     implementation 'org.gitlab4j:gitlab4j-api:4.15.4'
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
-    implementation 'org.yaml:snakeyaml:1.27'
+    implementation 'org.yaml:snakeyaml:2.2'
     // https://mvnrepository.com/artifact/com.vdurmont/semver4j
     implementation 'com.vdurmont:semver4j:2.2.0'
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
-    implementation 'org.slf4j:slf4j-log4j12:1.7.30'
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    implementation 'ch.qos.logback:logback-classic:1.3.11'
     testImplementation 'junit:junit:4.12'
 }
 
@@ -50,7 +64,7 @@ createExe {
     mainClassName = 'io.github.asseco.pst.commands.BaseCommand'
     headerType = "console"
     icon = "${projectDir}/assets/einstein.ico"
-    jar = "${rootDir}/build/libs/${rootProject.name}-${project.version}.jar"
+    jar = "${rootDir}/build/libs/${rootProject.name}-${project.version}-shadow.jar"
     outfile = "${rootProject.name}-${project.version}.exe"
 }
 
@@ -59,10 +73,11 @@ shadowJar {
 //    classifier = ''
     classifier = 'shadow'
 
-//    dependencies {
-//        exclude(dependency('org.slf4j:slf4j-log4j12:1.7.30'))
-//        exclude(dependency('org.apache.logging.log4j:log4j-core:2.13.3'))
-//    }
+    /*
+    dependencies {
+        exclude(dependency('org.slf4j:slf4j-log4j12:1.7.30'))
+        exclude(dependency('org.apache.logging.log4j:log4j-core:2.13.3'))
+    }*/
 }
 
 task sourcesJarGen(type: Jar, dependsOn: classes) {
@@ -129,3 +144,5 @@ signing {
 //    sign publishing.publications.shadow
     sign publishing.publications.library
 }
+
+build.finalizedBy('cyclonedxBom')

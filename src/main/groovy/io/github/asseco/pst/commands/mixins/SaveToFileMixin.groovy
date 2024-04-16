@@ -5,6 +5,9 @@ import io.github.asseco.pst.infrastructure.utils.FileValidator
 import org.slf4j.Logger
 import picocli.CommandLine.Option
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 final class SaveToFileMixin {
     private Logger logger
 
@@ -34,8 +37,12 @@ final class SaveToFileMixin {
 
     void writeToSaveFile(Map<String, String> aParsedDeps) {
         try {
+            LocalDateTime currentDateTime = LocalDateTime.now()
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
+
             this.logger.info("Writing calculated dependencies into file ${this.saveToFilePath}...")
-            new File(this.saveToFilePath).write(new JsonBuilder(aParsedDeps).toPrettyString())
+            File outputFile = new File(this.saveToFilePath,"parsedDependencies_" + currentDateTime.format(formatter) + ".txt")
+            outputFile.write(new JsonBuilder(aParsedDeps).toPrettyString())
         } catch (Exception exception) {
             this.logger.error("Unable to save results into output file '${this.saveToFilePath}'. Cause: ${exception.getMessage()}")
             System.exit(202)
