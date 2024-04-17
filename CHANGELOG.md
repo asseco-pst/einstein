@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+[1.3.3] - 2023-02-22
+### Fixed
+- Fixed exportation on custom tags
+
 [1.3.2] - 2022-01-12
 ### Fixed
 - Fixed method that compares which version is bigger, the comparison now is done by the same method
