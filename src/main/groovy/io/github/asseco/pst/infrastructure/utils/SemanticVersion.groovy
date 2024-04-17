@@ -8,6 +8,7 @@ import org.gitlab4j.api.models.Tag
 import java.util.function.Predicate
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import java.util.stream.Collectors
 
 
 class SemanticVersion extends Semver {
@@ -160,8 +161,19 @@ class SemanticVersion extends Semver {
         if (!tags)
             throw new VersionException("Unable to get satisfying version for declared dependency: ${aNamespace}/${aProjectName}: ${aVersionRange}")
 
-        Semver biggestVersion = getBiggestSanitizedVersion(tags)
+        Semver biggestVersion = getBiggestSanitizedVersion(filterCustomTags(aVersionRange, tags))
         return biggestVersion.getOriginalValue()
+    }
+
+    private static List<String> filterCustomTags(String aVersionRange, List<String> tags) {
+        if (aVersionRange.contains("-")) {
+            List<String> filteredTags = tags.stream()
+                    .filter(t -> t.contains("-") && t.contains(aVersionRange.substring(aVersionRange.indexOf("-"))))
+                    .collect(Collectors.toList())
+
+            tags = filteredTags
+        }
+        tags
     }
 
     /**
