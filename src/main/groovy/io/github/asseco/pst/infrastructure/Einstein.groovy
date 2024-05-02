@@ -16,7 +16,7 @@ class Einstein {
     private static final Logger logger = LoggerFactory.getLogger(Einstein.class)
     Metrics depsCalcDuration = new Metrics(Metrics.Category.DEPENDENCIES_CALCULATION_DURATION)
 
-    Path getWorkspaceFolder() {
+    static Path getWorkspaceFolder() {
         Path workspaceFolderPath = Paths.get([getUserHome(), EinsteinProperties.instance().getWorkspaceRootFolder()].join("/"))
         File folder = new File(workspaceFolderPath.toString())
 
