@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed - 2023-06-11
 - Changed log4j to logback and sl4j instead
-- Remove einstein singleton to allow multiple einsten executions (PTDOPFU1171648I-916) 
-
+- Remove einstein singleton to allow multiple einstein executions
+- 
 [1.3.2] - 2022-01-12
 ### Fixed
 - Fixed method that compares which version is bigger, the comparison now is done by the same method
