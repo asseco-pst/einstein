@@ -229,7 +229,7 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             return tags
                     .filter { tag -> SemanticVersion.isValid(tag.getName()) }
                     .filter(predicate)
-                    .collect { tag -> SemanticVersion.create(tag.getName()).getOriginalValue() }
+                    .collect { tag -> SemanticVersion.create(tag.getName()).getVersion()}
 
         } catch (Exception exception) {
             logger.warn("Could not get tags for project ${projectName}. Cause: ${exception.getMessage()}", exception)

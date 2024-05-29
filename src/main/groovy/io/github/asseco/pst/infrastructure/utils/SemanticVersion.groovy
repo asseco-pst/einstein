@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure.utils
 
-import com.vdurmont.semver4j.Semver
+import org.semver4j.Semver
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
 import org.gitlab4j.api.models.Tag
@@ -14,8 +14,8 @@ import java.util.stream.Collectors
 class SemanticVersion extends Semver {
     static final String SNAPSHOT_SUFFIX = "-SNAPSHOT"
 
-    SemanticVersion(String aVersion, SemverType aType) {
-        super(aVersion, aType)
+    SemanticVersion(String aVersion) {
+        super(aVersion)
     }
 
     /**
@@ -28,7 +28,7 @@ class SemanticVersion extends Semver {
         SemanticVersion version
 
         try {
-            version = new SemanticVersion(aVersion.trim(), SemverType.NPM)
+            version = new SemanticVersion(aVersion.trim())
         } catch (RuntimeException aException) {
             throw new VersionException("Unable to instantiate Semver version '${aVersion}'", aException)
         }
@@ -109,7 +109,7 @@ class SemanticVersion extends Semver {
             (a <=> b)
         }
 
-        return sanitizedTags[satisfies.getOriginalValue()]
+        return sanitizedTags[satisfies.getVersion()]
     }
 
     /**
@@ -162,7 +162,7 @@ class SemanticVersion extends Semver {
             throw new VersionException("Unable to get satisfying version for declared dependency: ${aNamespace}/${aProjectName}: ${aVersionRange}")
 
         Semver biggestVersion = getBiggestSanitizedVersion(filterCustomTags(aVersionRange, tags))
-        return biggestVersion.getOriginalValue()
+        return biggestVersion.getVersion()
     }
 
     private static List<String> filterCustomTags(String aVersionRange, List<String> tags) {
@@ -217,7 +217,7 @@ class SemanticVersion extends Semver {
      */
     @Override
     int compareTo(Semver aVersion) {
-        SemanticVersion comparingVersion = (SemanticVersion) aVersion
+        SemanticVersion comparingVersion = new SemanticVersion(aVersion.getVersion())
 
         if (this.isSnapshot() || comparingVersion.isSnapshot()) {
             return compareWithSnapshot(comparingVersion)
