@@ -1,6 +1,6 @@
 package io.github.asseco.pst.infrastructure
 
-import com.vdurmont.semver4j.Semver
+import org.semver4j.Semver
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -93,7 +93,7 @@ class Housekeeper {
             }
 
             filterAcceptedDependencies(dependencies).each { acceptedDependency ->
-                cleanDeps.put(acceptedDependency.id, acceptedDependency.version.getOriginalValue())
+                cleanDeps.put(acceptedDependency.id, acceptedDependency.version.getVersion())
             }
         }
     }
@@ -136,7 +136,7 @@ class Housekeeper {
 
     private void keepBiggestVersion(Map<SemanticVersion, String> aVersions) {
         List<String> versions = aVersions.entrySet().stream().collect({
-            it.getKey().getOriginalValue()
+            it.getKey().getVersion()
         })
 
         Semver biggestVersion = SemanticVersion.getBiggestSanitizedVersion(versions)
@@ -144,7 +144,7 @@ class Housekeeper {
 
         while (versionsIterator.hasNext()) {
             SemanticVersion currVersion = versionsIterator.next().key
-            if (currVersion.getOriginalValue() != biggestVersion.getOriginalValue())
+            if (currVersion.getVersion() != biggestVersion.getVersion())
                 versionsIterator.remove()
         }
     }
