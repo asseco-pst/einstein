@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.4.0] - 2024-06-03
 ### Added
 - Added new semver library to support feature tags (PTEFMBL1191828I-4655)
 
