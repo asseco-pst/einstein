@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.5.0] - 2024-06-19
+### Fixed
+- process to get the latest commit from a default branch, only considering develop branch but some projects is using main branch
+
 [1.4.0] - 2024-06-03
 ### Added
 - Added new semver library to support feature tags (PTEFMBL1191828I-4655)
