@@ -17,6 +17,7 @@ import java.util.stream.Stream
 class GitLabRepositoryExplorer extends RepositoryExplorer {
     private static final Logger logger = LoggerFactory.getLogger(GitLabRepositoryExplorer.class)
     final static String DEVELOP_BRANCH = "develop"
+    final static String MAIN_BRANCH = "main"
 
     GitLabApi api
 
@@ -141,12 +142,12 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 //    }
 
     /**
-     * Get the hash of the latest commit on the 'develop' branch
+     * Get the hash of the latest commit on the 'develop' or 'main' branch
      *
      * @param namespace
      * @param projectName
      * @return the SHA-1 hash of the identified commit
-     * @throws Exception if the Project does not contains a 'develop' named branch
+     * @throws Exception if the Project does not contains a 'develop' or 'main' named branch
      */
     @Override
     synchronized String getDevelopBranchLatestCommitSha(String namespace, String projectName) {
@@ -155,20 +156,14 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
         String commitId
 
         try {
-            logger.info("Trying to get the latest commit within '$DEVELOP_BRANCH' for project ${namespace}/${projectName}")
+            commitId = getLastCommitShaFromBranch(project, DEVELOP_BRANCH)
 
-            String[] curlCmd = ["curl", "--insecure", "-H", "PRIVATE-TOKEN: $token", "$repoUrl/api/v4/projects/${project.id}/repository/commits?ref_name=$DEVELOP_BRANCH"]
-            logger.debug("Executing `curl` command: ${curlCmd.toString()}")
-
-            String response = curlCmd.execute().text
-
-            if (!response)
-                throw new RuntimeException("Unable to fetch commits for ref '$DEVELOP_BRANCH'")
-
-            commitId = new JsonSlurper().parseText(response)[0]?.id
+            if (!commitId){
+                commitId = getLastCommitShaFromBranch(project, MAIN_BRANCH)
+            }
 
             if (!commitId)
-                throw new RuntimeException("Unable to parse commit id")
+                throw new RuntimeException("Unable to fetch commits for ref '$DEVELOP_BRANCH' or from $MAIN_BRANCH")
 
         } catch (Exception exception) {
             logger.warn("Unable to get the id of the latest commit within '$DEVELOP_BRANCH' ref. Cause: ${exception.getMessage()}")
@@ -178,6 +173,16 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 
         logger.debug("Found latest commit ${commitId}")
         return commitId
+    }
+    private String getLastCommitShaFromBranch(Project aProject, String aBranch){
+        logger.info("Trying to get the latest commit within '$aBranch' for project ${aProject.getNamespace().getName()}/${aProject.getName()}")
+
+        String[] curlCmd = ["curl", "--insecure", "-H", "PRIVATE-TOKEN: $token", "$repoUrl/api/v4/projects/${aProject.id}/repository/commits?ref_name=$aBranch"]
+        logger.debug("Executing `curl` command: ${curlCmd.toString()}")
+
+        String response = curlCmd.execute().text
+
+        return new JsonSlurper().parseText(response)[0]?.id
     }
 
     /**
