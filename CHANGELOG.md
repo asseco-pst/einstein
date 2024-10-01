@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.5.1] - 2024-10-01
+### Fixed
+- process to retrieve the latest commits from the default branch. The process was previously considering the 'main' branch for snapshots, but it should have been using the 'next' branch instead.
+
+### Security
+- Updated **org.codehaus.groovy:groovy** from `3.0.5` to `3.0.7` to address several vulnerabilities, including deserialization issues that could lead to remote code execution.
+  - CVE: [CVE-2020-17521](https://nvd.nist.gov/vuln/detail/CVE-2020-17521)
+  - Severity: High
+
+- Updated **org.gitlab4j:gitlab4j-api** from `4.15.4` to `6.0.0-rc.5` to fix various security vulnerabilities and improve overall security posture.
+  - The update addresses potential issues around API token exposure and improper input validation.
+  - CVE: N/A (Security-related update without a public CVE reference)
+  - Severity: Medium
+
+- Updated **org.yaml:snakeyaml** from `1.27` to `2.0` to fix a critical vulnerability that allowed the parsing of malicious YAML documents, leading to remote code execution.
+  - CVE: [CVE-2022-25857](https://nvd.nist.gov/vuln/detail/CVE-2022-25857)
+  - Severity: Critical
+
+- Replaced **org.slf4j:slf4j-log4j12** `1.7.30` with **org.slf4j:slf4j-reload4j** `2.0.16`, as the older version had security risks related to log4j vulnerabilities. The new `slf4j-reload4j` mitigates these risks by improving log handling.
+  - CVE: [CVE-2019-17571](https://nvd.nist.gov/vuln/detail/CVE-2019-17571)
+  - Severity: High
+
+- Updated **junit:junit** from `4.12` to `4.13.1` to patch security vulnerabilities related to improper handling of test data, which could lead to potential code execution or resource exhaustion.
+  - CVE: N/A
+  - Severity: Low
+  
 [1.5.0] - 2024-06-19
 ### Fixed
 - process to get the latest commit from a default branch, only considering develop branch but some projects is using main branch
