@@ -17,7 +17,7 @@ import java.util.stream.Stream
 class GitLabRepositoryExplorer extends RepositoryExplorer {
     private static final Logger logger = LoggerFactory.getLogger(GitLabRepositoryExplorer.class)
     final static String DEVELOP_BRANCH = "develop"
-    final static String MAIN_BRANCH = "main"
+    final static String NEXT_BRANCH = "next"
 
     GitLabApi api
 
@@ -159,11 +159,11 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
             commitId = getLastCommitShaFromBranch(project, DEVELOP_BRANCH)
 
             if (!commitId){
-                commitId = getLastCommitShaFromBranch(project, MAIN_BRANCH)
+                commitId = getLastCommitShaFromBranch(project, NEXT_BRANCH)
             }
 
             if (!commitId)
-                throw new RuntimeException("Unable to fetch commits for ref '$DEVELOP_BRANCH' or from $MAIN_BRANCH")
+                throw new RuntimeException("Unable to fetch commits for ref '$DEVELOP_BRANCH' or from $NEXT_BRANCH")
 
         } catch (Exception exception) {
             logger.warn("Unable to get the id of the latest commit within '$DEVELOP_BRANCH' ref. Cause: ${exception.getMessage()}")
