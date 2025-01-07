@@ -142,6 +142,36 @@ class GitLabRepositoryExplorer extends RepositoryExplorer {
 //    }
 
     /**
+     * Get the hash of the latest commit on the specific branch
+     *
+     * @param namespace
+     * @param projectName
+     * @return the SHA-1 hash of the identified commit
+     * @throws Exception if the Project does not contains a specific named branch
+     */
+    @Override
+    synchronized String getSpecificBranchLatestCommitSha(String namespace, String projectName, String branchName) {
+        Project project = findProject(namespace, projectName)
+        logger.debug("Found project ${project.nameWithNamespace}")
+        String commitId
+
+        try {
+            commitId = getLastCommitShaFromBranch(project, branchName)
+
+            if (!commitId)
+                throw new RuntimeException("Unable to fetch commits for ref '$branchName'")
+
+        } catch (Exception exception) {
+            logger.warn("Unable to get the id of the latest commit within '$branchName' ref. Cause: ${exception.getMessage()}")
+            logger.debug("Exception thrown:", exception)
+            throw exception
+        }
+
+        logger.debug("Found latest commit ${commitId}")
+        return commitId
+    }
+
+    /**
      * Get the hash of the latest commit on the 'develop' or 'main' branch
      *
      * @param namespace

@@ -1,5 +1,6 @@
 package io.github.asseco.pst.infrastructure.utils
 
+import io.github.asseco.pst.infrastructure.interfaces.Version
 import org.semver4j.Semver
 import io.github.asseco.pst.http.RepoExplorerFactory
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
@@ -11,7 +12,7 @@ import java.util.regex.Pattern
 import java.util.stream.Collectors
 
 
-class SemanticVersion extends Semver {
+class SemanticVersion extends Semver implements Version {
     static final String SNAPSHOT_SUFFIX = "-SNAPSHOT"
 
     SemanticVersion(String aVersion) {
@@ -279,4 +280,5 @@ class SemanticVersion extends Semver {
 
         return version
     }
+
 }

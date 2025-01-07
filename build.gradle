@@ -10,7 +10,7 @@ plugins {
 }
 
 group 'io.github.asseco-pst'
-version "1.5.1"
+version "1.5.2"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ dependencies {
     // https://mvnrepository.com/artifact/info.picocli/picocli
     implementation 'info.picocli:picocli:4.5.2'
     // https://mvnrepository.com/artifact/org.gitlab4j/gitlab4j-api
-    implementation 'org.gitlab4j:gitlab4j-api:6.0.0-rc.5'
+    implementation 'org.gitlab4j:gitlab4j-api:5.8.0'
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     implementation 'org.yaml:snakeyaml:2.0'
     // https://mvnrepository.com/artifact/org.semver4j/semver4j
