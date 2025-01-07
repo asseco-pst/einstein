@@ -10,7 +10,7 @@ class ProjectDao {
     ProjectDao(String aName, String aNamespace, String aVersion) {
         this.name = aName
         this.namespace = aNamespace
-        this.version = SemanticVersion.findSatisfyingVersion(aNamespace, aName, aVersion)
+        this.version = validateSemanticVersion(aNamespace, aName, aVersion)
     }
 
     static ProjectDao fromFullName(String aFullName) {
@@ -20,4 +20,12 @@ class ProjectDao {
         String version = aFullName.split(":").last()
         return new ProjectDao(name, namespace, version)
     }
+
+    private String validateSemanticVersion(String aNamespace, String aName, String aVersion){
+        if (aVersion.matches("\\b\\d+(\\.\\d+)*(-[a-zA-Z0-9._]+)?\\b")) {
+            aVersion = SemanticVersion.findSatisfyingVersion(aNamespace, aName, aVersion)
+        }
+        return aVersion
+    }
+
 }
