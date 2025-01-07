@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[1.5.2] - 2024-01-07
+[1.5.2] - 2025-01-07
 ### Fixed
 - process to retrieve the latest commits from a specific branch.
 
