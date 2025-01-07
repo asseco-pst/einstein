@@ -22,7 +22,7 @@ class ProjectDao {
     }
 
     private String validateSemanticVersion(String aNamespace, String aName, String aVersion){
-        if (aVersion.matches("\\b\\d+(\\.\\d+)*(-[a-zA-Z0-9._]+)?\\b")) {
+        if (aVersion.matches("\\b\\d+(\\.\\d+)*(-[a-zA-Z0-9._-]+)?\\b")) {
             aVersion = SemanticVersion.findSatisfyingVersion(aNamespace, aName, aVersion)
         }
         return aVersion
