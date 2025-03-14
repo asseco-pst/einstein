@@ -2,7 +2,10 @@ package io.github.asseco.pst.infrastructure
 
 import io.github.asseco.pst.http.GitLabRepositoryExplorer
 import io.github.asseco.pst.http.RepoExplorerFactory
+import io.github.asseco.pst.http.RepositoryExplorer
+import io.github.asseco.pst.infrastructure.enums.BranchesEnum
 import io.github.asseco.pst.infrastructure.exceptions.VersionException
+import io.github.asseco.pst.infrastructure.interfaces.Version
 import io.github.asseco.pst.infrastructure.utils.SemanticVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,7 +16,7 @@ class Project {
     static final String EINSTEIN_FILENAME = "einstein.yaml"
 
     String name
-    SemanticVersion version
+    Version version
     String namespace
     String parentProjectRef // identifies the parent project by: projectNamespace, projectName and version
     String id // identifies the Project by: projectNamespace and projectName
@@ -70,6 +73,15 @@ class Project {
         }
 
         return fetchedVersions.first()
+    }
+
+    private void validateVersionSha(){
+        if(BranchesEnum.isValidBranch(version.getVersion())){
+            versionCommitSha = RepoExplorerFactory.get().getSpecificBranchLatestCommitSha(namespace,name,version.getVersion())
+        }
+        else{
+            setVersionSha()
+        }
     }
 
     private void setVersionSha() {
@@ -153,7 +165,7 @@ class Project {
         }
 
         Builder setVersion(String aVersion) {
-            project.version = SemanticVersion.create(aVersion)
+            project.version = VersionFactory.createVersion(aVersion)
             return this
         }
 
@@ -161,7 +173,7 @@ class Project {
             project.with {
                 setRepoSshUrl(RepoExplorerFactory.get().getRepoSshUrl(project.namespace, project.name))
                 setRepoHttpsUrl(RepoExplorerFactory.get().getRepoWebUrl(project.namespace, project.name))
-                setVersionSha()
+                validateVersionSha()
                 setId("$project.namespace/$project.name")
                 setRef("$project.namespace/$project.name:${project.version.toString()}")
                 loadEinsteinFileContent()
