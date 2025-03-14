@@ -53,4 +53,6 @@ abstract class RepositoryExplorer {
 
     abstract String getDevelopBranchLatestCommitSha(String namespace, String projectName)
 
+    abstract String getSpecificBranchLatestCommitSha(String namespace, String projectName, String branchName)
+
 }

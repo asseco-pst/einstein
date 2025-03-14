@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[1.5.2] - 2025-01-07
+### Fixed
+- process to retrieve the latest commits from a specific branch.
+
+[1.5.1] - 2024-10-01
+### Fixed
+- process to retrieve the latest commits from the default branch. The process was previously considering the 'main' branch for snapshots, but it should have been using the 'next' branch instead.
+
 [1.5.1] - 2024-10-01
 ### Fixed
 - process to retrieve the latest commits from the default branch. The process was previously considering the 'main' branch for snapshots, but it should have been using the 'next' branch instead.
